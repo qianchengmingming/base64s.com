@@ -1,6 +1,6 @@
 @import "tailwindcss";
-/* @import "./themes/default.css"; */
-@import "./themes/purple.css";
+@import "./themes/default1.css";
+/* @import "./themes/purple.css"; */
 
 @plugin "tailwindcss-animate";
 

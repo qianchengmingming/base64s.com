@@ -3,10 +3,10 @@
   "theme": "light",
   "header": {
     "brand": {
-      "title": "ShipAny",
+      "title": "Base64s.com",
       "logo": {
         "src": "/logo.png",
-        "alt": "ShipAny"
+        "alt": "Base64s.com"
       },
       "url": "/"
     },
@@ -43,7 +43,7 @@
     "show_locale": true
   },
   "hero": {
-    "title": "几小时内快速构建 AI 创业项目，而不是几天",
+    "title": "Base64 在线编码解码 | Base64 加密解密 - Base64s.com",
     "highlight_text": "快速构建",
     "description": "ShipAny 是一个用于构建 AI SaaS 创业项目的 NextJS 模板。<br/>通过丰富的模板和组件快速启动。",
     "announcement": {
