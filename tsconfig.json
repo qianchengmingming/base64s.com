@@ -1,27 +1,43 @@
+// tsconfig.json - TypeScript 配置文件
+// 本文件用于配置TypeScript编译选项，影响项目的类型检查和编译行为
+// 详细中文注释已添加，便于理解每个配置项的作用
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // 指定要包含在编译中的库文件
+    "allowJs": true, // 允许编译JavaScript文件
+    "skipLibCheck": true, // 跳过库文件的类型检查，加快编译速度
+    "strict": true, // 启用所有严格类型检查选项
+    "noEmit": true, // 不生成输出文件，仅做类型检查
+    "esModuleInterop": true, // 允许默认导入非ES模块
+    "module": "esnext", // 指定生成的模块类型
+    "moduleResolution": "bundler", // 指定模块解析策略
+    "resolveJsonModule": true, // 允许导入JSON模块
+    "isolatedModules": true, // 每个文件作为单独的模块进行编译
+    "jsx": "preserve", // 保留JSX语法，交由后续工具处理
+    "incremental": true, // 启用增量编译，提高编译效率
     "plugins": [
       {
-        "name": "next"
+        "name": "next" // 使用Next.js相关的TypeScript插件
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ] // 配置路径别名，简化模块导入
     },
-    "target": "ES2017"
+    "target": "ES2017" // 指定编译输出的JavaScript版本
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ], // 包含的文件和类型声明
+  "exclude": [
+    "node_modules"
+  ] // 排除的文件夹
 }
