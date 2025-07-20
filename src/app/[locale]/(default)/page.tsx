@@ -1,58 +1,54 @@
-import Branding from "@/components/blocks/branding";
-import CTA from "@/components/blocks/cta";
-import FAQ from "@/components/blocks/faq";
-import Feature from "@/components/blocks/feature";
-import Feature1 from "@/components/blocks/feature1";
-import Feature2 from "@/components/blocks/feature2";
-import Feature3 from "@/components/blocks/feature3";
-import Hero from "@/components/blocks/hero";
-import Pricing from "@/components/blocks/pricing";
-import Showcase from "@/components/blocks/showcase";
-import Stats from "@/components/blocks/stats";
-import Testimonial from "@/components/blocks/testimonial";
-import { getLandingPage } from "@/services/page";
+import Base64Code from "@/components/home/base64code";
+import { useTranslations } from 'next-intl';
+import { Metadata } from 'next';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  let canonicalUrl = `${process.env.NEXT_PUBLIC_WEB_URL}`;
-
-  if (locale !== "en") {
-    canonicalUrl = `${process.env.NEXT_PUBLIC_WEB_URL}/${locale}`;
+export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
+  // 多语言SEO元信息
+  const locale = params.locale || 'en';
+  let title = 'Base64 Online Encode & Decode - Base64s.com';
+  let description = 'Base64s.com is the best online tool for Base64 encoding and decoding. Supports password obfuscation, auto copy, and more.';
+  let keywords = 'base64, encode, decode, online, tool, base64s, password, encryption, 解码, 编码, 在线, 工具';
+  if (locale === 'zh') {
+    title = 'Base64在线编码解码 - Base64s.com';
+    description = 'Base64s.com是最好用的Base64在线编码解码工具，支持密码混淆、自动复制等功能。';
+    keywords = 'base64, base64编码, base64解码, 在线, 工具, base64s, 密码, 加密, 解密';
   }
-
   return {
+    title,
+    description,
+    keywords,
+    openGraph: {
+      title,
+      description,
+      url: 'https://base64s.com',
+      siteName: 'Base64s.com',
+      type: 'website',
+      images: [
+        {
+          url: '/preview.png',
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/preview.png'],
+      site: '@base64s',
+    },
     alternates: {
-      canonical: canonicalUrl,
+      canonical: locale === 'en' ? 'https://base64s.com/' : `https://base64s.com/${locale}/`,
     },
   };
 }
 
-export default async function LandingPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
-  const page = await getLandingPage(locale);
-
-  return (
-    <>
-      {page.hero && <Hero hero={page.hero} />}
-      {page.branding && <Branding section={page.branding} />}
-      {page.introduce && <Feature1 section={page.introduce} />}
-      {page.benefit && <Feature2 section={page.benefit} />}
-      {page.usage && <Feature3 section={page.usage} />}
-      {page.feature && <Feature section={page.feature} />}
-      {page.showcase && <Showcase section={page.showcase} />}
-      {page.stats && <Stats section={page.stats} />}
-      {page.pricing && <Pricing pricing={page.pricing} />}
-      {page.testimonial && <Testimonial section={page.testimonial} />}
-      {page.faq && <FAQ section={page.faq} />}
-      {page.cta && <CTA section={page.cta} />}
-    </>
-  );
+export default function HomePage() {
+    return (
+        <div className="container flex items-center justify-center">
+            <Base64Code />
+        </div>
+    );
 }

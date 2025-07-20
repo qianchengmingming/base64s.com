@@ -1,0 +1,49 @@
+{
+  "brand": "Base64s.com",
+  "title": "Base64 Online Encode & Decode",
+  "subtitle": "(The best Base64 online tool)",
+  "input_placeholder": "Please enter the string to be Base64 encoded or decoded here.",
+  "encode": "Encode",
+  "decode": "Decode",
+  "swap": "↑ Swap",
+  "custom_str_placeholder": "String to auto add/remove",
+  "custom_str_tip": "When encoding, this fixed string will be randomly inserted at a position. When decoding, it will be automatically removed. This can prevent direct recognition. For example, when encoding a password, others cannot use it directly after decoding. It is recommended to fill in base64s.com.",
+  "custom_str_hint": "(More characters than the original, can prevent direct recognition)",
+  "auto_label": "Auto Encode/Decode",
+  "auto_tip": "When enabled, it will try to decode first. If decoding fails, it will automatically encode.",
+  "auto_copy_label": "Auto Copy Result",
+  "auto_copy_tip": "When enabled, the result will be automatically copied to the clipboard after each encode/decode/auto process, no need to copy manually.",
+  "shortcut": "(Encode/Decode shortcut: Ctrl + Enter)",
+  "output_placeholder": "The result will be displayed here",
+  "encode_failed": "Encode failed: The input may contain characters that cannot be encoded",
+  "decode_failed": "Decode failed: The input is not a valid Base64 string",
+  "auto_failed": "Auto process failed: The input cannot be encoded or decoded",
+  "base64_faq": {
+    "name": "faq",
+    "label": "FAQ",
+    "title": "base64s.com FAQ",
+    "description": "Here are some frequently asked questions about Base64 encoding/decoding. For more, feel free to contact us.",
+    "items": [
+      {
+        "title": "What is Base64 encoding/decoding? What is base64s.com?",
+        "description": "Base64 is an encoding method that converts binary data into ASCII strings, and is often used in data transmission, encryption, and other scenarios. base64s.com is an online Base64 encoding and decoding tool that supports Base64 encoding, decoding, exchange, automatic processing, and other functions. base64 plus s plus.com is the abbreviation of base64, which means Base64 encoding and decoding tool."
+      },
+      {
+        "title": "Why insert a custom string during encoding?",
+        "description": "Inserting a custom string can increase security and prevent direct recognition, especially suitable for obfuscating sensitive information such as passwords. For example, if you encode your password without adding a fixed string, others can use your password directly. If you add a specific string, others can obtain the encoded result and decode it without deleting the specific string. It should be noted that the fixed string needs to be a string that you often use, to prevent yourself from forgetting it and being unable to use it. It is recommended to fill in: base64s.com"
+      },
+      {
+        "title": "How does auto encode/decode work?",
+        "description": "When enabled, the input will first try to decode. If it fails, it will automatically encode. This is useful for quickly determining the content type."
+      },
+      {
+        "title": "How does auto copy result work?",
+        "description": "When enabled, the result will be automatically copied to the clipboard after each operation, no need to copy manually."
+      },
+      {
+        "title": "What characters are supported?",
+        "description": "All UTF-8 characters are supported, including special symbols, Chinese, emojis, etc."
+      }
+    ]
+  }
+} 

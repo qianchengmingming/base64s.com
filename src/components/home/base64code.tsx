@@ -13,6 +13,9 @@ import { getTimestamp } from '@/lib/time';
 import { getNonceStr } from '@/lib/hash';
 import { Switch } from '../ui/switch';
 import copy from 'copy-to-clipboard';
+import { useTranslations } from 'next-intl';
+import FAQ from '@/components/blocks/faq';
+import { useLocale, useMessages } from 'next-intl';
 
 const AUTO_KEY = 'BASE64_AUTO';
 const CUSTOM_KEY = 'BASE64_CUSTOM';
@@ -24,6 +27,7 @@ const OUTPUT_KEY = 'BASE64_OUTPUT';
 // Base64 编码/解码组件
 // 详细中文注释，便于理解每一步逻辑
 const Base64Code: React.FC = () => {
+  const t = useTranslations('home');
   // 输入内容
   const [input, setInput] = useState('');
   // 输出内容
@@ -37,6 +41,14 @@ const Base64Code: React.FC = () => {
   const [autoCopy, setAutoCopy] = useState(true);
   const [isComposing, setIsComposing] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  // 判断是否为小屏（小于500px）
+  const [isMobile, setIsMobile] = useState(false);
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 500);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // 初始化本地缓存
   React.useEffect(() => {
@@ -130,7 +142,7 @@ const Base64Code: React.FC = () => {
         setOutput(encoded);
         if (autoCopy) copy(encoded);
       } catch {
-        setOutput('自动处理失败：输入内容无法编码或解码');
+        setOutput(t('auto_failed'));
       }
     }
   };
@@ -147,7 +159,7 @@ const Base64Code: React.FC = () => {
       setOutput(encoded);
       if (autoCopy) copy(encoded);
     } catch (e) {
-      setOutput('编码失败：输入内容可能包含无法编码的字符');
+      setOutput(t('encode_failed'));
     }
   };
 
@@ -161,7 +173,7 @@ const Base64Code: React.FC = () => {
       setOutput(decoded);
       if (autoCopy) copy(decoded);
     } catch (e) {
-      setOutput('解码失败：输入内容不是有效的 Base64 字符串');
+      setOutput(t('decode_failed'));
     }
   };
 
@@ -171,83 +183,149 @@ const Base64Code: React.FC = () => {
     setOutput(input);
   };
 
+  // 从i18n多语言文件读取FAQ内容
+  const messages = useMessages();
+  const base64Faq = messages.home.base64_faq;
+
   return (
     <Card className="mt-8 mb-8 p-6 shadow-lg w-full bg-white">
       {/* 标题部分 */}
-      <div className="flex items-center mb-4">
-        <span className="bg-green-600 text-white rounded px-2 py-1 text-xs font-bold mr-2">Base64s.com</span>
-        <h1 className="text-2xl font-bold">Base64在线编码解码</h1>
-        <span className="ml-2 text-gray-500 text-sm">(最好用的 Base64 在线工具)</span>
+      <div className="flex flex-col sm:flex-row sm:items-center mb-4 gap-2 sm:gap-0">
+        <span className="bg-green-600 text-white rounded px-2 py-1 text-xs font-bold sm:mr-2 mx-auto sm:mx-0">{t('brand')}</span>
+        <h1 className="text-2xl font-bold text-center sm:text-left">{t('title')}</h1>
+        <span className="text-gray-500 text-sm text-center sm:text-left sm:ml-2">{t('subtitle')}</span>
       </div>
       {/* 输入框 */}
       <Textarea
         ref={inputRef}
         className="w-full h-40 mb-2"
-        placeholder={`请输入要进行 Base64 ${tab === 'encode' ? '编码' : '解码'} 的字符串`}
+        placeholder={t('input_placeholder', { action: tab === 'encode' ? t('encode') : t('decode') })}
         value={input}
         onChange={handleInputChange}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={handleCompositionEnd}
       />
-      {/* 操作按钮和选项 */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2 flex-wrap w-full">
-        {/* 左侧：按钮组和自定义字符串 */}
-        <div className="flex items-center gap-2 flex-wrap">
-          <Button onClick={handleEncode} variant={tab === 'encode' ? 'default' : 'outline'}>编码 (Encode)</Button>
-          <Button onClick={handleDecode} variant={tab === 'decode' ? 'default' : 'outline'}>解码 (Decode)</Button>
-          <Button variant="outline" onClick={handleSwap}>↑ 交换</Button>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center ml-2">
-                <Input
-                  className="w-48"
-                  placeholder="自动添加/删除的字符串"
-                  value={customStr}
-                  onChange={handleCustomStrChange}
-                />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              在编码时会随机在某个位置插入此固定字符串，解码时会自动删除，可用于防止被直接识别。比如对密码进行加密，别人解码后无法直接使用，建议填写 base64s.com
-            </TooltipContent>
-            <span className="text-xs text-gray-400 ml-2">(比原始内容多字符，可用于防止被直接识别)</span>
-          </Tooltip>
+      {/* 移动端下，编码/解码按钮放在输入框和输出框之间，并有间距 */}
+      {isMobile && (
+        <div className="flex w-full mb-2">
+          <Button onClick={handleEncode} variant={tab === 'encode' ? 'default' : 'outline'} style={{ width: '50%', minWidth: 120, marginRight: 8 }}>{t('encode')}</Button>
+          <Button onClick={handleDecode} variant={tab === 'decode' ? 'default' : 'outline'} style={{ width: '50%', minWidth: 120 }}>{t('decode')}</Button>
         </div>
-        {/* 右侧：开关组 */}
-        <div className="flex items-center gap-2 flex-wrap justify-end">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center ml-2">
-                <Switch id="auto-switch" checked={auto} onCheckedChange={handleAutoChange} />
-                <Label htmlFor="auto-switch" className="ml-1 cursor-pointer">自动编码/解码</Label>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              开启后将尝试自动解码，若无法解码则会自动编码。
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center ml-2">
-                <Switch id="auto-copy-switch" checked={autoCopy} onCheckedChange={handleAutoCopyChange} />
-                <Label htmlFor="auto-copy-switch" className="ml-1 cursor-pointer">自动复制结果</Label>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              开启后每次编码/解码/自动处理后会自动复制结果到剪贴板
-            </TooltipContent>
-          </Tooltip>
+      )}
+      {/* 操作按钮和选项（大屏） */}
+      {!isMobile ? (
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-2 flex-wrap w-full">
+          {/* 左侧：按钮组和自定义字符串 */}
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto sm:flex-1" style={{ width: '100%' }}>
+            <div className="flex w-1/2 flex-wrap gap-2 sm:w-auto">
+              <Button onClick={handleEncode} variant={tab === 'encode' ? 'default' : 'outline'} style={{ width: 150 }}>{t('encode')}</Button>
+              <Button onClick={handleDecode} variant={tab === 'decode' ? 'default' : 'outline'} style={{ width: 150 }}>{t('decode')}</Button>
+              <Button variant="outline" onClick={handleSwap}>{t('swap')}</Button>
+            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center ml-2">
+                  <Input
+                    className="w-48"
+                    placeholder={t('custom_str_placeholder')}
+                    value={customStr}
+                    onChange={handleCustomStrChange}
+                  />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                {t('custom_str_tip')}
+              </TooltipContent>
+              <span className="text-xs text-gray-400 ml-2">{t('custom_str_hint')}</span>
+            </Tooltip>
+          </div>
+          {/* 右侧：开关组 */}
+          <div className="flex items-center gap-2 flex-wrap justify-center w-full sm:w-auto">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center ml-2">
+                  <Switch id="auto-switch" checked={auto} onCheckedChange={handleAutoChange} />
+                  <Label htmlFor="auto-switch" className="ml-1 cursor-pointer">{t('auto_label')}</Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                {t('auto_tip')}
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex items-center ml-2">
+                  <Switch id="auto-copy-switch" checked={autoCopy} onCheckedChange={handleAutoCopyChange} />
+                  <Label htmlFor="auto-copy-switch" className="ml-1 cursor-pointer">{t('auto_copy_label')}</Label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                {t('auto_copy_tip')}
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
-      </div>
+      ) : null}
       {/* 输出框 */}
       <div className="mb-2">
         <Textarea
           className="w-full h-40"
           value={output}
           onChange={handleOutputChange}
-          placeholder="结果将在这里显示"
+          placeholder={t('output_placeholder')}
         />
       </div>
+      {/* 移动端下操作栏全部移到输出框下方，每项一行（除编码/解码按钮） */}
+      {isMobile && (
+        <div className="flex flex-col gap-2 mt-2 w-full">
+          <Button variant="outline" onClick={handleSwap} className="w-full">{t('swap')}</Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center w-full">
+                <Input
+                  className="w-full"
+                  placeholder={t('custom_str_placeholder')}
+                  value={customStr}
+                  onChange={handleCustomStrChange}
+                />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              {t('custom_str_tip')}
+            </TooltipContent>
+            <span className="text-xs text-gray-400 ml-2">{t('custom_str_hint')}</span>
+          </Tooltip>
+          <div className="text-xs text-gray-400 w-full text-center">{t('shortcut')}</div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center w-full justify-center">
+                <Switch id="auto-switch" checked={auto} onCheckedChange={handleAutoChange} />
+                <Label htmlFor="auto-switch" className="ml-1 cursor-pointer">{t('auto_label')}</Label>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              {t('auto_tip')}
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center w-full justify-center">
+                <Switch id="auto-copy-switch" checked={autoCopy} onCheckedChange={handleAutoCopyChange} />
+                <Label htmlFor="auto-copy-switch" className="ml-1 cursor-pointer">{t('auto_copy_label')}</Label>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              {t('auto_copy_tip')}
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      )}
+      {/* 常见问题FAQ */}
+      {base64Faq && (
+        <div className="mt-8">
+          <FAQ section={base64Faq} />
+        </div>
+      )}
     </Card>
   );
 };

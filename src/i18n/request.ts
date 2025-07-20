@@ -16,11 +16,19 @@ export default getRequestConfig(async ({ requestLocale }) => {
   }
 
   try {
-    const messages = (await import(`./messages/${locale.toLowerCase()}.json`))
-      .default;
+    const messages = (await import(`./messages/${locale.toLowerCase()}.json`)).default;
+    // 加载 home 页面语言包
+    let homeMessages = {};
+    try {
+      homeMessages = (await import(`./pages/home/${locale.toLowerCase()}.json`)).default;
+    } catch (e) {}
+    // 合并 home 到 messages
     return {
       locale: locale,
-      messages: messages,
+      messages: {
+        ...messages,
+        home: homeMessages
+      }
     };
   } catch (e) {
     return {
