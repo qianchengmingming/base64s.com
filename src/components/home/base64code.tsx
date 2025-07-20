@@ -54,20 +54,13 @@ const Base64Code: React.FC = () => {
   };
 
   return (
-      <Card className=" mt-8 p-6 shadow-lg w-full">
+    <Card className="mt-8 mb-8 p-6 shadow-lg w-full bg-white">
       {/* 标题部分 */}
       <div className="flex items-center mb-4">
-        <span className="bg-green-600 text-white rounded px-2 py-1 text-xs font-bold mr-2">Base64.us</span>
-        <h1 className="text-2xl font-bold">Base64 在线编码解码</h1>
+        <span className="bg-green-600 text-white rounded px-2 py-1 text-xs font-bold mr-2">Base64s.com</span>
+        <h1 className="text-2xl font-bold">Base64在线编码解码</h1>
         <span className="ml-2 text-gray-500 text-sm">(最好用的 Base64 在线工具)</span>
       </div>
-      {/* Tab 切换 */}
-      <Tabs value={tab} onValueChange={handleTabChange} className="mb-4">
-        <TabsList>
-          <TabsTrigger value="encode">编码 (Encode)</TabsTrigger>
-          <TabsTrigger value="decode">解码 (Decode)</TabsTrigger>
-        </TabsList>
-      </Tabs>
       {/* 输入框 */}
       <Textarea
         className="w-full h-32 mb-2"
@@ -77,31 +70,19 @@ const Base64Code: React.FC = () => {
       />
       {/* 操作按钮 */}
       <div className="flex items-center gap-2 mb-2">
-        <Button onClick={tab === 'encode' ? handleEncode : handleDecode}>
-          {tab === 'encode' ? '编码 (Encode)' : '解码 (Decode)'}
-        </Button>
+        <Button onClick={tab === 'encode' ? handleEncode : handleDecode}>编码 (Encode)</Button>
+        <Button onClick={tab === 'encode' ? handleEncode : handleDecode}>解码 (Decode)</Button>
         <Button variant="outline" onClick={handleSwap}>↑ 交换</Button>
         <span className="text-xs text-gray-400 ml-2">(编码/解码快捷键：Ctrl + Enter)</span>
       </div>
       {/* 输出框 */}
       <div className="mb-2">
-        <label className="block text-sm font-medium mb-1">Base64 编码或解码的结果：</label>
         <Textarea
-          className="w-full h-24"
+          className="w-full h-32"
           value={output}
           readOnly
           placeholder="结果将在这里显示"
         />
-      </div>
-      {/* 说明文字 */}
-      <div className="bg-blue-50 text-blue-700 p-2 rounded text-xs mb-2">
-        请在上方第一个文本框中输入要编码/解码的字符串。
-      </div>
-      {/* 文件上传（未实现，仅界面展示） */}
-      <div className="bg-gray-50 p-2 rounded text-xs flex items-center">
-        <span>也可以选择图片/文件来获取它的 Base64 编码的 DataURI 形式：</span>
-        <input type="file" className="ml-2" disabled />
-        <span className="ml-2 text-gray-400">未选择任何文件</span>
       </div>
     </Card>
   );
