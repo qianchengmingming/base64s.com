@@ -1,0 +1,50 @@
+{
+  "title": "Terms of Service",
+  "introduction": "Welcome to Base64s.com. By using our service, you agree to these terms. Please read them carefully.",
+  "use_of_service": {
+    "title": "Use of the Service",
+    "desc": "You agree to use Base64s.com in accordance with all applicable laws and regulations."
+  },
+  "user_account": {
+    "title": "User Account",
+    "create": "You must provide accurate information when creating an account.",
+    "security": "You are responsible for your account security and all activities under your account.",
+    "notify": "Notify us immediately of any unauthorized use of your account."
+  },
+  "intellectual_property": {
+    "title": "Intellectual Property",
+    "desc": "All content and technology of Base64s.com are protected. You may not redistribute or resell our templates or code without permission."
+  },
+  "prohibited": {
+    "title": "Prohibited Activities",
+    "desc": "Do not use Base64s.com for illegal purposes, disrupt the service, or attempt to bypass security."
+  },
+  "privacy": {
+    "title": "Privacy",
+    "desc": "We collect and use data as described in our Privacy Policy."
+  },
+  "payment": {
+    "title": "Payment",
+    "desc": "All purchases are final. Prices may change. You agree to pay all charges for your plan."
+  },
+  "termination": {
+    "title": "Termination",
+    "desc": "We may terminate your access for violations of these terms."
+  },
+  "disclaimer": {
+    "title": "Disclaimer",
+    "desc": "Base64s.com is provided as-is. We do not guarantee accuracy or availability."
+  },
+  "liability": {
+    "title": "Limitation of Liability",
+    "desc": "We are not liable for damages arising from your use of the service."
+  },
+  "changes": {
+    "title": "Changes to Terms",
+    "desc": "We may update these terms. Continued use means you accept the new terms."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "desc": "If you have any questions, please contact us via email."
+  }
+} 

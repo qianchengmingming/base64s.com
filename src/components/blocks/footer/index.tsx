@@ -1,7 +1,13 @@
 import { Footer as FooterType } from "@/types/blocks/footer";
 import Icon from "@/components/icon";
+import { Link, usePathname } from "@/i18n/navigation";
 
 export default function Footer({ footer }: { footer: FooterType }) {
+  // 获取当前路径，提取locale
+  const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+  const localeMatch = pathname.match(/^\/(\w{2,}(-\w{2,})?)(\/|$)/);
+  const locale = localeMatch ? localeMatch[1] : 'en';
+
   if (footer.disabled) {
     return null;
   }
@@ -70,27 +76,25 @@ export default function Footer({ footer }: { footer: FooterType }) {
             {footer.copyright && (
               <p>
                 {footer.copyright}
-                {process.env.NEXT_PUBLIC_SHOW_POWERED_BY === "false" ? null : (
-                  <a
-                    href="https://shipany.ai"
-                    target="_blank"
-                    className="px-2 text-primary"
-                  >
-                    build with ShipAny
-                  </a>
-                )}
               </p>
             )}
 
             {footer.agreement && (
               <ul className="flex justify-center gap-4 lg:justify-start">
-                {footer.agreement.items?.map((item, i) => (
-                  <li key={i} className="hover:text-primary">
-                    <a href={item.url} target={item.target}>
-                      {item.title}
-                    </a>
-                  </li>
-                ))}
+                {footer.agreement.items?.map((item, i) => {
+                  let url = item.url;
+                  // 只处理隐私政策和服务条款
+                  if (url === "/privacy-policy" || url === "/terms-of-service") {
+                    url = `/${locale}/(default)${url}`;
+                  }
+                  return (
+                    <li key={i} className="hover:text-primary">
+                      <Link href={url as any} target={item.target}>
+                        {item.title}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             )}
           </div>

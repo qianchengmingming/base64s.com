@@ -3,15 +3,21 @@
   "theme": "light",
   "header": {
     "brand": {
-      "title": "ShipAny",
+      "title": "Base64s.com",
       "logo": {
         "src": "/logo.png",
-        "alt": "ShipAny"
+        "alt": "Base64s.com"
       },
       "url": "/"
     },
     "nav": {
-      "items": [
+      "items": [],
+      "_comment_nav_items": [
+        {
+          "title": "这部分用于后续代码编写，已经注释",
+          "url": "/#ss",
+          "icon": "RiSparkling2Line"
+        },
         {
           "title": "Features",
           "url": "/#feature",
@@ -29,17 +35,9 @@
         }
       ]
     },
-    "buttons": [
-      {
-        "title": "Get ShipAny",
-        "url": "https://shipany.ai",
-        "target": "_blank",
-        "variant": "link",
-        "icon": "RiArrowRightUpLine"
-      }
-    ],
-    "show_sign": true,
-    "show_theme": true,
+    "buttons": [],
+    "show_sign": false,
+    "show_theme": false,
     "show_locale": true
   },
   "hero": {
@@ -381,33 +379,23 @@
   "footer": {
     "name": "footer",
     "brand": {
-      "title": "ShipAny",
-      "description": "ShipAny is a NextJS boilerplate for building AI SaaS startups. Ship Fast with a variety of templates and components.",
+      "title": "Base64s.com",
+      "description": "base64s.com is an online Base64 encoding and decoding tool that supports encoding, decoding, conversion, automatic processing, and more. 'base64' + 's' + '.com' stands for Base64 encoding and decoding tool.",
       "logo": {
         "src": "/logo.png",
-        "alt": "ShipAny"
+        "alt": "Base64"
       },
       "url": "/"
     },
-    "copyright": "© 2025 • ShipAny All rights reserved.",
+    "copyright": "© 2025 • base64s.com All rights reserved.",
     "nav": {
       "items": [
         {
           "title": "About",
           "children": [
             {
-              "title": "Features",
-              "url": "/#feature",
-              "target": "_self"
-            },
-            {
-              "title": "Showcases",
-              "url": "/#showcase",
-              "target": "_self"
-            },
-            {
-              "title": "Pricing",
-              "url": "/#pricing",
+              "title": "Contact Us",
+              "url": "/#contact",
               "target": "_self"
             }
           ]
@@ -416,38 +404,18 @@
           "title": "Resources",
           "children": [
             {
-              "title": "Documents",
-              "url": "https://docs.shipany.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "Components",
-              "url": "https://shipany.ai/components",
-              "target": "_blank"
-            },
-            {
-              "title": "Templates",
-              "url": "https://shipany.ai/templates",
+              "title": "Code Repository",
+              "url": "https://github.com/qianchengmingming",
               "target": "_blank"
             }
           ]
         },
         {
-          "title": "Friends",
+          "title": "Links",
           "children": [
             {
-              "title": "ThinkAny",
-              "url": "https://thinkany.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "HeyBeauty",
-              "url": "https://heybeauty.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "Pagen",
-              "url": "https://pagen.so",
+              "title": "Base64 Encode Decode",
+              "url": "https://base64s.com",
               "target": "_blank"
             }
           ]
@@ -456,30 +424,6 @@
     },
     "social": {
       "items": [
-        {
-          "title": "X",
-          "icon": "RiTwitterXFill",
-          "url": "https://x.com/shipanyai",
-          "target": "_blank"
-        },
-        {
-          "title": "Github",
-          "icon": "RiGithubFill",
-          "url": "https://github.com/shipanyai",
-          "target": "_blank"
-        },
-        {
-          "title": "Discord",
-          "icon": "RiDiscordFill",
-          "url": "https://discord.gg/HQNnrzjZQS",
-          "target": "_blank"
-        },
-        {
-          "title": "Email",
-          "icon": "RiMailLine",
-          "url": "mailto:support@shipany.ai",
-          "target": "_self"
-        }
       ]
     },
     "agreement": {

@@ -11,7 +11,13 @@
       "url": "/"
     },
     "nav": {
-      "items": [
+      "items": [],
+      "_comment_nav_items": [
+        {
+          "title": "这部分用于后续代码编写，已经注释",
+          "url": "/#ss",
+          "icon": "RiSparkling2Line"
+        },
         {
           "title": "功能特点",
           "url": "/#feature",
@@ -30,6 +36,8 @@
       ]
     },
     "buttons": [
+    ],
+    "buttons_copy": [
       {
         "title": "获取 ShipAny",
         "url": "https://shipany.ai",
@@ -38,8 +46,8 @@
         "icon": "RiArrowRightUpLine"
       }
     ],
-    "show_sign": true,
-    "show_theme": true,
+    "show_sign": false,
+    "show_theme": false,
     "show_locale": true
   },
   "hero": {
@@ -381,33 +389,23 @@
   "footer": {
     "name": "footer",
     "brand": {
-      "title": "ShipAny",
-      "description": "ShipAny 是一个用于构建 AI SaaS 创业项目的 NextJS 模板。通过丰富的模板和组件快速启动。",
+      "title": "Base64s.com",
+      "description": "base64s.com 是一个在线的 Base64 编码解码工具，支持 Base64 编码、解码、交换、自动处理等功能。base64加s加.com 是 base64 的缩写，表示 Base64 编码解码工具。",
       "logo": {
         "src": "/logo.png",
-        "alt": "ShipAny"
+        "alt": "Base64"
       },
       "url": "/"
     },
-    "copyright": "© 2025 • ShipAny 保留所有权利。",
+    "copyright": "© 2025 • base64s.com 保留所有权利。",
     "nav": {
       "items": [
         {
           "title": "关于",
           "children": [
             {
-              "title": "功能特点",
-              "url": "/#feature",
-              "target": "_self"
-            },
-            {
-              "title": "案例展示",
-              "url": "/#showcase",
-              "target": "_self"
-            },
-            {
-              "title": "定价",
-              "url": "/#pricing",
+              "title": "联系我们",
+              "url": "/#contact",
               "target": "_self"
             }
           ]
@@ -416,18 +414,8 @@
           "title": "资源",
           "children": [
             {
-              "title": "文档",
-              "url": "https://docs.shipany.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "组件",
-              "url": "https://shipany.ai/components",
-              "target": "_blank"
-            },
-            {
-              "title": "模板",
-              "url": "https://shipany.ai/templates",
+              "title": "代码仓库",
+              "url": "https://github.com/qianchengmingming",
               "target": "_blank"
             }
           ]
@@ -436,18 +424,8 @@
           "title": "友情链接",
           "children": [
             {
-              "title": "ThinkAny",
-              "url": "https://thinkany.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "HeyBeauty",
-              "url": "https://heybeauty.ai",
-              "target": "_blank"
-            },
-            {
-              "title": "Pagen",
-              "url": "https://pagen.so",
+              "title": "base64编码解码",
+              "url": "https://base64s.com",
               "target": "_blank"
             }
           ]
@@ -456,30 +434,6 @@
     },
     "social": {
       "items": [
-        {
-          "title": "X",
-          "icon": "RiTwitterXFill",
-          "url": "https://x.com/shipanyai",
-          "target": "_blank"
-        },
-        {
-          "title": "Github",
-          "icon": "RiGithubFill",
-          "url": "https://github.com/shipanyai",
-          "target": "_blank"
-        },
-        {
-          "title": "Discord",
-          "icon": "RiDiscordFill",
-          "url": "https://discord.gg/HQNnrzjZQS",
-          "target": "_blank"
-        },
-        {
-          "title": "邮箱",
-          "icon": "RiMailLine",
-          "url": "mailto:support@shipany.ai",
-          "target": "_self"
-        }
       ]
     },
     "agreement": {
