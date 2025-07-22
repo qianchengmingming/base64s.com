@@ -2,9 +2,9 @@ import Base64Code from "@/components/home/base64code";
 import { useTranslations } from 'next-intl';
 import { Metadata } from 'next';
 
-export async function generateMetadata({ params }: { params: { locale: string } }) : Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) : Promise<Metadata> {
   // 多语言SEO元信息
-  const locale = params.locale || 'en';
+  const { locale } = await params;
   let title = 'Base64 Online Encode & Decode - Base64s.com';
   let description = 'Base64s.com is the best online tool for Base64 encoding and decoding. Supports password obfuscation, auto copy, and more.';
   let keywords = 'base64, encode, decode, online, tool, base64s, password, encryption, 解码, 编码, 在线, 工具';

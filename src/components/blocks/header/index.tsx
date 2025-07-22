@@ -144,7 +144,7 @@ export default function Header({ header }: { header: HeaderType }) {
             </div>
           </div>
           <div className="shrink-0 flex gap-2 items-center">
-            {header.show_locale && <LocaleToggle />}
+            {(header.show_locale !== false) && <LocaleToggle />}
             {header.show_theme && <ThemeToggle />}
 
             {header.buttons?.map((item, i) => {
@@ -303,7 +303,7 @@ export default function Header({ header }: { header: HeaderType }) {
                   </div>
 
                   <div className="mt-4 flex items-center gap-2">
-                    {header.show_locale && <LocaleToggle />}
+                    {(header.show_locale !== false) && <LocaleToggle />}
                     <div className="flex-1"></div>
 
                     {header.show_theme && <ThemeToggle />}
