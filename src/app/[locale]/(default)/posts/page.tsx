@@ -3,20 +3,14 @@ import { BlogItem, Blog as BlogType } from "@/types/blocks/blog";
 import { getPostsByLocale } from "@/models/post";
 import { getTranslations } from "next-intl/server";
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
+// 详细注释：generateMetadata 和页面组件 props 的参数类型应为 { params: { locale: string } }，不能为 Promise，否则会导致类型冲突。
+export async function generateMetadata({ params }: { params: { locale: string } }) {
+  const { locale } = params;
   const t = await getTranslations();
-
   let canonicalUrl = `${process.env.NEXT_PUBLIC_WEB_URL}/posts`;
-
   if (locale !== "en") {
     canonicalUrl = `${process.env.NEXT_PUBLIC_WEB_URL}/${locale}/posts`;
   }
-
   return {
     title: t("blog.title"),
     description: t("blog.description"),
@@ -26,22 +20,15 @@ export async function generateMetadata({
   };
 }
 
-export default async function PostsPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
-  const { locale } = await params;
+export default async function PostsPage({ params }: { params: { locale: string } }) {
+  const { locale } = params;
   const t = await getTranslations();
-
   const posts = await getPostsByLocale(locale);
-
   const blog: BlogType = {
     title: t("blog.title"),
     description: t("blog.description"),
     items: posts as unknown as BlogItem[],
     read_more_text: t("blog.read_more_text"),
   };
-
   return <Blog blog={blog} />;
 }
