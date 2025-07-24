@@ -28,15 +28,27 @@ export default async function LocaleLayout({ children, params }: Readonly<{ chil
   const { locale } = await params;
   setRequestLocale(locale);
   const messages = await getMessages();
+  
+  // Check if authentication is enabled
+  const isAuthEnabled = process.env.NEXT_PUBLIC_AUTH_ENABLED === "true";
+  
   return (
     <NextIntlClientProvider messages={messages}>
-      <NextAuthSessionProvider>
+      {isAuthEnabled ? (
+        <NextAuthSessionProvider>
+          <AppContextProvider>
+            <ThemeProvider attribute="class" disableTransitionOnChange>
+              {children}
+            </ThemeProvider>
+          </AppContextProvider>
+        </NextAuthSessionProvider>
+      ) : (
         <AppContextProvider>
           <ThemeProvider attribute="class" disableTransitionOnChange>
             {children}
           </ThemeProvider>
         </AppContextProvider>
-      </NextAuthSessionProvider>
+      )}
     </NextIntlClientProvider>
   );
 }

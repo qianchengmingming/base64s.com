@@ -20,7 +20,8 @@ const AppContext = createContext({} as ContextValue);
 
 export const useAppContext = () => useContext(AppContext);
 
-export const AppContextProvider = ({ children }: { children: ReactNode }) => {
+// Component with authentication
+const AppContextProviderWithAuth = ({ children }: { children: ReactNode }) => {
   if (
     process.env.NEXT_PUBLIC_AUTH_GOOGLE_ONE_TAP_ENABLED === "true" &&
     process.env.NEXT_PUBLIC_AUTH_GOOGLE_ID
@@ -29,6 +30,17 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const { data: session } = useSession();
+  
+  return <AppContextProviderBase session={session}>{children}</AppContextProviderBase>;
+};
+
+// Component without authentication
+const AppContextProviderWithoutAuth = ({ children }: { children: ReactNode }) => {
+  return <AppContextProviderBase session={null}>{children}</AppContextProviderBase>;
+};
+
+// Base component that handles the actual context logic
+const AppContextProviderBase = ({ children, session }: { children: ReactNode; session: any }) => {
 
   const [theme, setTheme] = useState<string>(() => {
     return process.env.NEXT_PUBLIC_DEFAULT_THEME || "";
@@ -136,4 +148,15 @@ export const AppContextProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </AppContext.Provider>
   );
+};
+
+// Export the appropriate provider based on auth configuration
+export const AppContextProvider = ({ children }: { children: ReactNode }) => {
+  const isAuthEnabled = process.env.NEXT_PUBLIC_AUTH_ENABLED === "true";
+  
+  if (isAuthEnabled) {
+    return <AppContextProviderWithAuth>{children}</AppContextProviderWithAuth>;
+  } else {
+    return <AppContextProviderWithoutAuth>{children}</AppContextProviderWithoutAuth>;
+  }
 };
