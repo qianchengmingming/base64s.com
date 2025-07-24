@@ -3,19 +3,21 @@ import React, { useState, useRef } from 'react';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
 import { Card } from '../ui/card';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '../ui/tabs';
-import { Checkbox } from '../ui/checkbox';
+// 移除不使用的UI组件导入以减小bundle大小
 import { Input } from '../ui/input';
 import { Label } from '../ui/label';
-import { Tooltip, TooltipTrigger, TooltipContent } from '../ui/tooltip';
+// 简化UI，移除Tooltip以减小bundle大小
 import { cacheGet, cacheSet } from '@/lib/cache';
 import { getTimestamp } from '@/lib/time';
 import { getNonceStr } from '@/lib/hash';
 import { Switch } from '../ui/switch';
-import copy from 'copy-to-clipboard';
+// 使用原生 Clipboard API 替代 copy-to-clipboard 库
 import { useTranslations } from 'next-intl';
-import FAQ from '@/components/blocks/faq';
 import { useLocale, useMessages } from 'next-intl';
+import { lazy, Suspense } from 'react';
+
+// 动态导入FAQ组件，减少首屏加载时间
+const FAQ = lazy(() => import('@/components/blocks/faq'));
 
 const AUTO_KEY = 'BASE64_AUTO';
 const CUSTOM_KEY = 'BASE64_CUSTOM';
@@ -130,7 +132,17 @@ const Base64Code: React.FC = () => {
         decoded = decoded.replaceAll(customStr, '');
       }
       setOutput(decoded);
-      if (autoCopy) copy(decoded);
+      if (autoCopy) {
+        navigator.clipboard?.writeText(decoded).catch(() => {
+          // 降级到旧方法
+          const textArea = document.createElement('textarea');
+          textArea.value = decoded;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+        });
+      }
     } catch {
       try {
         let toEncode = val;
@@ -140,7 +152,17 @@ const Base64Code: React.FC = () => {
         }
         const encoded = btoa(unescape(encodeURIComponent(toEncode)));
         setOutput(encoded);
-        if (autoCopy) copy(encoded);
+        if (autoCopy) {
+          navigator.clipboard?.writeText(encoded).catch(() => {
+            // 降级到旧方法
+            const textArea = document.createElement('textarea');
+            textArea.value = encoded;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+          });
+        }
       } catch {
         setOutput(t('auto_failed'));
       }
@@ -157,7 +179,17 @@ const Base64Code: React.FC = () => {
       }
       const encoded = btoa(unescape(encodeURIComponent(toEncode)));
       setOutput(encoded);
-      if (autoCopy) copy(encoded);
+      if (autoCopy) {
+        navigator.clipboard?.writeText(encoded).catch(() => {
+          // 降级到旧方法
+          const textArea = document.createElement('textarea');
+          textArea.value = encoded;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+        });
+      }
     } catch (e) {
       setOutput(t('encode_failed'));
     }
@@ -171,7 +203,17 @@ const Base64Code: React.FC = () => {
         decoded = decoded.replaceAll(customStr, '');
       }
       setOutput(decoded);
-      if (autoCopy) copy(decoded);
+      if (autoCopy) {
+        navigator.clipboard?.writeText(decoded).catch(() => {
+          // 降级到旧方法
+          const textArea = document.createElement('textarea');
+          textArea.value = decoded;
+          document.body.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+        });
+      }
     } catch (e) {
       setOutput(t('decode_failed'));
     }
@@ -222,47 +264,27 @@ const Base64Code: React.FC = () => {
               <Button onClick={handleDecode} variant={tab === 'decode' ? 'default' : 'outline'} style={{ width: 150 }}>{t('decode')}</Button>
               <Button variant="outline" onClick={handleSwap}>{t('swap')}</Button>
             </div>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center ml-2">
-                  <Input
-                    className="w-48"
-                    placeholder={t('custom_str_placeholder')}
-                    value={customStr}
-                    onChange={handleCustomStrChange}
-                  />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                {t('custom_str_tip')}
-              </TooltipContent>
+            <div className="flex items-center ml-2">
+              <Input
+                className="w-48"
+                placeholder={t('custom_str_placeholder')}
+                value={customStr}
+                onChange={handleCustomStrChange}
+                title={t('custom_str_tip')}
+              />
               <span className="text-xs text-gray-400 ml-2">{t('custom_str_hint')}</span>
-            </Tooltip>
+            </div>
           </div>
           {/* 右侧：开关组 */}
           <div className="flex items-center gap-2 flex-wrap justify-center w-full sm:w-auto">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center ml-2">
-                  <Switch id="auto-switch" checked={auto} onCheckedChange={handleAutoChange} />
-                  <Label htmlFor="auto-switch" className="ml-1 cursor-pointer">{t('auto_label')}</Label>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                {t('auto_tip')}
-              </TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="flex items-center ml-2">
-                  <Switch id="auto-copy-switch" checked={autoCopy} onCheckedChange={handleAutoCopyChange} />
-                  <Label htmlFor="auto-copy-switch" className="ml-1 cursor-pointer">{t('auto_copy_label')}</Label>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="top">
-                {t('auto_copy_tip')}
-              </TooltipContent>
-            </Tooltip>
+            <div className="flex items-center ml-2" title={t('auto_tip')}>
+              <Switch id="auto-switch" checked={auto} onCheckedChange={handleAutoChange} />
+              <Label htmlFor="auto-switch" className="ml-1 cursor-pointer">{t('auto_label')}</Label>
+            </div>
+            <div className="flex items-center ml-2" title={t('auto_copy_tip')}>
+              <Switch id="auto-copy-switch" checked={autoCopy} onCheckedChange={handleAutoCopyChange} />
+              <Label htmlFor="auto-copy-switch" className="ml-1 cursor-pointer">{t('auto_copy_label')}</Label>
+            </div>
           </div>
         </div>
       ) : null}
@@ -279,51 +301,33 @@ const Base64Code: React.FC = () => {
       {isMobile && (
         <div className="flex flex-col gap-2 mt-2 w-full">
           <Button variant="outline" onClick={handleSwap} className="w-full">{t('swap')}</Button>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center w-full">
-                <Input
-                  className="w-full"
-                  placeholder={t('custom_str_placeholder')}
-                  value={customStr}
-                  onChange={handleCustomStrChange}
-                />
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              {t('custom_str_tip')}
-            </TooltipContent>
-            <span className="text-xs text-gray-400 ml-2">{t('custom_str_hint')}</span>
-          </Tooltip>
+          <div className="flex items-center w-full">
+            <Input
+              className="w-full"
+              placeholder={t('custom_str_placeholder')}
+              value={customStr}
+              onChange={handleCustomStrChange}
+              title={t('custom_str_tip')}
+            />
+          </div>
+          <span className="text-xs text-gray-400 text-center">{t('custom_str_hint')}</span>
           <div className="text-xs text-gray-400 w-full text-center">{t('shortcut')}</div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center w-full justify-center">
-                <Switch id="auto-switch" checked={auto} onCheckedChange={handleAutoChange} />
-                <Label htmlFor="auto-switch" className="ml-1 cursor-pointer">{t('auto_label')}</Label>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              {t('auto_tip')}
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div className="flex items-center w-full justify-center">
-                <Switch id="auto-copy-switch" checked={autoCopy} onCheckedChange={handleAutoCopyChange} />
-                <Label htmlFor="auto-copy-switch" className="ml-1 cursor-pointer">{t('auto_copy_label')}</Label>
-              </div>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              {t('auto_copy_tip')}
-            </TooltipContent>
-          </Tooltip>
+          <div className="flex items-center w-full justify-center" title={t('auto_tip')}>
+            <Switch id="auto-switch" checked={auto} onCheckedChange={handleAutoChange} />
+            <Label htmlFor="auto-switch" className="ml-1 cursor-pointer">{t('auto_label')}</Label>
+          </div>
+          <div className="flex items-center w-full justify-center" title={t('auto_copy_tip')}>
+            <Switch id="auto-copy-switch" checked={autoCopy} onCheckedChange={handleAutoCopyChange} />
+            <Label htmlFor="auto-copy-switch" className="ml-1 cursor-pointer">{t('auto_copy_label')}</Label>
+          </div>
         </div>
       )}
-      {/* 常见问题FAQ */}
+      {/* 常见问题FAQ - 动态加载 */}
       {base64Faq && (
         <div className="mt-8">
-          <FAQ section={base64Faq} />
+          <Suspense fallback={<div className="text-center py-4 text-muted-foreground">Loading FAQ...</div>}>
+            <FAQ section={base64Faq} />
+          </Suspense>
         </div>
       )}
     </Card>
