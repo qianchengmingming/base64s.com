@@ -12,9 +12,9 @@ import Stats from "@/components/blocks/stats";
 import Testimonial from "@/components/blocks/testimonial";
 import { getLandingPage } from "@/services/page";
 
-// 详细注释：generateMetadata 和页面组件 props 的参数类型应为 { params: { locale: string } }，不能为 Promise，否则会导致类型冲突。
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+// 详细注释：generateMetadata 和页面组件 props 的参数类型应为 { params: Promise<{ locale: string }> } 在 Next.js 15 中。
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   let canonicalUrl = `${process.env.NEXT_PUBLIC_WEB_URL}/doc`;
   if (locale !== "en") {
     canonicalUrl = `${process.env.NEXT_PUBLIC_WEB_URL}/${locale}/doc`;
@@ -26,8 +26,8 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default async function LandingPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function LandingPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const page = await getLandingPage(locale);
   return (
     <>

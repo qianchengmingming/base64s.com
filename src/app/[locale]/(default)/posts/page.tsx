@@ -3,9 +3,9 @@ import { BlogItem, Blog as BlogType } from "@/types/blocks/blog";
 import { getPostsByLocale } from "@/models/post";
 import { getTranslations } from "next-intl/server";
 
-// 详细注释：generateMetadata 和页面组件 props 的参数类型应为 { params: { locale: string } }，不能为 Promise，否则会导致类型冲突。
-export async function generateMetadata({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+// 详细注释：generateMetadata 和页面组件 props 的参数类型应为 { params: Promise<{ locale: string }> } 在 Next.js 15 中。
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const t = await getTranslations();
   let canonicalUrl = `${process.env.NEXT_PUBLIC_WEB_URL}/posts`;
   if (locale !== "en") {
@@ -20,8 +20,8 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-export default async function PostsPage({ params }: { params: { locale: string } }) {
-  const { locale } = params;
+export default async function PostsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   const t = await getTranslations();
   const posts = await getPostsByLocale(locale);
   const blog: BlogType = {

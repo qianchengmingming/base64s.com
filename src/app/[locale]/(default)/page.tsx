@@ -2,10 +2,10 @@ import Base64Code from "@/components/home/base64code";
 import { useTranslations } from 'next-intl';
 import { Metadata } from 'next';
 
-// 详细注释：generateMetadata 的参数类型应为 { params: { locale: string } }，不能为 Promise，否则会导致类型冲突。
-export async function generateMetadata({ params }: { params: { locale: string } }): Promise<Metadata> {
+// 详细注释：generateMetadata 的参数类型应为 { params: Promise<{ locale: string }> } 在 Next.js 15 中。
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   // 多语言SEO元信息
-  const { locale } = params;
+  const { locale } = await params;
   let title = 'Base64 Online Encode & Decode - Base64s.com';
   let description = 'Base64s.com is the best online tool for Base64 encoding and decoding. Supports password obfuscation, auto copy, and more.';
   let keywords = 'base64, encode, decode, online, tool, base64s, password, encryption, 解码, 编码, 在线, 工具';
@@ -46,8 +46,9 @@ export async function generateMetadata({ params }: { params: { locale: string } 
   };
 }
 
-// 详细注释：Next.js 页面组件的 props 类型应为 params: { locale: string }，不能为 Promise 类型，否则会导致类型错误。
-export default async function Page({ params }: { params: { locale: string } }) {
+// 详细注释：Next.js 页面组件的 props 类型应为 params: Promise<{ locale: string }> 在 Next.js 15 中。
+export default async function Page({ params }: { params: Promise<{ locale: string }> }) {
+    const { locale } = await params;
     return (
         <div className="container flex items-center justify-center">
             <Base64Code />
