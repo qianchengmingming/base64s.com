@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <!-- 头部导航 -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/static/images/logo.svg" alt="Logo" width="30" height="24"
+                    class="d-inline-block align-text-top">
+                Bases64.com
+            </a>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">文字编码</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">图片编码</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">文件编码</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">网页编码</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            常见问题
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">密码如何防止破解?</a></li>
+                            <li><a class="dropdown-item" href="#">如何使用此网站?</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">关于我们</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <!-- 语言选择按钮 -->
+                    <div class="dropdown me-2">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            🌐 中文
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">🇨🇳 简体中文</a></li>
+                            <li><a class="dropdown-item" href="#">🇹🇼 繁体中文</a></li>
+                            <li><a class="dropdown-item" href="#">🇺🇸 English</a></li>
+                            <li><a class="dropdown-item" href="#">🇯🇵 日本語</a></li>
+                            <li><a class="dropdown-item" href="#">🇰🇷 한국어</a></li>
+                        </ul>
+                    </div>
+                    <!-- 设置按钮 -->
+                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal"
+                        data-bs-target="#settingsModal">
+                        ⚙️ 设置
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 内容区 -->
+    <div class="container text-center" style="margin-top: 20px;margin-bottom: 20px;">
+        <div class="row">
+            <div class="col">
+                <p class="fw-lighter text-start">请输入要进行 Base64 编码或解码的字符: </p>
+                <div class="position-relative">
+                    <input type="text" style="height: 50vh;" class="form-control" aria-label="Text input with checkbox">
+                    <div class="position-absolute bottom-0 end-0 p-2">
+                        <button type="button" class="btn me-1" title="清空">
+                            <i class="bi bi-back"></i>
+                        </button>
+                        <button type="button" class="btn me-1" title="清空">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <p class="fw-lighter text-start">Base64 编码或解码的结果: </p>
+                <div class="position-relative">
+                    <input type="text" style="height: 50vh;" class="form-control" aria-label="Text input with checkbox">
+                    <div class="position-absolute bottom-0 end-0 p-2">
+                        <button type="button" class="btn btn-sm btn-outline-success" title="复制">
+                            📋
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <button type="button" class="btn btn-primary">编码</button>
+        <button type="button" class="btn btn-light">解码</button>
+        <button type="button" class="btn btn-light">交换</button>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="settingsModalLabel">⚙️ 系统设置</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!-- 主题设置 -->
+                        <div class="mb-3">
+                            <label class="form-label">🎨 主题模式</label>
+                            <div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="theme" id="lightTheme"
+                                        value="light" checked>
+                                    <label class="form-check-label" for="lightTheme">
+                                        ☀️ 浅色模式
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="theme" id="darkTheme"
+                                        value="dark">
+                                    <label class="form-check-label" for="darkTheme">
+                                        🌙 深色模式
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="theme" id="autoTheme"
+                                        value="auto">
+                                    <label class="form-check-label" for="autoTheme">
+                                        🔄 跟随系统
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 编码设置 -->
+                        <div class="mb-3">
+                            <label class="form-label">📝 编码选项</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="autoEncode" checked>
+                                <label class="form-check-label" for="autoEncode">
+                                    自动编码（实时转换）
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="showLineNumbers">
+                                <label class="form-check-label" for="showLineNumbers">
+                                    显示行号
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="wordWrap" checked>
+                                <label class="form-check-label" for="wordWrap">
+                                    自动换行
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 字体大小设置 -->
+                        <div class="mb-3">
+                            <label for="fontSize" class="form-label">🔤 字体大小</label>
+                            <select class="form-select" id="fontSize">
+                                <option value="12">12px</option>
+                                <option value="14" selected>14px（默认）</option>
+                                <option value="16">16px</option>
+                                <option value="18">18px</option>
+                                <option value="20">20px</option>
+                            </select>
+                        </div>
+
+                        <!-- 其他设置 -->
+                        <div class="mb-3">
+                            <label class="form-label">🔔 通知设置</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="enableNotifications" checked>
+                                <label class="form-check-label" for="enableNotifications">
+                                    启用操作提示
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="enableSound">
+                                <label class="form-check-label" for="enableSound">
+                                    操作音效
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // 语言切换功能
+        function switchLanguage(lang, langName, flag) {
+            // 更新按钮显示
+            const langButton = document.querySelector('.dropdown-toggle');
+            langButton.innerHTML = `${flag} ${langName}`;
+
+            // 保存语言选择
+            localStorage.setItem('selectedLanguage', JSON.stringify({
+                lang: lang,
+                name: langName,
+                flag: flag
+            }));
+        }
+    </script>
+</body>
+
+</html>
