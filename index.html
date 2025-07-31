@@ -288,22 +288,7 @@
             window.clearText = clearText;
             window.copyToClipboard = copyToClipboard;
             
-            // 测试自动检测功能
-            setTimeout(() => {
-                console.log('测试自动检测功能...');
-                // 测试Base64字符串
-                const testBase64 = 'SGVsbG8gV29ybGQ='; // "Hello World"
-                console.log('测试Base64:', testBase64, 'isBase64:', isBase64(testBase64));
-                
-                // 测试普通文本
-                const testText = 'Hello World';
-                console.log('测试文本:', testText, 'isBase64:', isBase64(testText));
-                
-                // 测试用户提供的Base64字符串
-                const userBase64 = '5piv55qE5Y+R6aG65Liw55qE5pKS5pem5rOV5piv5ZCm';
-                console.log('用户Base64:', userBase64, 'isBase64:', isBase64(userBase64));
-                console.log('用户Base64解码结果:', safeBase64Decode(userBase64));
-            }, 1000);
+
         });
 
         // 设置事件监听器
@@ -700,70 +685,7 @@
             showAlert('所有内容已清空。', 'info');
         }
 
-        // 测试自动检测功能
-        function testAutoDetect() {
-            console.log('=== 测试自动检测功能 ===');
-            console.log('当前设置 - 自动检测:', settings.autoDetect);
-            
-            // 测试1：Base64字符串
-            $('#inputText').val('SGVsbG8gV29ybGQ=');
-            console.log('测试1: 输入Base64字符串 "SGVsbG8gV29ybGQ="');
-            autoDetectAndProcess();
-            
-            setTimeout(() => {
-                // 测试2：普通文本
-                $('#inputText').val('Hello World');
-                console.log('测试2: 输入普通文本 "Hello World"');
-                autoDetectAndProcess();
-                
-                setTimeout(() => {
-                    // 测试3：中文文本
-                    $('#inputText').val('你好世界');
-                    console.log('测试3: 输入中文文本 "你好世界"');
-                    autoDetectAndProcess();
-                    
-                    setTimeout(() => {
-                        // 测试4：中文Base64解码
-                        $('#inputText').val('5L2g5aW95LiW55WM'); // "你好世界"的Base64
-                        console.log('测试4: 输入中文Base64 "5L2g5aW95LiW55WM"');
-                        autoDetectAndProcess();
-                        
-                        setTimeout(() => {
-                            // 测试5：用户提供的Base64字符串
-                            $('#inputText').val('5piv55qE5Y+R6aG65Liw55qE5pKS5pem5rOV5piv5ZCm');
-                            console.log('测试5: 输入用户提供的Base64字符串');
-                            autoDetectAndProcess();
-                            
-                            setTimeout(() => {
-                                // 清空测试内容
-                                $('#inputText').val('');
-                                $('#outputText').val('');
-                                console.log('测试完成，内容已清空');
-                            }, 1000);
-                        }, 1000);
-                    }, 1000);
-                }, 1000);
-            }, 1000);
-        }
 
-        // 测试交换功能
-        function testSwap() {
-            console.log('=== 测试交换功能 ===');
-            
-            // 设置测试内容
-            $('#inputText').val('这是输入框的内容');
-            $('#outputText').val('这是输出框的内容');
-            
-            console.log('设置测试内容完成');
-            console.log('输入框:', $('#inputText').val());
-            console.log('输出框:', $('#outputText').val());
-            
-            // 调用交换函数
-            setTimeout(() => {
-                console.log('开始测试交换...');
-                swapText();
-            }, 500);
-        }
 
         // 语言切换功能
         function switchLanguage(lang, langName, flag) {
