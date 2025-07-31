@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>Base64 在线编码解码 | Base64 加密解密 - Base64.us</title>
+    <link rel="icon" href="./static/images/logo.svg" type="image/png">
+    <meta name="keywords" content="Base64,Base64编码,Base64解码,Base64加密,Base64解密">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -17,7 +19,7 @@
             <a class="navbar-brand" href="#">
                 <img src="/static/images/logo.svg" alt="Logo" width="30" height="24"
                     class="d-inline-block align-text-top">
-                Bases64.com
+                base64<span style="color: rgb(123 18 249);">s</span>.com
             </a>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -82,12 +84,15 @@
             <div class="col">
                 <p class="fw-lighter text-start">请输入要进行 Base64 编码或解码的字符: </p>
                 <div class="position-relative">
-                    <input type="text" style="height: 50vh;" class="form-control" aria-label="Text input with checkbox">
+                    <textarea id="inputText" style="height: 50vh; resize: vertical; font-size: 12px;" class="form-control" 
+                        placeholder="请输入要编码或解码的内容..." aria-label="Text input with checkbox"></textarea>
                     <div class="position-absolute bottom-0 end-0 p-2">
-                        <button type="button" class="btn me-1" title="清空">
-                            <i class="bi bi-back"></i>
+                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="拷贝" onclick="copyToClipboard('inputText')">
+                            <i class="bi bi-clipboard"></i>
                         </button>
-                        <button type="button" class="btn me-1" title="清空">
+                    </div>
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearText('inputText')">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
@@ -96,10 +101,19 @@
             <div class="col">
                 <p class="fw-lighter text-start">Base64 编码或解码的结果: </p>
                 <div class="position-relative">
-                    <input type="text" style="height: 50vh;" class="form-control" aria-label="Text input with checkbox">
+                    <textarea id="outputText" style="height: 50vh; resize: vertical; font-size: 12px;" class="form-control" 
+                        placeholder="编码或解码结果将显示在这里..." aria-label="Text input with checkbox" readonly></textarea>
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearText('outputText')">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
                     <div class="position-absolute bottom-0 end-0 p-2">
-                        <button type="button" class="btn btn-sm btn-outline-success" title="复制">
-                            📋
+                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="拷贝" onclick="copyToClipboard('outputText')">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                        <button type="button" class="btn swap-btn" style="padding:0 5px;" title="交换" onclick="swapText()">
+                            <i class="bi bi-arrow-left-right"></i>
                         </button>
                     </div>
                 </div>
@@ -108,9 +122,21 @@
     </div>
 
     <div class="container">
-        <button type="button" class="btn btn-primary">编码</button>
-        <button type="button" class="btn btn-light">解码</button>
-        <button type="button" class="btn btn-light">交换</button>
+        <button type="button" class="btn btn-primary encode-btn" style="width: 120px;" onclick="encodeText()">编码</button>
+        <button type="button" class="btn btn-light decode-btn" style="width: 120px;" onclick="decodeText()">解码</button>
+        <button type="button" class="btn btn-light swap-btn" style="width: 120px;" onclick="swapText()">交换</button>
+        <input type="text" id="insertChar" class="form-control" style="display: inline-block;width: 150px;"
+            placeholder="插入字符" aria-label="Text input with dropdown button">
+        <button type="button" class="btn btn-outline-secondary" style="width: 120px;" onclick="testAutoDetect()">测试自动检测</button>
+        <button type="button" class="btn btn-outline-info" style="width: 120px;" onclick="testSwap()">测试交换</button>
+    </div>
+
+    <div class="container mt-3">
+        <div id="alertMessage" class="alert alert-info" role="alert" style="display: none;">
+            请在上方第一个文本框中输入要编码/解码的字符。
+        </div>
+        
+
     </div>
 
     <!-- 设置模态框 -->
@@ -161,6 +187,18 @@
                                 </label>
                             </div>
                             <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="autoDetect" checked>
+                                <label class="form-check-label" for="autoDetect">
+                                    自动识别编码/解码
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="insertRandomChar">
+                                <label class="form-check-label" for="insertRandomChar">
+                                    启用随机字符插入
+                                </label>
+                            </div>
+                            <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="showLineNumbers">
                                 <label class="form-check-label" for="showLineNumbers">
                                     显示行号
@@ -178,8 +216,11 @@
                         <div class="mb-3">
                             <label for="fontSize" class="form-label">🔤 字体大小</label>
                             <select class="form-select" id="fontSize">
-                                <option value="12">12px</option>
-                                <option value="14" selected>14px（默认）</option>
+                                <option value="10">10px</option>
+                                <option value="11">11px</option>
+                                <option value="12" selected>12px（默认）</option>
+                                <option value="13">13px</option>
+                                <option value="14">14px</option>
                                 <option value="16">16px</option>
                                 <option value="18">18px</option>
                                 <option value="20">20px</option>
@@ -212,16 +253,525 @@
         </div>
     </div>
 
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
 
     <script>
+        // 全局变量存储设置
+        let settings = {
+            autoEncode: true,
+            autoDetect: true,
+            insertRandomChar: false,
+            showLineNumbers: false,
+            wordWrap: true,
+            enableNotifications: true,
+            enableSound: false,
+            fontSize: '12'
+        };
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            setupEventListeners();
+            showAlert('请在上方第一个文本框中输入要编码/解码的字符。', 'info');
+            
+            // 调试：显示当前设置状态
+            console.log('自动检测设置:', settings.autoDetect);
+            
+            // 确保函数在全局作用域中可用
+            window.encodeText = encodeText;
+            window.decodeText = decodeText;
+            window.swapText = swapText;
+            window.clearText = clearText;
+            window.copyToClipboard = copyToClipboard;
+            window.testAutoDetect = testAutoDetect;
+            window.testSwap = testSwap;
+            
+            // 测试自动检测功能
+            setTimeout(() => {
+                console.log('测试自动检测功能...');
+                // 测试Base64字符串
+                const testBase64 = 'SGVsbG8gV29ybGQ='; // "Hello World"
+                console.log('测试Base64:', testBase64, 'isBase64:', isBase64(testBase64));
+                
+                // 测试普通文本
+                const testText = 'Hello World';
+                console.log('测试文本:', testText, 'isBase64:', isBase64(testText));
+                
+                // 测试用户提供的Base64字符串
+                const userBase64 = '5piv55qE5Y+R6aG65Liw55qE5pKS5pem5rOV5piv5ZCm';
+                console.log('用户Base64:', userBase64, 'isBase64:', isBase64(userBase64));
+                console.log('用户Base64解码结果:', safeBase64Decode(userBase64));
+            }, 1000);
+        });
+
+        // 设置事件监听器
+        function setupEventListeners() {
+            // 使用jQuery设置事件监听器
+            $('#inputText').on('input', function() {
+                if (settings.autoDetect) {
+                    autoDetectAndProcess();
+                }
+            });
+
+            $('#insertChar').on('input', function() {
+                if ($(this).val() && settings.insertRandomChar) {
+                    settings.insertRandomChar = true;
+                    saveSettings();
+                }
+            });
+
+            // 粘贴事件监听
+            $('#inputText').on('paste', function(e) {
+                setTimeout(() => {
+                    if (settings.autoDetect) {
+                        autoDetectAndProcess();
+                    }
+                }, 100);
+            });
+
+            // 设置按钮点击事件
+            $('.encode-btn').on('click', encodeText);
+            $('.decode-btn').on('click', decodeText);
+            $('.swap-btn').on('click', swapText);
+        }
+
+        // 自动检测并处理编码/解码
+        function autoDetectAndProcess() {
+            const text = $('#inputText').val().trim();
+            
+            if (!text) {
+                clearOutput();
+                return;
+            }
+
+            // 调试：显示检测过程
+            console.log('自动检测输入:', text);
+            console.log('是否为Base64:', isBase64(text));
+
+            // 检测是否为Base64编码
+            if (isBase64(text)) {
+                console.log('检测到Base64编码，执行自动解码');
+                autoDecode();
+            } else {
+                console.log('不是Base64，执行自动编码');
+                autoEncode();
+            }
+        }
+
+        // 检查是否为Base64编码
+        function isBase64(str) {
+            // 移除可能的空白字符
+            str = str.replace(/\s/g, '');
+            
+            // 空字符串不是Base64
+            if (!str) {
+                return false;
+            }
+            
+            // Base64字符串长度必须是4的倍数
+            if (str.length % 4 !== 0) {
+                return false;
+            }
+            
+            // 检查是否只包含Base64字符
+            const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/;
+            if (!base64Regex.test(str)) {
+                return false;
+            }
+            
+            // 尝试解码验证
+            try {
+                atob(str);
+                return true;
+            } catch (err) {
+                return false;
+            }
+        }
+
+        // 检查是否为可读文本
+        function isReadableText(str) {
+            // 检查是否包含可读字符
+            const readableChars = str.match(/[a-zA-Z0-9\u4e00-\u9fa5\s.,!?;:'"()[\]{}]/g);
+            return readableChars && readableChars.length > str.length * 0.3;
+        }
+
+        // 安全的中文Base64解码函数
+        function safeBase64Decode(str) {
+            try {
+                // 首先尝试直接解码
+                const binaryString = atob(str);
+                
+                // 尝试使用TextDecoder解码（支持UTF-8）
+                if (typeof TextDecoder !== 'undefined') {
+                    const bytes = new Uint8Array(binaryString.length);
+                    for (let i = 0; i < binaryString.length; i++) {
+                        bytes[i] = binaryString.charCodeAt(i);
+                    }
+                    return new TextDecoder('utf-8').decode(bytes);
+                } else {
+                    // 降级到传统方法，但使用更安全的方式
+                    try {
+                        return decodeURIComponent(escape(binaryString));
+                    } catch (e) {
+                        // 如果escape方法失败，尝试直接返回二进制字符串
+                        return binaryString;
+                    }
+                }
+            } catch (e) {
+                throw new Error('Base64解码失败: ' + e.message);
+            }
+        }
+
+        // 安全的中文Base64编码函数
+        function safeBase64Encode(str) {
+            try {
+                // 尝试使用TextEncoder编码（支持UTF-8）
+                if (typeof TextEncoder !== 'undefined') {
+                    const encoder = new TextEncoder();
+                    const bytes = encoder.encode(str);
+                    let binaryString = '';
+                    for (let i = 0; i < bytes.length; i++) {
+                        binaryString += String.fromCharCode(bytes[i]);
+                    }
+                    return btoa(binaryString);
+                } else {
+                    // 降级到传统方法
+                    return btoa(unescape(encodeURIComponent(str)));
+                }
+            } catch (e) {
+                throw new Error('Base64编码失败: ' + e.message);
+            }
+        }
+
+        // 自动编码（不显示提示）
+        function autoEncode() {
+            let text = $('#inputText').val();
+            if (!text.trim()) return;
+
+            try {
+                // 如果有插入字符且启用了随机插入
+                if ($('#insertChar').val() && settings.insertRandomChar) {
+                    text = insertRandomChar(text, $('#insertChar').val());
+                }
+                
+                // 使用更安全的中文编码方法
+                const encoded = safeBase64Encode(text);
+                $('#outputText').val(encoded);
+                updateButtonStates('encode');
+            } catch (e) {
+                console.log('自动编码失败:', e.message);
+                // 自动编码失败时不显示错误
+            }
+        }
+
+        // 自动解码（不显示提示）
+        function autoDecode() {
+            let text = $('#inputText').val();
+            if (!text.trim()) return;
+
+            try {
+                // 如果有插入字符且启用了随机插入，先移除插入的字符
+                if ($('#insertChar').val() && settings.insertRandomChar) {
+                    text = removeInsertedChar(text, $('#insertChar').val());
+                }
+                
+                // 使用更安全的中文解码方法
+                const decoded = safeBase64Decode(text);
+                $('#outputText').val(decoded);
+                updateButtonStates('decode');
+            } catch (e) {
+                console.log('自动解码失败:', e.message);
+                // 自动解码失败时不显示错误
+            }
+        }
+
+        // Base64编码功能
+        function encodeText() {
+            let text = $('#inputText').val();
+            if (!text.trim()) {
+                showAlert('请输入要编码的内容。', 'warning');
+                return;
+            }
+
+            try {
+                // 如果有插入字符且启用了随机插入
+                if ($('#insertChar').val() && settings.insertRandomChar) {
+                    text = insertRandomChar(text, $('#insertChar').val());
+                }
+                
+                // 使用更安全的中文编码方法
+                const encoded = safeBase64Encode(text);
+                $('#outputText').val(encoded);
+                
+                showAlert('编码成功！', 'success');
+                updateButtonStates('encode');
+            } catch (e) {
+                showAlert('编码失败：' + e.message, 'danger');
+            }
+        }
+
+        // Base64解码功能
+        function decodeText() {
+            let text = $('#inputText').val();
+            if (!text.trim()) {
+                showAlert('请输入要解码的内容。', 'warning');
+                return;
+            }
+
+            try {
+                // 如果有插入字符且启用了随机插入，先移除插入的字符
+                if ($('#insertChar').val() && settings.insertRandomChar) {
+                    text = removeInsertedChar(text, $('#insertChar').val());
+                }
+                
+                // 使用更安全的中文解码方法
+                const decoded = safeBase64Decode(text);
+                $('#outputText').val(decoded);
+                
+                showAlert('解码成功！', 'success');
+                updateButtonStates('decode');
+            } catch (e) {
+                showAlert('解码失败：请检查输入是否为有效的Base64编码。', 'danger');
+            }
+        }
+
+        // 随机插入字符
+        function insertRandomChar(text, char) {
+            const chars = text.split('');
+            const insertPosition = Math.floor(Math.random() * (chars.length + 1));
+            chars.splice(insertPosition, 0, char);
+            return chars.join('');
+        }
+
+        // 移除插入的字符
+        function removeInsertedChar(text, char) {
+            return text.replace(new RegExp(char, 'g'), '');
+        }
+
+        // 交换文本内容
+        function swapText() {
+            console.log('交换函数被调用');
+            
+            // 使用原生JavaScript作为备选方案
+            const inputElement = document.getElementById('inputText');
+            const outputElement = document.getElementById('outputText');
+            
+            if (!inputElement || !outputElement) {
+                console.error('元素未找到');
+                alert('元素未找到，交换功能无法使用');
+                return;
+            }
+            
+            const inputText = inputElement.value;
+            const outputText = outputElement.value;
+            
+            console.log('交换前 - 输入框:', inputText);
+            console.log('交换前 - 输出框:', outputText);
+            
+            // 执行交换
+            inputElement.value = outputText;
+            outputElement.value = inputText;
+            
+            console.log('交换后 - 输入框:', inputElement.value);
+            console.log('交换后 - 输出框:', outputElement.value);
+            
+            showAlert('内容已交换。', 'info');
+        }
+
+        // 复制到剪贴板
+        function copyToClipboard(elementId) {
+            const element = $('#' + elementId)[0];
+            element.select();
+            element.setSelectionRange(0, 99999); // 兼容移动端
+            document.execCommand('copy');
+            
+            showAlert('已复制到剪贴板！', 'success');
+        }
+
+        // 清空文本
+        function clearText(elementId) {
+            $('#' + elementId).val('');
+            if (elementId === 'inputText') {
+                clearOutput();
+            }
+            showAlert('内容已清空。', 'info');
+        }
+
+        // 清空输出
+        function clearOutput() {
+            $('#outputText').val('');
+        }
+
+        // 更新按钮状态
+        function updateButtonStates(action) {
+            if (action === 'encode') {
+                $('.encode-btn').removeClass('btn-light').addClass('btn-primary');
+                $('.decode-btn').removeClass('btn-primary').addClass('btn-light');
+            } else if (action === 'decode') {
+                $('.decode-btn').removeClass('btn-light').addClass('btn-primary');
+                $('.encode-btn').removeClass('btn-primary').addClass('btn-light');
+            }
+        }
+
+        // 显示提示信息
+        function showAlert(message, type = 'info') {
+            $('#alertMessage')
+                .removeClass()
+                .addClass(`alert alert-${type}`)
+                .text(message)
+                .show();
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                $('#alertMessage').hide();
+            }, 3000);
+        }
+
+        // 保存设置
+        function saveSettings() {
+            settings.autoEncode = $('#autoEncode').is(':checked');
+            settings.autoDetect = $('#autoDetect').is(':checked');
+            settings.insertRandomChar = $('#insertRandomChar').is(':checked');
+            settings.showLineNumbers = $('#showLineNumbers').is(':checked');
+            settings.wordWrap = $('#wordWrap').is(':checked');
+            settings.enableNotifications = $('#enableNotifications').is(':checked');
+            settings.enableSound = $('#enableSound').is(':checked');
+            settings.fontSize = $('#fontSize').val();
+            
+            localStorage.setItem('base64Settings', JSON.stringify(settings));
+            showAlert('设置已保存！', 'success');
+            
+            // 应用设置
+            applySettings();
+        }
+
+        // 加载设置
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('base64Settings');
+            if (savedSettings) {
+                settings = JSON.parse(savedSettings);
+            }
+            
+            // 应用设置到UI
+            $('#autoEncode').prop('checked', settings.autoEncode);
+            $('#autoDetect').prop('checked', settings.autoDetect);
+            $('#insertRandomChar').prop('checked', settings.insertRandomChar);
+            $('#showLineNumbers').prop('checked', settings.showLineNumbers);
+            $('#wordWrap').prop('checked', settings.wordWrap);
+            $('#enableNotifications').prop('checked', settings.enableNotifications);
+            $('#enableSound').prop('checked', settings.enableSound);
+            $('#fontSize').val(settings.fontSize);
+            
+            // 应用设置
+            applySettings();
+        }
+
+        // 应用设置
+        function applySettings() {
+            // 应用字体大小
+            applyFontSize();
+            
+            // 应用自动换行
+            if (settings.wordWrap) {
+                $('textarea').css('white-space', 'pre-wrap');
+            } else {
+                $('textarea').css('white-space', 'pre');
+            }
+            
+            // 应用行号显示（如果需要的话）
+            if (settings.showLineNumbers) {
+                // 这里可以添加行号显示的逻辑
+            }
+        }
+
+        // 应用字体大小
+        function applyFontSize() {
+            // 设置最小字体大小为10px，最大为20px
+            const fontSize = Math.max(10, Math.min(20, parseInt(settings.fontSize)));
+            $('textarea').css('font-size', fontSize + 'px');
+        }
+
+        // 清空所有内容
+        function clearAll() {
+            $('#inputText').val('');
+            $('#outputText').val('');
+            showAlert('所有内容已清空。', 'info');
+        }
+
+        // 测试自动检测功能
+        function testAutoDetect() {
+            console.log('=== 测试自动检测功能 ===');
+            console.log('当前设置 - 自动检测:', settings.autoDetect);
+            
+            // 测试1：Base64字符串
+            $('#inputText').val('SGVsbG8gV29ybGQ=');
+            console.log('测试1: 输入Base64字符串 "SGVsbG8gV29ybGQ="');
+            autoDetectAndProcess();
+            
+            setTimeout(() => {
+                // 测试2：普通文本
+                $('#inputText').val('Hello World');
+                console.log('测试2: 输入普通文本 "Hello World"');
+                autoDetectAndProcess();
+                
+                setTimeout(() => {
+                    // 测试3：中文文本
+                    $('#inputText').val('你好世界');
+                    console.log('测试3: 输入中文文本 "你好世界"');
+                    autoDetectAndProcess();
+                    
+                    setTimeout(() => {
+                        // 测试4：中文Base64解码
+                        $('#inputText').val('5L2g5aW95LiW55WM'); // "你好世界"的Base64
+                        console.log('测试4: 输入中文Base64 "5L2g5aW95LiW55WM"');
+                        autoDetectAndProcess();
+                        
+                        setTimeout(() => {
+                            // 测试5：用户提供的Base64字符串
+                            $('#inputText').val('5piv55qE5Y+R6aG65Liw55qE5pKS5pem5rOV5piv5ZCm');
+                            console.log('测试5: 输入用户提供的Base64字符串');
+                            autoDetectAndProcess();
+                            
+                            setTimeout(() => {
+                                // 清空测试内容
+                                $('#inputText').val('');
+                                $('#outputText').val('');
+                                console.log('测试完成，内容已清空');
+                            }, 1000);
+                        }, 1000);
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }
+
+        // 测试交换功能
+        function testSwap() {
+            console.log('=== 测试交换功能 ===');
+            
+            // 设置测试内容
+            $('#inputText').val('这是输入框的内容');
+            $('#outputText').val('这是输出框的内容');
+            
+            console.log('设置测试内容完成');
+            console.log('输入框:', $('#inputText').val());
+            console.log('输出框:', $('#outputText').val());
+            
+            // 调用交换函数
+            setTimeout(() => {
+                console.log('开始测试交换...');
+                swapText();
+            }, 500);
+        }
+
         // 语言切换功能
         function switchLanguage(lang, langName, flag) {
             // 更新按钮显示
-            const langButton = document.querySelector('.dropdown-toggle');
-            langButton.innerHTML = `${flag} ${langName}`;
+            $('.dropdown-toggle').html(`${flag} ${langName}`);
 
             // 保存语言选择
             localStorage.setItem('selectedLanguage', JSON.stringify({
@@ -229,6 +779,154 @@
                 name: langName,
                 flag: flag
             }));
+        }
+
+        // 添加键盘快捷键支持
+        $(document).on('keydown', function(e) {
+            // Ctrl+Enter 编码
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                encodeText();
+            }
+            // Ctrl+Shift+Enter 解码
+            if (e.ctrlKey && e.shiftKey && e.key === 'Enter') {
+                e.preventDefault();
+                decodeText();
+            }
+            // Ctrl+S 交换
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                swapText();
+            }
+            // Ctrl+L 清空
+            if (e.ctrlKey && e.key === 'l') {
+                e.preventDefault();
+                clearAll();
+            }
+        });
+
+        // 添加文件拖拽上传功能
+        $('#inputText').on('dragover', function(e) {
+            e.preventDefault();
+            $(this).addClass('border-primary');
+        }).on('dragleave', function(e) {
+            e.preventDefault();
+            $(this).removeClass('border-primary');
+        }).on('drop', function(e) {
+            e.preventDefault();
+            $(this).removeClass('border-primary');
+            
+            const files = e.originalEvent.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#inputText').val(e.target.result);
+                    if (settings.autoDetect) {
+                        autoDetectAndProcess();
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // 统计相关函数
+        function updateCharCount() {
+            const inputLength = $('#inputText').val().length;
+            const outputLength = $('#outputText').val().length;
+            
+            $('#inputCharCount').text(inputLength);
+            $('#outputCharCount').text(outputLength);
+        }
+
+        function updateStats() {
+            $('#encodeCount').text(stats.encodeCount);
+            $('#decodeCount').text(stats.decodeCount);
+        }
+
+        function saveStats() {
+            localStorage.setItem('base64Stats', JSON.stringify(stats));
+        }
+
+        function loadStats() {
+            const savedStats = localStorage.getItem('base64Stats');
+            if (savedStats) {
+                stats = JSON.parse(savedStats);
+                updateStats();
+            }
+        }
+
+        // 清空所有内容
+        function clearAll() {
+            $('#inputText').val('');
+            $('#outputText').val('');
+            $('#insertChar').val('');
+            updateCharCount();
+            showAlert('所有内容已清空。', 'info');
+        }
+
+        // 播放音效
+        function playSound(type) {
+            if (!settings.enableSound) return;
+            
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                if (type === 'success') {
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
+                } else if (type === 'error') {
+                    oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime + 0.1);
+                }
+                
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                // 如果Web Audio API不可用，静默失败
+            }
+        }
+
+        // 增强的Base64检测函数
+        function isBase64(str) {
+            if (str === '' || str.trim() === '') {
+                return false;
+            }
+            
+            try {
+                // 检查是否只包含Base64字符
+                const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/;
+                if (!base64Regex.test(str)) {
+                    return false;
+                }
+                
+                // 尝试解码
+                const decoded = atob(str);
+                // 检查解码结果是否有效
+                return btoa(decoded) === str;
+            } catch (err) {
+                return false;
+            }
+        }
+
+        // 增强的可读文本检测
+        function isReadableText(str) {
+            if (!str || str.length === 0) return false;
+            
+            // 检查是否包含可读字符（包括中文）
+            const readableChars = str.match(/[a-zA-Z0-9\u4e00-\u9fa5\s.,!?;:'"()[\]{}]/g);
+            const readableRatio = readableChars ? readableChars.length / str.length : 0;
+            
+            // 如果可读字符比例超过50%，认为是可读文本
+            return readableRatio > 0.5;
         }
     </script>
 </body>
