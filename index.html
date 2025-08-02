@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Base64 在线编码解码 | Base64 加密解密 - Base64.us</title>
+    <title>Base64 Online Encoder Decoder | Base64 Encryption Decryption - Base64.us</title>
     <link rel="icon" href="./static/images/logo.svg" type="image/png">
-    <meta name="keywords" content="Base64,Base64编码,Base64解码,Base64加密,Base64解密">
+    <meta name="keywords" content="Base64,Base64 Encode,Base64 Decode,Base64 Encrypt,Base64 Decrypt">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
@@ -29,51 +29,51 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">文字编码</a>
+                        <a class="nav-link" href="#" data-nav="textEncode">Text Encode</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">图片编码</a>
+                        <a class="nav-link" href="#" data-nav="imageEncode">Image Encode</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">文件编码</a>
+                        <a class="nav-link" href="#" data-nav="fileEncode">File Encode</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">网页编码</a>
+                        <a class="nav-link" href="#" data-nav="webEncode">Web Encode</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            常见问题
+                            aria-expanded="false" data-nav="faq">
+                            FAQ
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">密码如何防止破解?</a></li>
-                            <li><a class="dropdown-item" href="#">如何使用此网站?</a></li>
+                            <li><a class="dropdown-item" href="#" data-nav="faqItem1">How to prevent password cracking?</a></li>
+                            <li><a class="dropdown-item" href="#" data-nav="faqItem2">How to use this website?</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                            <li><a class="dropdown-item" href="#" data-nav="faqItem3">Something else here</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">关于我们</a>
+                        <a class="nav-link" href="#" data-nav="about">About Us</a>
                     </li>
                 </ul>
                 <div class="d-flex navbar-buttons">
                     <!-- 语言选择按钮 -->
                     <div class="dropdown me-2">
-                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
+                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm language-toggle" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            🌐 中文
+                            🇺🇸 English
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">🇺🇸 English</a></li>
-                            <li><a class="dropdown-item" href="#">🇨🇳 简体中文</a></li>
+                            <li><a class="dropdown-item language-item" href="#" data-lang="en">🇺🇸 English</a></li>
+                            <li><a class="dropdown-item language-item" href="#" data-lang="zh">🇨🇳 简体中文</a></li>
                         </ul>
                     </div>
                     <!-- 设置按钮 -->
                     <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="modal"
-                        data-bs-target="#settingsModal">
-                        ⚙️ 设置
+                        data-bs-target="#settingsModal" data-nav="settings">
+                        ⚙️ Settings
                     </button>
                 </div>
             </div>
@@ -84,12 +84,12 @@
     <div class="container text-center" style="margin-top: 20px;margin-bottom: 20px;">
         <div class="row textarea-container">
             <div class="col input-section">
-                <p class="fw-lighter text-start">请输入要进行 Base64 编码或解码的字符: </p>
+                <p class="fw-lighter text-start" data-main="inputLabel">Please enter the characters to be Base64 encoded or decoded:</p>
                 <div class="position-relative">
-                    <textarea id="inputText" class="code-input" placeholder="请输入要编码或解码的内容..."
+                    <textarea id="inputText" class="code-input" placeholder="Please enter the content to be encoded or decoded..."
                         aria-label="Text input with checkbox"></textarea>
                     <div class="position-absolute top-0 end-0 p-2">
-                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空"
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="Clear"
                             onclick="clearText('inputText')">
                             <i class="bi bi-x-lg"></i>
                         </button>
@@ -101,34 +101,35 @@
             <div class="col-12 mobile-buttons" style="margin: 0;padding: 0;">
                 <div class="d-flex justify-content-center gap-2 my-3">
                     <button type="button" class="btn btn-primary encode-btn" onclick="encodeText()"
-                        style="width: 100px;">
+                        style="width: 100px;" data-main="encodeBtn">
                         <i class="bi bi-lightbulb-fill"></i>
-                        编码
+                        Encode
                     </button>
-                    <button type="button" class="btn btn-info decode-btn" style="width: 100px;" onclick="decodeText()">
+                    <button type="button" class="btn btn-info decode-btn" style="width: 100px;" onclick="decodeText()" 
+                        data-main="decodeBtn">
                         <i class="bi bi-lightbulb-off"></i>
-                        解码
+                        Decode
                     </button>
-                    <button type="button" class="btn btn-secondary swap-btn" style="width: 100px;">
+                    <button type="button" class="btn btn-secondary swap-btn" style="width: 100px;" data-main="swapBtn">
                         <i class="bi bi-repeat"></i>
-                        交换
+                        Swap
                     </button>
                 </div>
             </div>
 
             <div class="col output-section">
-                <p class="fw-lighter text-start">Base64 编码或解码的结果: </p>
+                <p class="fw-lighter text-start" data-main="outputLabel">Base64 encoding or decoding result:</p>
                 <div class="position-relative">
-                    <textarea id="outputText" class="code-input" placeholder="编码或解码结果将显示在这里..."
+                    <textarea id="outputText" class="code-input" placeholder="The encoding or decoding result will be displayed here..."
                         aria-label="Text input with checkbox"></textarea>
                     <div class="position-absolute top-0 end-0 p-2">
-                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空"
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="Clear"
                             onclick="clearText('outputText')">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
                     <div class="position-absolute bottom-0 p-2" style="right: 20px;">
-                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="拷贝"
+                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="Copy"
                             onclick="copyToClipboard('outputText')">
                             <i class="bi bi-intersect"></i>
                         </button>
@@ -140,75 +141,77 @@
 
     <!-- 桌面端操作按钮 -->
     <div class="container desktop-buttons">
-        <button type="button" class="btn btn-primary encode-btn" onclick="encodeText()" style="width: 120px;">
+        <button type="button" class="btn btn-primary encode-btn" onclick="encodeText()" style="width: 120px;" 
+            data-main="encodeBtn">
             <i class="bi bi-lightbulb-fill"></i>
-            编码
+            Encode
         </button>
-        <button type="button" class="btn btn-info decode-btn" style="width: 120px;" onclick="decodeText()">
+        <button type="button" class="btn btn-info decode-btn" style="width: 120px;" onclick="decodeText()" 
+            data-main="decodeBtn">
             <i class="bi bi-lightbulb-off"></i>
-            解码
+            Decode
         </button>
-        <button type="button" class="btn btn-secondary swap-btn" style="width: 120px;">
+        <button type="button" class="btn btn-secondary swap-btn" style="width: 120px;" data-main="swapBtn">
             <i class="bi bi-repeat"></i>
-            交换
+            Swap
         </button>
     </div>
     <div class="container" style="margin-top: 20px;">
         <div id="alertMessage" class="alert alert-info" role="alert" style="display: none;">
-            请在上方第一个文本框中输入要编码/解码的字符。
+            Please enter the characters to be encoded/decoded in the first text box above.
         </div>
     </div>
 
     <!-- 设置用户的常用操作 -->
     <div class="container">
         <hr>
-        <!-- 使用flexbox实现自适应布局 -->
-        <div class="d-flex flex-wrap gap-3 align-items-end">
-            <!-- 自动添加字符串 -->
-            <div class="flex-shrink-0" style="min-width: 300px;">
-                <label class="form-label small">自动添加字符串</label>
-                <div class="input-group">
-                    <input type="text" id="autoAddString" class="form-control" placeholder="最多100个字符" maxlength="100"
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="编码时自动添加此字符串，解码时自动移除。用于防止内容被轻易识别。">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="positionDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-tooltip="tooltip"
-                        data-bs-placement="top" title="选择字符串插入的位置">
-                        <span id="currentPosition">随机位置</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item position-option" href="#" data-value="random">随机位置</a></li>
-                        <li><a class="dropdown-item position-option" href="#" data-value="start">在开头添加</a></li>
-                        <li><a class="dropdown-item position-option" href="#" data-value="end">在结尾添加</a></li>
-                        <li><a class="dropdown-item position-option" href="#" data-value="random-edge">随机在开头或结尾</a></li>
-                    </ul>
-                </div>
-            </div>
+                 <!-- 使用flexbox实现自适应布局 -->
+         <div class="d-flex flex-wrap gap-3 align-items-end">
+             <!-- 自动添加字符串 -->
+             <div class="flex-shrink-0" style="min-width: 300px;">
+                 <label class="form-label small" data-ops="autoAddString">Auto Add String</label>
+                 <div class="input-group">
+                     <input type="text" id="autoAddString" class="form-control" placeholder="Maximum 100 characters" maxlength="100"
+                         data-bs-toggle="tooltip" data-bs-placement="top" title="Automatically add this string when encoding and remove it when decoding. Used to prevent content from being easily identified.">
+                     <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="positionDropdown"
+                         data-bs-toggle="dropdown" aria-expanded="false" data-bs-tooltip="tooltip"
+                         data-bs-placement="top" title="Select the position to insert the string">
+                         <span id="currentPosition">Random Position</span>
+                     </button>
+                     <ul class="dropdown-menu dropdown-menu-end">
+                         <li><a class="dropdown-item position-option" href="#" data-value="random">Random Position</a></li>
+                         <li><a class="dropdown-item position-option" href="#" data-value="start">Add at Beginning</a></li>
+                         <li><a class="dropdown-item position-option" href="#" data-value="end">Add at End</a></li>
+                         <li><a class="dropdown-item position-option" href="#" data-value="random-edge">Random at Beginning or End</a></li>
+                     </ul>
+                 </div>
+             </div>
 
-            <!-- 编码次数 -->
-            <div class="flex-shrink-0" style="min-width: 10px;">
-                <label class="form-label small">编码次数</label>
-                <input type="number" id="encodeCount" class="form-control" value="1" min="1" max="100"
-                    data-bs-toggle="tooltip" data-bs-placement="top" title="设置Base64编码的次数，多次编码可增强安全性。建议1-10次。">
-            </div>
+             <!-- 编码次数 -->
+             <div class="flex-shrink-0" style="min-width: 10px;">
+                 <label class="form-label small" data-ops="encodeCount">Encode Count</label>
+                 <input type="number" id="encodeCount" class="form-control" value="1" min="1" max="100"
+                     data-bs-toggle="tooltip" data-bs-placement="top" title="Set the number of Base64 encoding times, multiple encoding can enhance security. Recommended 1-10 times.">
+             </div>
 
-            <!-- 自动复制结果开关 -->
-            <div class="flex-shrink-0">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="autoCopyResult" checked
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="开启后，编码/解码完成时自动复制结果到剪贴板，无需手动点击复制按钮。">
-                    <label class="form-check-label small" for="autoCopyResult">自动复制结果</label>
-                </div>
-            </div>
+             <!-- 自动复制结果开关 -->
+             <div class="flex-shrink-0">
+                 <div class="form-check form-switch">
+                     <input class="form-check-input" type="checkbox" role="switch" id="autoCopyResult" checked
+                         data-bs-toggle="tooltip" data-bs-placement="top" title="When enabled, automatically copy the result to clipboard after encoding/decoding without manual copy button click.">
+                     <label class="form-check-label small" for="autoCopyResult" data-ops="autoCopyResult">Auto Copy Result</label>
+                 </div>
+             </div>
 
-            <!-- 自动编解码开关 -->
-            <div class="flex-shrink-0">
-                <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" id="autoDetectSwitch" checked
-                        data-bs-toggle="tooltip" data-bs-placement="top" title="开启后，输入内容时自动检测是否为Base64并进行相应的编码或解码操作。">
-                    <label class="form-check-label small" for="autoDetectSwitch">自动编解码</label>
-                </div>
-            </div>
-        </div>
+             <!-- 自动编解码开关 -->
+             <div class="flex-shrink-0">
+                 <div class="form-check form-switch">
+                     <input class="form-check-input" type="checkbox" role="switch" id="autoDetectSwitch" checked
+                         data-bs-toggle="tooltip" data-bs-placement="top" title="When enabled, automatically detect whether the input is Base64 and perform corresponding encoding or decoding operations.">
+                     <label class="form-check-label small" for="autoDetectSwitch" data-ops="autoDetectSwitch">Auto Encode/Decode</label>
+                 </div>
+             </div>
+         </div>
     </div>
 
     <!-- 设置模态框 -->
@@ -216,7 +219,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="settingsModalLabel">⚙️ 系统设置</h1>
+                    <h1 class="modal-title fs-5" id="settingsModalLabel" data-settings="title">⚙️ System Settings</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -225,48 +228,50 @@
                         <div class="mb-3">
                             <!-- 自动添加字符串设置 -->
                             <div class="mb-2">
-                                <label class="form-label small">自动添加字符串</label>
+                                <label class="form-label small" data-settings="autoAddStringLabel">Auto Add String</label>
                                 <div class="input-group mb-2">
                                     <input type="text" id="modalAutoAddString" class="form-control"
-                                        placeholder="最多100个字符" maxlength="100" data-bs-toggle="tooltip"
-                                        title="编码时自动添加此字符串，解码时自动移除。用于防止内容被轻易识别。">
+                                        placeholder="Maximum 100 characters" maxlength="100" data-bs-toggle="tooltip"
+                                        title="Automatically add this string when encoding and remove it when decoding. Used to prevent content from being easily identified.">
                                 </div>
                                 <select class="form-select form-select-sm" id="modalAddPosition">
-                                    <option value="random">随机位置</option>
-                                    <option value="start">在开头添加</option>
-                                    <option value="end">在结尾添加</option>
-                                    <option value="random-edge">随机在开头或结尾</option>
+                                    <option value="random">Random Position</option>
+                                    <option value="start">Add at Beginning</option>
+                                    <option value="end">Add at End</option>
+                                    <option value="random-edge">Random at Beginning or End</option>
                                 </select>
                             </div>
 
                             <!-- 编码次数设置 -->
                             <div class="mb-2">
-                                <label class="form-label small">编码次数</label>
+                                <label class="form-label small" data-settings="encodeCountLabel">Encode Count</label>
                                 <input type="number" id="modalEncodeCount" class="form-control" value="1" min="1"
-                                    max="10" data-bs-toggle="tooltip" title="设置Base64编码的次数，多次编码可增强安全性。建议1-3次。">
+                                    max="10" data-bs-toggle="tooltip" title="Set the number of Base64 encoding times, multiple encoding can enhance security. Recommended 1-3 times.">
                             </div>
 
                             <!-- 开关设置 -->
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="modalAutoCopyResult" checked>
                                 <label class="form-check-label" for="modalAutoCopyResult" data-bs-toggle="tooltip"
-                                    title="开启后，编码/解码完成时自动复制结果到剪贴板">
-                                    自动复制结果
+                                    title="When enabled, automatically copy the result to clipboard after encoding/decoding"
+                                    data-settings="autoCopyResultLabel">
+                                    Auto Copy Result
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="modalAutoDetectSwitch" checked>
                                 <label class="form-check-label" for="modalAutoDetectSwitch" data-bs-toggle="tooltip"
-                                    title="开启后，输入内容时自动检测是否为Base64并进行相应的编码或解码操作">
-                                    自动编解码
+                                    title="When enabled, automatically detect whether the input is Base64 and perform corresponding encoding or decoding operations"
+                                    data-settings="autoDetectSwitchLabel">
+                                    Auto Encode/Decode
                                 </label>
                             </div>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                    <button type="button" class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-settings="cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSettings()" data-settings="save">Save Settings</button>
                 </div>
             </div>
         </div>
@@ -278,6 +283,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
+    <!-- 多语言支持 -->
+    <script src="./static/js/languageswitch.js"></script>
 
     <script>
         // 全局变量存储设置
@@ -397,7 +404,7 @@
                     saveSettingsToStorage();
                 } else {
                     $(this).val(settings.encodeCount);
-                    showAlert('编码次数必须在1-10之间', 'warning');
+                    showAlert(window.LanguageManager.getText('messages.encodeCountRange'), 'warning');
                 }
             });
 
@@ -716,7 +723,7 @@
                 }
 
                 // 显示自动复制提示
-                showAlert('结果已自动复制到剪贴板！', 'success');
+                showAlert(window.LanguageManager.getText('messages.autoCopied'), 'success');
             } catch (e) {
                 console.error('传统复制方法失败:', e);
             }
@@ -786,7 +793,7 @@
         function encodeText() {
             let text = $('#inputText').val();
             if (!text.trim()) {
-                showAlert('请输入要编码的内容。', 'warning');
+                showAlert(window.LanguageManager.getText('messages.inputRequired'), 'warning');
                 return;
             }
 
@@ -807,14 +814,15 @@
 
                 // 显示成功提示，包含编码次数信息
                 const message = settings.encodeCount > 1 ?
-                    `编码成功！（${settings.encodeCount}次编码）` : '编码成功！';
+                    window.LanguageManager.formatMessage('messages.encodeSuccessMultiple', { count: settings.encodeCount }) :
+                    window.LanguageManager.getText('messages.encodeSuccess');
                 showAlert(message, 'success');
                 updateButtonStates('encode');
 
                 // 第四步：自动复制结果（如果开启）
                 autoCopyToClipboard(encoded);
             } catch (e) {
-                showAlert('编码失败：' + e.message, 'danger');
+                showAlert(window.LanguageManager.getText('messages.encodeError') + e.message, 'danger');
             }
         }
 
@@ -822,7 +830,7 @@
         function decodeText() {
             let text = $('#inputText').val();
             if (!text.trim()) {
-                showAlert('请输入要解码的内容。', 'warning');
+                showAlert(window.LanguageManager.getText('messages.inputRequiredDecode'), 'warning');
                 return;
             }
 
@@ -845,14 +853,15 @@
 
                 // 显示成功提示，包含解码次数信息
                 const message = decodeResult.decodeTimes > 1 ?
-                    `解码成功！（${decodeResult.decodeTimes}次解码）` : '解码成功！';
+                    window.LanguageManager.formatMessage('messages.decodeSuccessMultiple', { count: decodeResult.decodeTimes }) :
+                    window.LanguageManager.getText('messages.decodeSuccess');
                 showAlert(message, 'success');
                 updateButtonStates('decode');
 
                 // 第四步：自动复制结果（如果开启）
                 autoCopyToClipboard(decoded);
             } catch (e) {
-                showAlert('解码失败：请检查输入是否为有效的Base64编码。', 'danger');
+                showAlert(window.LanguageManager.getText('messages.decodeError'), 'danger');
             }
         }
 
@@ -901,7 +910,7 @@
             }, 50);
 
             // 显示操作成功提示信息
-            showAlert('内容已交换。', 'info');
+            showAlert(window.LanguageManager.getText('messages.swapped'), 'info');
         }
 
         // 复制到剪贴板 - 手动复制功能，保持原有焦点
@@ -916,7 +925,7 @@
                 // 使用现代的Clipboard API（如果支持）
                 if (navigator.clipboard && window.isSecureContext) {
                     navigator.clipboard.writeText(text).then(() => {
-                        showAlert('已复制到剪贴板！', 'success');
+                        showAlert(window.LanguageManager.getText('messages.copied'), 'success');
                     }).catch(() => {
                         // 降级到传统方法
                         fallbackManualCopy(element, activeElement);
@@ -927,7 +936,7 @@
                 }
             } catch (e) {
                 console.error('复制失败:', e);
-                showAlert('复制失败，请手动选择文本复制。', 'danger');
+                showAlert(window.LanguageManager.getText('messages.copyFailed'), 'danger');
             }
         }
 
@@ -945,10 +954,10 @@
                     }, 100);
                 }
 
-                showAlert('已复制到剪贴板！', 'success');
+                showAlert(window.LanguageManager.getText('messages.copied'), 'success');
             } catch (e) {
                 console.error('传统复制方法失败:', e);
-                showAlert('复制失败，请手动选择文本复制。', 'danger');
+                showAlert(window.LanguageManager.getText('messages.copyFailed'), 'danger');
             }
         }
 
@@ -958,7 +967,7 @@
             if (elementId === 'inputText') {
                 clearOutput();
             }
-            showAlert('内容已清空。', 'info');
+            showAlert(window.LanguageManager.getText('messages.cleared'), 'info');
         }
 
         // 清空输出
@@ -1016,7 +1025,7 @@
             }
 
             localStorage.setItem('base64Settings', JSON.stringify(settings));
-            showAlert('设置已保存！', 'success');
+            showAlert(window.LanguageManager.getText('messages.settingsSaved'), 'success');
 
             // 应用设置到界面
             applySettings();
@@ -1163,7 +1172,7 @@
             $('#outputText').val('');
             $('#insertChar').val('');
             updateCharCount();
-            showAlert('所有内容已清空。', 'info');
+            showAlert(window.LanguageManager.getText('messages.cleared'), 'info');
         }
 
         // 增强的Base64检测函数
