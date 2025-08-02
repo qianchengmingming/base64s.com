@@ -1,0 +1,36 @@
+# robots.txt for Base64s.com
+# 优化搜索引擎爬取规则
+
+# 允许所有搜索引擎爬取所有内容
+User-agent: *
+Allow: /
+
+# 禁止爬取临时文件和系统文件
+Disallow: /.*
+Disallow: /*.tmp
+Disallow: /*.bak
+Disallow: /test*
+
+# 站点地图位置
+Sitemap: https://base64s.com/sitemap.xml
+
+# 特定搜索引擎优化设置
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+# 主要页面（供搜索引擎参考）
+# https://base64s.com/
+# https://base64s.com/image2base64.html
+# https://base64s.com/file2base64.html
+# https://base64s.com/webpage2base64.html
+# https://base64s.com/html/about/
+# https://base64s.com/html/faq/what-is-base64.html

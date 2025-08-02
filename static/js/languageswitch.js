@@ -25,13 +25,16 @@ window.LanguageManager = {
         let initialLanguage = 'en';
         if (savedLanguage && this.supportedLanguages.includes(savedLanguage)) {
             initialLanguage = savedLanguage;
+            console.log('使用本地存储的语言设置:', savedLanguage);
         } else {
             // 检测浏览器语言
-            const browserLang = navigator.language || navigator.userLanguage;
-            if (browserLang.startsWith('zh')) {
-                initialLanguage = 'zh';
-            }
+            initialLanguage = this.detectBrowserLanguage();
+            console.log('检测到浏览器语言:', initialLanguage);
         }
+        
+        // 检测当前页面类型
+        this.currentPageType = this.detectPageType();
+        console.log('检测到页面类型:', this.currentPageType);
         
         // 预加载语言文件
         await this.preloadLanguages();
@@ -94,6 +97,78 @@ window.LanguageManager = {
         return `/static/language/${language}.json`;
     },
     
+    // 检测浏览器语言 - 更详细的语言检测机制
+    detectBrowserLanguage() {
+        // 尝试从不同来源获取浏览器语言
+        const languages = [
+            navigator.language,
+            navigator.userLanguage,
+            navigator.browserLanguage,
+            navigator.systemLanguage
+        ].filter(Boolean);
+        
+        // 遍历所有可能的语言设置
+        for (const lang of languages) {
+            // 检查是否是中文（包括简体、繁体）
+            if (lang.toLowerCase().startsWith('zh')) {
+                return 'zh';
+            }
+            // 检查是否是英文
+            if (lang.toLowerCase().startsWith('en')) {
+                return 'en';
+            }
+        }
+        
+        // 检查浏览器接受的语言列表
+        if (navigator.languages && navigator.languages.length > 0) {
+            for (const lang of navigator.languages) {
+                if (lang.toLowerCase().startsWith('zh')) {
+                    return 'zh';
+                }
+                if (lang.toLowerCase().startsWith('en')) {
+                    return 'en';
+                }
+            }
+        }
+        
+        // 默认返回英文
+        return 'en';
+    },
+    
+    // 检测当前页面类型 - 用于确定加载哪种meta信息
+    detectPageType() {
+        const pathname = window.location.pathname;
+        const filename = pathname.split('/').pop() || 'index.html';
+        
+        // 根据文件名或路径确定页面类型
+        if (pathname === '/' || filename === 'index.html') {
+            return 'home';
+        } else if (filename === 'image2base64.html') {
+            return 'image';
+        } else if (filename === 'file2base64.html') {
+            return 'file';
+        } else if (filename === 'webpage2base64.html') {
+            return 'webpage';
+        } else if (filename === 'sitemap.html') {
+            return 'sitemap';
+        } else if (pathname.includes('/about/')) {
+            return 'about';
+        } else if (pathname.includes('/faq/')) {
+            // 根据具体的FAQ页面返回不同类型
+            if (pathname.includes('prevent-password-cracking')) {
+                return 'faq.password-protection';
+            } else if (pathname.includes('how-to-use-website')) {
+                return 'faq.how-to-use';
+            } else if (pathname.includes('what-is-base64')) {
+                return 'faq.what-is-base64';
+            } else if (pathname.includes('privacy-policy')) {
+                return 'faq.privacy-policy';
+            }
+            return 'faq.what-is-base64'; // 默认FAQ页面
+        }
+        return 'home'; // 默认返回首页类型
+    },
+    
     // 设置语言
     async setLanguage(language) {
         if (!this.supportedLanguages.includes(language)) {
@@ -130,12 +205,8 @@ window.LanguageManager = {
             return;
         }
         
-        // 更新页面标题和meta信息
-        document.title = data.meta.title;
-        const keywordsMetaTag = document.querySelector('meta[name="keywords"]');
-        if (keywordsMetaTag) {
-            keywordsMetaTag.setAttribute('content', data.meta.keywords);
-        }
+        // 更新页面meta信息（title、description、keywords）
+        this.updateMetaTags(data);
         
         // 更新导航栏
         this.updateNavbar(data.navbar);
@@ -168,6 +239,61 @@ window.LanguageManager = {
         
         // 更新所有带有data-i18n属性的元素
         this.updateDataI18nElements(data);
+    },
+    
+    // 更新meta标签信息 - 根据当前页面类型和语言动态更新
+    updateMetaTags(data) {
+        if (!data.meta || !data.meta.pages) {
+            console.warn('语言数据中缺少meta.pages信息');
+            return;
+        }
+        
+        // 根据页面类型获取对应的meta信息
+        const pageMetaData = this.getNestedValue(data.meta.pages, this.currentPageType);
+        
+        if (!pageMetaData) {
+            console.warn(`未找到页面类型 "${this.currentPageType}" 的meta数据`);
+            return;
+        }
+        
+        // 更新HTML lang属性
+        document.documentElement.setAttribute('lang', this.currentLanguage === 'zh' ? 'zh-CN' : 'en');
+        
+        // 更新页面标题
+        if (pageMetaData.title) {
+            document.title = pageMetaData.title;
+        }
+        
+        // 更新keywords meta标签
+        if (pageMetaData.keywords) {
+            let keywordsMetaTag = document.querySelector('meta[name="keywords"]');
+            if (!keywordsMetaTag) {
+                // 如果不存在keywords标签，创建一个
+                keywordsMetaTag = document.createElement('meta');
+                keywordsMetaTag.setAttribute('name', 'keywords');
+                document.head.appendChild(keywordsMetaTag);
+            }
+            keywordsMetaTag.setAttribute('content', pageMetaData.keywords);
+        }
+        
+        // 更新description meta标签
+        if (pageMetaData.description) {
+            let descriptionMetaTag = document.querySelector('meta[name="description"]');
+            if (!descriptionMetaTag) {
+                // 如果不存在description标签，创建一个
+                descriptionMetaTag = document.createElement('meta');
+                descriptionMetaTag.setAttribute('name', 'description');
+                document.head.appendChild(descriptionMetaTag);
+            }
+            descriptionMetaTag.setAttribute('content', pageMetaData.description);
+        }
+        
+        console.log(`已更新页面 "${this.currentPageType}" 的meta信息 (${this.currentLanguage}):`, {
+            title: pageMetaData.title,
+            description: pageMetaData.description,
+            keywords: pageMetaData.keywords,
+            htmlLang: document.documentElement.getAttribute('lang')
+        });
     },
     
     // 更新导航栏

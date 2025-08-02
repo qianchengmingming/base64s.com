@@ -1,14 +1,66 @@
 {
   "meta": {
-    "title": "Base64 Online Encoder Decoder | Base64 Encryption Decryption - Base64.us",
-    "keywords": "Base64,Base64 Encode,Base64 Decode,Base64 Encrypt,Base64 Decrypt"
+    "pages": {
+      "home": {
+        "title": "Base64 Online Encoder Decoder | Free Base64 Encryption Tool - Base64s.com",
+        "description": "Free online Base64 encoder and decoder with advanced security features. Convert text, images, files to Base64 instantly. Auto-detection, multiple encoding, privacy-focused.",
+        "keywords": "Base64 encoder,Base64 decoder,online Base64 converter,free Base64 tool,Base64 encoding online,Base64 decoding online,text to Base64,Base64 encryption tool,secure Base64 converter,Base64 generator"
+      },
+      "image": {
+        "title": "Image to Base64 Converter | Free Online Image Base64 Encoder - Base64s.com",
+        "description": "Convert images to Base64 online for free. Support JPG, PNG, GIF, SVG, WebP. Perfect for web development, email embedding, and data URLs. Instant conversion with preview.",
+        "keywords": "image to Base64 converter,PNG to Base64,JPG to Base64,image Base64 encoder,convert image to Base64 online,Base64 image generator,data URL converter,embed image Base64,online image encoder,free image to Base64"
+      },
+      "file": {
+        "title": "File to Base64 Converter | Any File Format Base64 Encoder - Base64s.com",
+        "description": "Convert any file to Base64 online. Support all file formats up to 50MB. Multiple output formats: plain text, data URI, JSON, XML. Perfect for file embedding and storage.",
+        "keywords": "file to Base64 converter,PDF to Base64,document to Base64,any file Base64 encoder,convert file to Base64 online,Base64 file generator,file embedding tool,data URI generator,online file encoder,free file to Base64"
+      },
+      "webpage": {
+        "title": "Webpage to Base64 Converter | URL to Base64 Online Tool - Base64s.com",
+        "description": "Convert any webpage or URL to Base64 encoding. Perfect for web archiving, content backup, and data storage. CORS-enabled with live preview functionality.",
+        "keywords": "webpage to Base64 converter,URL to Base64,HTML to Base64,web page encoder,convert website to Base64,web archiving tool,HTML Base64 converter,online webpage encoder,website backup tool,free URL to Base64"
+      },
+      "about": {
+        "title": "About Base64s.com | Professional Base64 Encoding Platform",
+        "description": "Learn about Base64s.com - the leading online Base64 encoding and decoding platform. Our mission, team, security features, and commitment to user privacy.",
+        "keywords": "Base64s.com about,professional Base64 platform,online encoding tools,Base64 service provider,secure Base64 tools,privacy-focused encoding,Base64 platform features,online converter tools,web development tools,encoding service"
+      },
+      "faq": {
+        "password-protection": {
+          "title": "How to Prevent Password Cracking with Base64 | Security Guide - Base64s.com",
+          "description": "Learn advanced security techniques for Base64 encoding. Discover auto-add strings and multiple encoding rounds to protect your data from unauthorized access.",
+          "keywords": "Base64 security tips,password protection Base64,secure Base64 encoding,prevent Base64 cracking,multiple encoding security,auto-add string protection,Base64 encryption security,data protection techniques,secure encoding methods,Base64 security guide"
+        },
+        "how-to-use": {
+          "title": "How to Use Base64s.com | Complete Guide to All Features - Base64s.com",
+          "description": "Complete tutorial on using Base64s.com. Learn about text, image, file, and webpage encoding modules. Tips for maximum efficiency and security features.",
+          "keywords": "how to use Base64 encoder,Base64 tutorial guide,online encoder tutorial,Base64 tool instructions,encoding guide,Base64 converter tutorial,web tool guide,online encoding tutorial,Base64 usage guide,encoding tools tutorial"
+        },
+        "what-is-base64": {
+          "title": "What is Base64 Encoding | Complete Guide and Use Cases - Base64s.com",
+          "description": "Comprehensive guide to Base64 encoding. Learn what Base64 is, when to use it, best practices, limitations, and real-world applications in web development.",
+          "keywords": "what is Base64 encoding,Base64 explained guide,Base64 encoding tutorial,binary to text encoding,ASCII encoding methods,Base64 use cases,data encoding guide,Base64 applications,encoding algorithms,Base64 encoding explained"
+        },
+        "privacy-policy": {
+          "title": "Privacy Policy | Data Protection at Base64s.com",
+          "description": "Our privacy policy explains how Base64s.com protects your data. All processing is client-side, ensuring your data never leaves your browser. GDPR compliant.",
+          "keywords": "Base64s.com privacy policy,data protection online tools,GDPR compliant encoder,client-side processing,secure online tools,privacy-focused encoding,no data storage policy,secure Base64 tools,data privacy protection,online tool privacy"
+        }
+      },
+      "sitemap": {
+        "title": "Site Map | Base64s.com - All Base64 Tools and Resources",
+        "description": "Complete site map of Base64s.com. Find all Base64 encoding tools, tutorials, and resources in one place. Easy navigation to all features.",
+        "keywords": "Base64s.com sitemap,Base64 tools navigation,site map,Base64 resources,encoding tools directory,website navigation,Base64 tool finder"
+      }
+    }
   },
   "navbar": {
     "brand": "base64s.com",
-    "textEncode": "Text Encode",
-    "imageEncode": "Image Encode", 
-    "fileEncode": "File Encode",
-    "webEncode": "Web Encode",
+    "textEncode": "StringToBase64",
+    "imageEncode": "ImageToBase64", 
+    "fileEncode": "FileToBase64",
+    "webEncode": "WebToBase64",
     "faq": "FAQ",
     "faqItem1": "How to prevent password cracking?",
     "faqItem2": "How to use this website?",

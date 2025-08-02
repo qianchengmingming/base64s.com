@@ -1,7 +1,59 @@
 {
   "meta": {
-    "title": "Base64 在线编码解码 | Base64 加密解密 - Base64.us",
-    "keywords": "Base64,Base64编码,Base64解码,Base64加密,Base64解密"
+    "pages": {
+      "home": {
+        "title": "Base64 在线编码解码器 | 免费Base64加密工具 - Base64s.com",
+        "description": "免费在线Base64编码解码器，具有高级安全功能。即时转换文本、图片、文件为Base64。支持自动检测、多次编码，注重隐私保护。",
+        "keywords": "Base64编码器,Base64解码器,在线Base64转换,免费Base64工具,Base64在线编码,Base64在线解码,文本转Base64,Base64加密工具,安全Base64转换器,Base64生成器"
+      },
+      "image": {
+        "title": "图片转Base64转换器 | 免费在线图片Base64编码器 - Base64s.com",
+        "description": "免费在线图片转Base64。支持JPG、PNG、GIF、SVG、WebP格式。完美适用于网页开发、邮件嵌入和数据URL。即时转换并预览。",
+        "keywords": "图片转Base64转换器,PNG转Base64,JPG转Base64,图片Base64编码器,在线图片转Base64,Base64图片生成器,数据URL转换器,图片嵌入Base64,在线图片编码器,免费图片转Base64"
+      },
+      "file": {
+        "title": "文件转Base64转换器 | 任意文件格式Base64编码器 - Base64s.com",
+        "description": "在线转换任意文件为Base64。支持所有文件格式，最大50MB。多种输出格式：纯文本、数据URI、JSON、XML。完美适用于文件嵌入和存储。",
+        "keywords": "文件转Base64转换器,PDF转Base64,文档转Base64,任意文件Base64编码器,在线文件转Base64,Base64文件生成器,文件嵌入工具,数据URI生成器,在线文件编码器,免费文件转Base64"
+      },
+      "webpage": {
+        "title": "网页转Base64转换器 | URL转Base64在线工具 - Base64s.com",
+        "description": "将任意网页或URL转换为Base64编码。完美适用于网页归档、内容备份和数据存储。支持CORS，具有实时预览功能。",
+        "keywords": "网页转Base64转换器,URL转Base64,HTML转Base64,网页编码器,网站转Base64,网页归档工具,HTML Base64转换器,在线网页编码器,网站备份工具,免费URL转Base64"
+      },
+      "about": {
+        "title": "关于Base64s.com | 专业Base64编码平台",
+        "description": "了解Base64s.com - 领先的在线Base64编码解码平台。我们的使命、团队、安全功能以及对用户隐私的承诺。",
+        "keywords": "Base64s.com关于,专业Base64平台,在线编码工具,Base64服务提供商,安全Base64工具,隐私保护编码,Base64平台功能,在线转换工具,网页开发工具,编码服务"
+      },
+      "faq": {
+        "password-protection": {
+          "title": "Base64密码如何防止破解 | 安全指南 - Base64s.com",
+          "description": "学习Base64编码的高级安全技术。了解自动添加字符串和多轮编码，保护您的数据免受未经授权的访问。",
+          "keywords": "Base64安全技巧,密码保护Base64,安全Base64编码,防止Base64破解,多重编码安全,自动添加字符串保护,Base64加密安全,数据保护技术,安全编码方法,Base64安全指南"
+        },
+        "how-to-use": {
+          "title": "如何使用Base64s.com | 完整功能指南 - Base64s.com",
+          "description": "Base64s.com完整使用教程。学习文本、图片、文件和网页编码模块。获取最大效率和安全功能的使用技巧。",
+          "keywords": "如何使用Base64编码器,Base64教程指南,在线编码器教程,Base64工具使用说明,编码指南,Base64转换器教程,网页工具指南,在线编码教程,Base64使用指南,编码工具教程"
+        },
+        "what-is-base64": {
+          "title": "什么是Base64编码 | 完整指南和使用场景 - Base64s.com",
+          "description": "Base64编码综合指南。了解什么是Base64、何时使用、最佳实践、限制以及在网页开发中的实际应用。",
+          "keywords": "什么是Base64编码,Base64解释指南,Base64编码教程,二进制转文本编码,ASCII编码方法,Base64使用场景,数据编码指南,Base64应用,编码算法,Base64编码解释"
+        },
+        "privacy-policy": {
+          "title": "隐私政策 | Base64s.com数据保护",
+          "description": "我们的隐私政策说明Base64s.com如何保护您的数据。所有处理均在客户端完成，确保您的数据永不离开浏览器。符合GDPR规范。",
+          "keywords": "Base64s.com隐私政策,在线工具数据保护,GDPR合规编码器,客户端处理,安全在线工具,隐私保护编码,无数据存储政策,安全Base64工具,数据隐私保护,在线工具隐私"
+        }
+      },
+      "sitemap": {
+        "title": "网站地图 | Base64s.com - 所有Base64工具和资源",
+        "description": "Base64s.com完整网站地图。在一个地方找到所有Base64编码工具、教程和资源。便捷访问所有功能。",
+        "keywords": "Base64s.com网站地图,Base64工具导航,站点地图,Base64资源,编码工具目录,网站导航,Base64工具查找器"
+      }
+    }
   },
   "navbar": {
     "brand": "base64s.com",

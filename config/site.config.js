@@ -17,7 +17,7 @@ window.SiteConfig = {
     
     // 联系方式
     contact: {
-        email: "contact@base64s.com"
+        email: "tim_info@163.com"
     },
     
     // 技术支持
