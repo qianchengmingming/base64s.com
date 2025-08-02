@@ -473,15 +473,25 @@
         // 显示提示消息
         function showAlert(message, type = 'info') {
             const alertElement = $('#alertMessage');
+            
+            // 清除之前的定时器（如果存在）
+            const existingTimer = alertElement.data('hideTimer');
+            if (existingTimer) {
+                clearTimeout(existingTimer);
+            }
+            
             alertElement.removeClass('alert-success alert-danger alert-warning alert-info');
             alertElement.addClass(`alert-${type}`);
             alertElement.text(message);
             alertElement.show();
             
-            // 3秒后自动隐藏
-            setTimeout(() => {
+            // 10秒后自动隐藏，并保存定时器ID
+            const hideTimer = setTimeout(() => {
                 alertElement.hide();
-            }, 3000);
+                alertElement.removeData('hideTimer');
+            }, 10000);
+            
+            alertElement.data('hideTimer', hideTimer);
         }
 
         // 初始化工具提示

@@ -330,11 +330,24 @@ window.LanguageManager = {
             '[data-main="swapBtn"]': mainData.swapBtn
         };
         
+        // 单独处理初始消息，因为它在messages对象中
+        const currentData = this.languageData[this.currentLanguage];
+        if (currentData && currentData.messages && currentData.messages.initialMessage) {
+            const alertElements = document.querySelectorAll('[data-main="initialMessage"]');
+            alertElements.forEach(element => {
+                if (element) {
+                    element.textContent = currentData.messages.initialMessage;
+                }
+            });
+        }
+        
         Object.entries(elements).forEach(([selector, text]) => {
-            const element = document.querySelector(selector);
-            if (element) {
-                element.textContent = text;
-            }
+            const elementsList = document.querySelectorAll(selector);
+            elementsList.forEach(element => {
+                if (element) {
+                    element.textContent = text;
+                }
+            });
         });
         
         // 更新placeholder
@@ -346,6 +359,16 @@ window.LanguageManager = {
         if (outputTextarea) {
             outputTextarea.setAttribute('placeholder', mainData.outputPlaceholder);
         }
+
+        
+        // 更新title属性
+        const titleElements = document.querySelectorAll('[data-main-title]');
+        titleElements.forEach(element => {
+            const titleKey = element.getAttribute('data-main-title');
+            if (mainData[titleKey]) {
+                element.setAttribute('title', mainData[titleKey]);
+            }
+        });
     },
     
     // 更新图片页面内容
@@ -497,16 +520,74 @@ window.LanguageManager = {
         
         // 更新下拉菜单选项
         const positionOptions = document.querySelectorAll('.position-option');
-        const positionTexts = [
-            operationsData.positionRandom,
-            operationsData.positionStart,
-            operationsData.positionEnd,
-            operationsData.positionRandomEdge
-        ];
+        positionOptions.forEach((option) => {
+            const value = option.getAttribute('data-value');
+            switch(value) {
+                case 'random':
+                    option.textContent = operationsData.positionRandom;
+                    break;
+                case 'start':
+                    option.textContent = operationsData.positionStart;
+                    break;
+                case 'end':
+                    option.textContent = operationsData.positionEnd;
+                    break;
+                case 'random-edge':
+                    option.textContent = operationsData.positionRandomEdge;
+                    break;
+            }
+        });
         
-        positionOptions.forEach((option, index) => {
-            if (positionTexts[index]) {
-                option.textContent = positionTexts[index];
+        // 更新当前位置显示
+        const currentPositionElement = document.getElementById('currentPosition');
+        if (currentPositionElement) {
+            // 从localStorage获取当前设置的位置值
+            let currentPosition = 'random';
+            try {
+                const savedSettings = localStorage.getItem('base64Settings');
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    currentPosition = settings.addPosition || 'random';
+                }
+            } catch (e) {
+                console.warn('无法读取位置设置，使用默认值');
+            }
+            
+            switch(currentPosition) {
+                case 'random':
+                    currentPositionElement.textContent = operationsData.positionRandom;
+                    break;
+                case 'start':
+                    currentPositionElement.textContent = operationsData.positionStart;
+                    break;
+                case 'end':
+                    currentPositionElement.textContent = operationsData.positionEnd;
+                    break;
+                case 'random-edge':
+                    currentPositionElement.textContent = operationsData.positionRandomEdge;
+                    break;
+                default:
+                    currentPositionElement.textContent = operationsData.positionRandom;
+            }
+        }
+        
+        // 更新模态框中的选项
+        const modalSelectOptions = document.querySelectorAll('#modalAddPosition option');
+        modalSelectOptions.forEach((option) => {
+            const value = option.getAttribute('value');
+            switch(value) {
+                case 'random':
+                    option.textContent = operationsData.positionRandom;
+                    break;
+                case 'start':
+                    option.textContent = operationsData.positionStart;
+                    break;
+                case 'end':
+                    option.textContent = operationsData.positionEnd;
+                    break;
+                case 'random-edge':
+                    option.textContent = operationsData.positionRandomEdge;
+                    break;
             }
         });
         
