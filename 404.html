@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - Base64s.com</title>
+    <meta name="description" content="The page you are looking for was not found. Redirecting to home page.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet" 
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- 导航栏样式 -->
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    <!-- 网站配置 -->
+    <script src="/config/site.config.js"></script>
+    
+    <style>
+        /* 404页面专用样式 */
+        .error-container {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .error-content {
+            max-width: 600px;
+            padding: 2rem;
+        }
+        
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            color: #e74c3c;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+        
+        .error-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+        
+        .error-description {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 2rem;
+        }
+        
+        .countdown-container {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid #e9ecef;
+        }
+        
+        .countdown-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #3498db;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .action-buttons {
+            margin-top: 2rem;
+        }
+        
+        .action-buttons .btn {
+            margin: 0.5rem;
+            min-width: 150px;
+        }
+        
+        .features-grid {
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            transition: transform 0.2s ease;
+            border: 1px solid #e9ecef;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 5rem;
+            }
+            
+            .error-title {
+                font-size: 2rem;
+            }
+            
+            .error-description {
+                font-size: 1rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .action-buttons .btn {
+                display: block;
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏容器 -->
+    <div id="navbar-container"></div>
+    
+    <div class="container-fluid">
+        <div class="error-container">
+            <div class="error-content">
+                <!-- 错误代码 -->
+                <div class="error-code">404</div>
+                
+                <!-- 错误标题 -->
+                <h1 class="error-title" data-404="title">Page Not Found</h1>
+                
+                <!-- 错误描述 -->
+                <p class="error-description" data-404="description">
+                    Sorry, the page you are looking for doesn't exist or has been moved.
+                </p>
+                
+                <!-- 倒计时容器 -->
+                <div class="countdown-container">
+                    <div class="row align-items-center">
+                        <div class="col-md-4">
+                            <div class="countdown-number" id="countdown">5</div>
+                        </div>
+                        <div class="col-md-8">
+                            <h4 data-404="countdownTitle">Auto Redirect</h4>
+                            <p class="mb-0" data-404="countdownText">
+                                Redirecting to home page in <span id="countdown-text">5</span> seconds...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 行动按钮 -->
+                <div class="action-buttons">
+                    <a href="/index.html" class="btn btn-primary btn-lg">
+                        <i class="bi bi-house-door me-2"></i>
+                        <span data-404="homeButton">Go to Home</span>
+                    </a>
+                    <button id="cancel-redirect" class="btn btn-outline-secondary btn-lg">
+                        <i class="bi bi-pause-circle me-2"></i>
+                        <span data-404="cancelButton">Cancel Redirect</span>
+                    </button>
+                </div>
+                
+                <!-- 功能模块快速访问 -->
+                <div class="features-grid">
+                    <h4 class="mb-4" data-404="quickAccess">Quick Access to Our Features</h4>
+                    <div class="row g-3">
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-type fs-1 text-primary mb-2"></i>
+                                    <h6 class="card-title">Text Encoding</h6>
+                                    <p class="card-text small">Encode/decode text with security features</p>
+                                    <a href="/index.html" class="btn btn-outline-primary btn-sm">Try Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-image fs-1 text-success mb-2"></i>
+                                    <h6 class="card-title">Image Encoding</h6>
+                                    <p class="card-text small">Convert images to Base64 format</p>
+                                    <a href="/image2base64.html" class="btn btn-outline-success btn-sm">Try Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-file-earmark fs-1 text-warning mb-2"></i>
+                                    <h6 class="card-title">File Encoding</h6>
+                                    <p class="card-text small">Encode files with multiple formats</p>
+                                    <a href="/file2base64.html" class="btn btn-outline-warning btn-sm">Try Now</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3">
+                            <div class="card feature-card h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-globe fs-1 text-info mb-2"></i>
+                                    <h6 class="card-title">Web Encoding</h6>
+                                    <p class="card-text small">Encode web pages from URLs</p>
+                                    <a href="/webpage2base64.html" class="btn btn-outline-info btn-sm">Try Now</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript引用 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- 导航栏管理 -->
+    <script src="/static/js/navbar.js"></script>
+    <!-- 多语言支持 -->
+    <script src="/static/js/languageswitch.js"></script>
+
+    <!-- 404页面专用JavaScript -->
+    <script>
+        // 倒计时和重定向功能
+        let countdownTimer = null;
+        let countdownValue = 5;
+        let redirectCancelled = false;
+
+        $(document).ready(function() {
+
+            
+            // 清理重定向标记
+            if (window.ErrorHandler) {
+                window.ErrorHandler.clearRedirectFlag();
+            }
+            sessionStorage.removeItem('redirecting_to_404');
+            
+            // 开始倒计时
+            startCountdown();
+            
+            // 取消重定向按钮事件
+            $('#cancel-redirect').on('click', function() {
+                cancelRedirect();
+            });
+            
+            // 监听多语言系统初始化完成
+            const checkLanguageManager = setInterval(function() {
+                if (window.LanguageManager && window.LanguageManager.languageData) {
+                    clearInterval(checkLanguageManager);
+                    
+                    update404Content();
+                }
+            }, 100);
+            
+            // 设置页面标题
+            updatePageTitle();
+        });
+
+        // 开始倒计时
+        function startCountdown() {
+            if (redirectCancelled) return;
+            
+            countdownTimer = setInterval(function() {
+                if (redirectCancelled) {
+                    clearInterval(countdownTimer);
+                    return;
+                }
+                
+                countdownValue--;
+                $('#countdown').text(countdownValue);
+                $('#countdown-text').text(countdownValue);
+                
+                if (countdownValue <= 0) {
+                    clearInterval(countdownTimer);
+                    window.location.href = '/index.html';
+                }
+            }, 1000);
+        }
+
+        // 取消重定向
+        function cancelRedirect() {
+            redirectCancelled = true;
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+            
+            // 更新UI显示
+            $('.countdown-container').html(`
+                <div class="text-center">
+                    <i class="bi bi-pause-circle fs-1 text-warning mb-3"></i>
+                    <h4>Redirect Cancelled</h4>
+                    <p class="mb-0">You can now navigate manually using the buttons above.</p>
+                </div>
+            `);
+            
+            // 隐藏取消按钮
+            $('#cancel-redirect').hide();
+        }
+
+        // 更新404内容（多语言支持）
+        function update404Content() {
+            try {
+                if (window.LanguageManager && window.LanguageManager.languageData) {
+                    const currentLang = window.LanguageManager.currentLanguage;
+                    const languageData = window.LanguageManager.languageData[currentLang];
+                    
+                    if (languageData && languageData.error404) {
+                        const error404Data = languageData.error404;
+                        
+                        // 更新文本内容
+                        $('[data-404="title"]').text(error404Data.title);
+                        $('[data-404="description"]').text(error404Data.description);
+                        $('[data-404="countdownTitle"]').text(error404Data.countdownTitle);
+                        $('[data-404="homeButton"]').text(error404Data.homeButton);
+                        $('[data-404="cancelButton"]').text(error404Data.cancelButton);
+                        $('[data-404="quickAccess"]').text(error404Data.quickAccess);
+                        
+                        // 更新倒计时文本
+                        if (!redirectCancelled) {
+                            $('[data-404="countdownText"]').html(
+                                error404Data.countdownText.replace('{seconds}', '<span id="countdown-text">' + countdownValue + '</span>')
+                            );
+                        }
+                        
+        
+                    }
+                }
+            } catch (error) {
+                console.error('更新404页面内容失败:', error);
+            }
+        }
+
+        // 更新页面标题
+        function updatePageTitle() {
+            try {
+                if (window.SiteConfig && window.SiteConfig.site) {
+                    document.title = `Page Not Found - ${window.SiteConfig.site.name}`;
+                }
+            } catch (error) {
+                console.error('更新页面标题失败:', error);
+            }
+        }
+
+        // 处理页面离开事件
+        window.addEventListener('beforeunload', function() {
+            if (countdownTimer) {
+                clearInterval(countdownTimer);
+            }
+        });
+    </script>
+</body>
+</html>

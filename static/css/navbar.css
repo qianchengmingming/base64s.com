@@ -1,0 +1,167 @@
+/**
+ * 导航栏专用样式
+ * 包含导航栏的所有样式和响应式设计
+ */
+
+/* 导航栏基础样式 */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    padding: 0.5rem 0;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* 移动端导航栏优化 */
+@media (max-width: 991.98px) {
+    .navbar-nav {
+        text-align: center;
+        padding: 1rem 0;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid #f8f9fa;
+    }
+    
+    .navbar-nav .nav-link:last-child {
+        border-bottom: none;
+    }
+    
+    .navbar-nav .dropdown-menu {
+        border: none;
+        box-shadow: none;
+        background-color: #f8f9fa;
+        margin-top: 0;
+    }
+    
+    .navbar-nav .dropdown-item {
+        text-align: center;
+        padding: 0.5rem 1rem;
+    }
+    
+    /* 移动端右侧按钮优化 */
+    .navbar .navbar-buttons {
+        justify-content: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #dee2e6;
+        width: 100%;
+    }
+    
+    .navbar .navbar-buttons .btn {
+        margin: 0 0.25rem;
+        font-size: 0.875rem;
+        min-width: 80px;
+    }
+    
+    .navbar .navbar-buttons .dropdown-menu {
+        min-width: 150px;
+    }
+    
+    /* 汉堡菜单按钮样式 */
+    .navbar-toggler {
+        border: 1px solid #dee2e6;
+        font-size: 1.25rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.375rem;
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        border-color: #86b7fe;
+    }
+    
+    .navbar-toggler:hover {
+        background-color: rgba(0,0,0,.05);
+    }
+    
+    /* 移动端菜单展开动画 */
+    .navbar-collapse {
+        transition: all 0.3s ease-in-out;
+    }
+    
+    /* 移动端品牌logo优化 */
+    .navbar-brand img {
+        margin-right: 0.5rem;
+    }
+    
+    /* 移动端激活状态样式 */
+    .navbar-nav .nav-link.active {
+        background-color: #0d6efd;
+        color: white !important;
+        font-weight: 600;
+        border-radius: 0.25rem;
+        margin: 0.25rem 1rem;
+    }
+}
+
+/* 大屏幕导航栏优化 */
+@media (min-width: 992px) {
+    .navbar-nav .nav-link {
+        margin: 0 0.5rem;
+        border-radius: 0.25rem;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        background-color: rgba(0,0,0,.05);
+        transform: translateY(-1px);
+    }
+    
+    /* 激活状态样式 */
+    .navbar-nav .nav-link.active {
+        background-color: #0d6efd;
+        color: white !important;
+        font-weight: 600;
+        box-shadow: 0 2px 4px rgba(13, 110, 253, 0.3);
+    }
+    
+    .navbar-nav .nav-link.active:hover {
+        background-color: #0b5ed7;
+        transform: translateY(-1px);
+    }
+}
+
+/* 品牌logo样式 */
+.navbar-brand img {
+    margin-right: 0.5rem;
+}
+
+/* 导航栏加载状态 */
+#navbar-container {
+    min-height: 70px; /* 防止布局跳动 */
+}
+
+/* 加载动画 */
+.navbar-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70px;
+    background-color: #f8f9fa;
+}
+
+.navbar-loading::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid #dee2e6;
+    border-top: 2px solid #0d6efd;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 确保导航栏在其他内容之上 */
+.navbar {
+    z-index: 1030;
+    position: relative;
+}

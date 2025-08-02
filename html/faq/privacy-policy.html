@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy | FAQ - Base64s.com</title>
+    <link rel="icon" href="/static/images/logo.svg" type="image/png">
+    <meta name="description" content="Privacy Policy for Base64s.com - Learn about how we protect your data and privacy.">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" 
+        rel="stylesheet" 
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" 
+        crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- 导航栏样式 -->
+    <link rel="stylesheet" href="/static/css/navbar.css">
+    
+    <style>
+        /* Privacy Policy页面专用样式 */
+        .privacy-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-radius: 15px;
+            margin-top: 2rem;
+        }
+        
+        .privacy-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #333;
+        }
+        
+        .privacy-content h2 {
+            color: #495057;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+        
+        .privacy-content h3 {
+            color: #6c757d;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        
+        .privacy-content p {
+            margin-bottom: 1.2rem;
+        }
+        
+        .privacy-content ul, .privacy-content ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .privacy-content li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .privacy-content code {
+            background-color: #f8f9fa;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            color: #e83e8c;
+        }
+        
+        .highlight-box {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .action-buttons {
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .action-buttons .btn {
+            margin: 0.5rem;
+            min-width: 160px;
+        }
+        
+        .last-updated {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #6c757d;
+        }
+        
+        @media (max-width: 768px) {
+            .privacy-container {
+                padding: 15px;
+            }
+            
+            .privacy-header {
+                margin-top: 1rem;
+                padding: 1.5rem;
+            }
+            
+            .privacy-content {
+                font-size: 1rem;
+            }
+            
+            .action-buttons .btn {
+                display: block;
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 导航栏容器 -->
+    <div id="navbar-container"></div>
+    
+    <div class="container-fluid">
+        <div class="privacy-container">
+            <!-- 页面头部 -->
+            <div class="privacy-header">
+                <h1 data-privacy-title="title">Privacy Policy</h1>
+                <p data-privacy-subtitle="subtitle" class="lead mb-0">How we protect your data and privacy</p>
+            </div>
+            
+            <!-- 返回按钮 -->
+            <div class="mb-4">
+                <a href="/index.html" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    <span data-faq="backToHome">← Back to Home</span>
+                </a>
+
+            </div>
+            
+            <!-- 最后更新时间 -->
+            <div class="last-updated">
+                <small>
+                    <i class="bi bi-calendar-event"></i>
+                    <span data-privacy="lastUpdated">Last updated: December 2024</span>
+                </small>
+            </div>
+            
+            <!-- Privacy Policy内容区域 -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div id="privacy-content" class="privacy-content">
+                                <!-- 内容将由JavaScript从语言文件中加载 -->
+                                <div class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-3 text-muted">Loading content...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 联系信息框 -->
+            <div class="info-box mt-4">
+                <h5>
+                    <i class="bi bi-envelope me-2"></i>
+                    <span data-privacy="contactTitle">Questions about Privacy?</span>
+                </h5>
+                <p class="mb-2" data-privacy="contactDescription">
+                    If you have any questions about this Privacy Policy, please contact us:
+                </p>
+                <p class="mb-0">
+                    <strong>Email:</strong> 
+                    <a href="mailto:contact@base64s.com" id="privacy-email">contact@base64s.com</a>
+                </p>
+            </div>
+            
+            <!-- 行动按钮 -->
+            <div class="action-buttons">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <a href="/index.html" class="btn btn-primary btn-lg">
+                            <i class="bi bi-shield-check me-2"></i>
+                            <span data-privacy="startUsing">Start Using Safely</span>
+                        </a>
+                    </div>
+                    <div class="col-auto">
+                        <a href="/html/about/index.html" class="btn btn-outline-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <span data-privacy="learnMore">Learn More About Us</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 网站配置文件 -->
+    <script src="/config/site.config.js"></script>
+    
+    <!-- JavaScript引用 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- 导航栏管理 -->
+    <script src="/static/js/navbar.js"></script>
+    <!-- 多语言支持 -->
+    <script src="/static/js/languageswitch.js"></script>
+
+    <!-- Privacy Policy页面专用JavaScript -->
+    <script>
+        // Privacy Policy页面初始化
+        $(document).ready(function() {
+
+            
+            // 加载网站配置
+            loadSiteConfig();
+            
+            // 设置超时处理，防止无限等待
+            let loadingTimeout = setTimeout(function() {
+
+                if (!window.LanguageManager || !window.LanguageManager.languageData) {
+
+                    loadDefaultContent();
+                } else {
+
+
+
+                }
+            }, 3000);
+            
+            // 监听多语言系统初始化完成
+            const checkLanguageManager = setInterval(function() {
+                if (window.LanguageManager && window.LanguageManager.languageData && window.LanguageManager.currentLanguage) {
+                    const currentLang = window.LanguageManager.currentLanguage;
+                    const languageData = window.LanguageManager.languageData[currentLang];
+
+                    if (languageData && languageData.privacy) {
+                        clearInterval(checkLanguageManager);
+                        clearTimeout(loadingTimeout);
+
+                        loadPrivacyContent();
+                    } else if (languageData) {
+
+                    }
+                }
+            }, 100);
+            
+            // 兜底：如果3秒后还没加载完成，使用默认内容
+            setTimeout(function() {
+                if ($('#privacy-content .spinner-border').length > 0) {
+
+                    loadDefaultContent();
+                }
+            }, 3000);
+            
+            // 监听语言切换事件
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('language-item')) {
+
+                    // 延迟重新加载内容，等待语言切换完成
+                    setTimeout(function() {
+                        if (window.LanguageManager && window.LanguageManager.currentLanguage && window.LanguageManager.languageData) {
+                            const currentLang = window.LanguageManager.currentLanguage;
+                            const languageData = window.LanguageManager.languageData[currentLang];
+
+                            if (languageData && languageData.privacy) {
+                                loadPrivacyContent();
+                            } else {
+
+                                loadDefaultContent();
+                            }
+                        }
+                    }, 500);
+                }
+            });
+        });
+
+        // 加载网站配置
+        function loadSiteConfig() {
+            if (window.SiteConfig) {
+                // 更新隐私邮箱
+                $('#privacy-email').text(window.SiteConfig.contact.email).attr('href', `mailto:${window.SiteConfig.contact.email}`);
+
+            }
+        }
+
+        // 加载Privacy Policy内容
+        function loadPrivacyContent() {
+            try {
+                const currentLang = window.LanguageManager.currentLanguage;
+                const languageData = window.LanguageManager.languageData[currentLang];
+                const privacyData = languageData.privacy;
+                
+                if (!privacyData) {
+
+                    loadDefaultContent();
+                    return;
+                }
+                
+                // 更新标题和副标题
+                $('[data-privacy-title]').text(privacyData.title);
+                $('[data-privacy-subtitle]').text(privacyData.subtitle);
+                
+                // 更新返回按钮
+                if (languageData && languageData.faq) {
+                    $('[data-faq="backToHome"]').text(languageData.faq.backToHome);
+                }
+                
+                // 更新所有privacy相关的文本
+                $('[data-privacy]').each(function() {
+                    const key = $(this).data('privacy');
+                    if (privacyData[key]) {
+                        $(this).text(privacyData[key]);
+                    }
+                });
+                
+                // 渲染内容
+                const contentHtml = renderMarkdownContent(privacyData.content);
+                $('#privacy-content').html(contentHtml);
+                
+                // 更新页面标题
+                document.title = privacyData.title + ' | FAQ - Base64s.com';
+                
+
+                
+            } catch (error) {
+
+                loadDefaultContent();
+            }
+        }
+
+        // 加载默认内容（英文）
+        function loadDefaultContent() {
+            const defaultContent = [
+                "## 1. Information We Collect",
+                "",
+                "### Data Processing",
+                "Base64s.com is designed with privacy in mind. **All encoding and decoding operations are performed entirely on your device** using client-side JavaScript. This means:",
+                "",
+                "- Your data never leaves your browser",
+                "- We do not store any content you encode or decode",
+                "- No files or text are transmitted to our servers",
+                "- All processing happens locally on your computer",
+                "",
+                "### Website Usage Data",
+                "We may collect standard web analytics data through your browser, including:",
+                "",
+                "- Pages visited and time spent on site",
+                "- Browser type and version",
+                "- Operating system information", 
+                "- General geographic location (country/city level)",
+                "- Referring websites",
+                "",
+                "This data is collected anonymously and used solely to improve our service.",
+                "",
+                "## 2. How We Use Information",
+                "",
+                "### Primary Use",
+                "Since all encoding/decoding happens on your device, we do not have access to your actual data. Any usage data we collect is used to:",
+                "",
+                "- Improve website performance and user experience",
+                "- Monitor for technical issues and system errors",
+                "- Understand which features are most useful to users",
+                "- Generate anonymous usage statistics",
+                "",
+                "### We Do NOT:",
+                "- Store your encoded or decoded content",
+                "- Track your individual encoding activities",
+                "- Share your data with third parties",
+                "- Use your data for advertising purposes",
+                "- Require registration or login",
+                "",
+                "## 3. Data Storage and Security",
+                "",
+                "### Local Storage",
+                "Base64s.com uses browser local storage only for:",
+                "",
+                "- Saving your preferred settings (language, auto-copy preferences)",
+                "- Remembering your chosen encoding options",
+                "- Storing UI preferences for better user experience",
+                "",
+                "**Important:** This data remains on your device and is never transmitted to our servers.",
+                "",
+                "### Security Measures",
+                "We implement several security measures:",
+                "",
+                "- **HTTPS encryption** for all website communications",
+                "- **Client-side processing** ensuring data privacy",
+                "- **No server-side storage** of user content",
+                "- **Regular security updates** to our platform",
+                "- **Secure hosting** with industry-standard protections",
+                "",
+                "## 4. Cookies and Tracking",
+                "",
+                "### Essential Cookies Only",
+                "We use minimal cookies necessary for website functionality:",
+                "",
+                "- **Session cookies** for basic website operation",
+                "- **Preference cookies** to remember your settings",
+                "- **Security cookies** to protect against attacks",
+                "",
+                "### No Tracking Cookies",
+                "We do **NOT** use:",
+                "",
+                "- Advertising tracking cookies",
+                "- Cross-site tracking mechanisms",
+                "- Third-party analytics that identify individual users",
+                "- Social media tracking pixels",
+                "",
+                "## 5. Third-Party Services",
+                "",
+                "### Limited Third-Party Integration",
+                "Base64s.com uses minimal third-party services:",
+                "",
+                "- **CDN services** for faster content delivery (Bootstrap, jQuery)",
+                "- **Web hosting** with privacy-focused providers",
+                "- **Domain services** for website operation",
+                "",
+                "### CORS Proxy Services",
+                "For the \"Web Encoding\" feature, we may use third-party CORS proxy services to fetch publicly accessible web content. These services:",
+                "",
+                "- Only process the URLs you explicitly provide",
+                "- Do not store or log the content they fetch",
+                "- Are used solely to overcome browser security restrictions",
+                "- Process data temporarily and do not retain it",
+                "",
+                "## 6. Data Retention",
+                "",
+                "### No Content Retention",
+                "- **Encoded/decoded content:** Never stored (processed client-side only)",
+                "- **User files:** Never uploaded to our servers",
+                "- **Personal data:** We do not collect personal information",
+                "",
+                "### Analytics Data",
+                "Anonymous usage statistics may be retained for up to 24 months to help improve our service.",
+                "",
+                "## 7. Your Rights and Choices",
+                "",
+                "### User Control",
+                "You have complete control over your data:",
+                "",
+                "- **Clear local storage** anytime through your browser settings",
+                "- **Disable JavaScript** to prevent any local processing",
+                "- **Use private/incognito mode** for no local data storage",
+                "- **Block cookies** if you prefer (may affect functionality)",
+                "",
+                "### Data Portability",
+                "Since all data remains on your device, you can:",
+                "",
+                "- Export your browser settings and preferences",
+                "- Clear all local data anytime",
+                "- Use the service without creating any persistent data",
+                "",
+                "## 8. Children's Privacy",
+                "",
+                "Our service is designed to be safe for all ages:",
+                "",
+                "- **No personal information collection** from any users",
+                "- **No registration required** for any features",
+                "- **Educational use friendly** with transparent privacy practices",
+                "- **COPPA compliant** due to no data collection",
+                "",
+                "## 9. International Users",
+                "",
+                "### Global Privacy Compliance",
+                "Base64s.com is designed to comply with international privacy laws:",
+                "",
+                "- **GDPR compliant** (European Union)",
+                "- **CCPA compliant** (California, USA)",
+                "- **PIPEDA compliant** (Canada)",
+                "- **Privacy Act compliant** (Australia)",
+                "",
+                "### Data Processing Location",
+                "Since all processing occurs on your device, your data never crosses international boundaries through our service.",
+                "",
+                "## 10. Changes to Privacy Policy",
+                "",
+                "### Notification of Changes",
+                "We may update this Privacy Policy to:",
+                "",
+                "- Reflect changes in our practices",
+                "- Address new privacy regulations",
+                "- Improve clarity and transparency",
+                "- Add new features or services",
+                "",
+                "### How We Notify You",
+                "- **Website banner** for major changes",
+                "- **Updated \"Last Modified\" date** on this page",
+                "- **Archived versions** available upon request",
+                "",
+                "## 11. Security Best Practices for Users",
+                "",
+                "To maximize your privacy while using Base64s.com:",
+                "",
+                "### Recommended Practices",
+                "- **Use HTTPS** (our site automatically redirects)",
+                "- **Keep your browser updated** for latest security features",
+                "- **Use private browsing mode** for sensitive data",
+                "- **Clear browser data** after processing sensitive content",
+                "- **Verify our URL** to avoid phishing sites",
+                "",
+                "### For Sensitive Data",
+                "- **Use our auto-add string feature** for additional security",
+                "- **Apply multiple encoding rounds** for extra protection",
+                "- **Verify decoded content** before using",
+                "- **Use offline mode** if available in your browser",
+                "",
+                "## 12. Transparency Report",
+                "",
+                "### Data Requests",
+                "Since we do not store user content or personal data:",
+                "",
+                "- **Zero data requests** can be fulfilled (no data to provide)",
+                "- **No government requests** for user data (nothing to request)",
+                "- **No law enforcement cooperation** needed (no data stored)",
+                "- **Complete user privacy** maintained at all times",
+                "",
+                "### Open Source Commitment",
+                "We are committed to transparency and may open-source our code to allow independent security audits.",
+                "",
+                "---",
+                "",
+                "**Contact Information:**",
+                "For any privacy-related questions or concerns, please contact us at contact@base64s.com",
+                "",
+                "**Effective Date:** This Privacy Policy is effective as of December 2024.",
+                "",
+                "By using Base64s.com, you acknowledge that you have read and understood this Privacy Policy and agree to our privacy practices as described above."
+            ];
+            
+            const contentHtml = renderMarkdownContent(defaultContent);
+            $('#privacy-content').html(contentHtml);
+            
+            // 设置默认文本
+            $('[data-privacy-title]').text("Privacy Policy");
+            $('[data-privacy-subtitle]').text("How we protect your data and privacy");
+            $('[data-privacy="lastUpdated"]').text("Last updated: December 2024");
+            $('[data-privacy="contactTitle"]').text("Questions about Privacy?");
+            $('[data-privacy="contactDescription"]').text("If you have any questions about this Privacy Policy, please contact us:");
+            $('[data-privacy="startUsing"]').text("Start Using Safely");
+            $('[data-privacy="learnMore"]').text("Learn More About Us");
+            $('[data-faq="backToHome"]').text("← Back to Home");
+        }
+
+        // 渲染Markdown格式内容
+        function renderMarkdownContent(content) {
+            if (Array.isArray(content)) {
+                content = content.join('\n');
+            }
+            
+            let html = content
+                // 处理代码块
+                .replace(/```([^`]+)```/g, '<pre><code>$1</code></pre>')
+                // 处理行内代码
+                .replace(/`([^`]+)`/g, '<code>$1</code>')
+                // 处理标题
+                .replace(/^## (.+)$/gm, '<h2>$1</h2>')
+                .replace(/^### (.+)$/gm, '<h3>$1</h3>')
+                // 处理粗体
+                .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+                // 处理列表
+                .replace(/^- (.+)$/gm, '<li>$1</li>')
+                // 处理分隔线
+                .replace(/^---$/gm, '<hr>')
+                // 处理段落
+                .split('\n\n')
+                .map(paragraph => {
+                    paragraph = paragraph.trim();
+                    if (!paragraph) return '';
+                    if (paragraph.startsWith('<h') || paragraph.startsWith('<pre') || paragraph.includes('<li>') || paragraph === '<hr>') {
+                        // 处理列表
+                        if (paragraph.includes('<li>')) {
+                            return '<ul>' + paragraph + '</ul>';
+                        }
+                        return paragraph;
+                    }
+                    return '<p>' + paragraph.replace(/\n/g, '<br>') + '</p>';
+                })
+                .join('\n');
+            
+            return html;
+        }
+    </script>
+</body>
+</html>

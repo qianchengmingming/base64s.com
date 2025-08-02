@@ -16,7 +16,7 @@ window.LanguageManager = {
     
     // 初始化语言系统
     async init() {
-        console.log('正在初始化多语言系统...');
+
         
         // 从本地存储获取用户语言偏好
         const savedLanguage = localStorage.getItem('selectedLanguage');
@@ -42,14 +42,14 @@ window.LanguageManager = {
         // 设置语言切换事件监听器
         this.setupLanguageSwitcher();
         
-        console.log(`多语言系统初始化完成，当前语言: ${initialLanguage}`);
+        
     },
     
     // 预加载所有语言文件
     async preloadLanguages() {
         const promises = this.supportedLanguages.map(lang => this.loadLanguageData(lang));
         await Promise.all(promises);
-        console.log('所有语言文件加载完成');
+
     },
     
     // 加载语言数据
@@ -59,26 +59,39 @@ window.LanguageManager = {
         }
         
         try {
-            const response = await fetch(`./static/language/${language}.json`);
+            // 智能路径检测
+            const languagePath = this.getLanguagePath(language);
+    
+            
+            const response = await fetch(languagePath);
             if (!response.ok) {
                 throw new Error(`加载语言文件失败: ${language}`);
             }
             
             const data = await response.json();
             this.languageData[language] = data;
-            console.log(`语言文件加载成功: ${language}`);
+            
             return data;
         } catch (error) {
             console.error(`加载语言文件失败: ${language}`, error);
             
             // 如果加载失败且不是英语，尝试加载英语作为备用
             if (language !== 'en' && !this.languageData['en']) {
-                console.log('尝试加载英语作为备用语言...');
+
                 return await this.loadLanguageData('en');
             }
             
             throw error;
         }
+    },
+    
+    // 获取语言文件路径（使用绝对路径）
+    getLanguagePath(language) {
+        const currentPath = window.location.pathname;
+
+        
+        // 统一使用绝对路径，从网站根目录开始
+        return `/static/language/${language}.json`;
     },
     
     // 设置语言
@@ -103,7 +116,7 @@ window.LanguageManager = {
             // 保存到本地存储
             localStorage.setItem('selectedLanguage', language);
             
-            console.log(`语言切换成功: ${language}`);
+
         } catch (error) {
             console.error(`语言设置失败: ${language}`, error);
         }
@@ -130,8 +143,25 @@ window.LanguageManager = {
         // 更新主要内容区
         this.updateMainContent(data.main);
         
+        // 更新图片页面内容（如果存在）
+        if (data.image) {
+            this.updateImageContent(data.image);
+        }
+        
+        // 更新文件页面内容（如果存在）
+        if (data.file) {
+            this.updateFileContent(data.file);
+        }
+        
+        // 更新网页页面内容（如果存在）
+        if (data.web) {
+            this.updateWebContent(data.web);
+        }
+        
         // 更新常用操作区域
-        this.updateCommonOperations(data.commonOperations);
+        if (data.commonOperations) {
+            this.updateCommonOperations(data.commonOperations);
+        }
         
         // 更新设置弹框
         this.updateSettings(data.settings);
@@ -151,6 +181,7 @@ window.LanguageManager = {
             '[data-nav="faqItem1"]': navbarData.faqItem1,
             '[data-nav="faqItem2"]': navbarData.faqItem2,
             '[data-nav="faqItem3"]': navbarData.faqItem3,
+            '[data-nav="faqItem4"]': navbarData.faqItem4,
             '[data-nav="about"]': navbarData.about,
             '[data-nav="settings"]': navbarData.settings
         };
@@ -188,6 +219,137 @@ window.LanguageManager = {
         }
         if (outputTextarea) {
             outputTextarea.setAttribute('placeholder', mainData.outputPlaceholder);
+        }
+    },
+    
+    // 更新图片页面内容
+    updateImageContent(imageData) {
+        const elements = {
+            '[data-image="title"]': imageData.title,
+            '[data-image="uploadLabel"]': imageData.uploadLabel,
+            '[data-image="base64Label"]': imageData.base64Label,
+            '[data-image="uploadBtn"]': imageData.uploadBtn,
+            '[data-image="previewLabel"]': imageData.previewLabel,
+            '[data-image="resultLabel"]': imageData.resultLabel,
+            '[data-image="downloadBtn"]': imageData.downloadBtn,
+            '[data-image="copyBase64Btn"]': imageData.copyBase64Btn,
+            '[data-image="clearAllBtn"]': imageData.clearAllBtn,
+            '[data-image="dragDropText"]': imageData.dragDropText,
+            '[data-image="supportedFormats"]': imageData.supportedFormats
+        };
+        
+        Object.entries(elements).forEach(([selector, text]) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.textContent = text;
+            }
+        });
+        
+        // 更新placeholder
+        const base64Input = document.getElementById('base64Input');
+        if (base64Input) {
+            base64Input.setAttribute('placeholder', imageData.base64Placeholder);
+        }
+    },
+    
+    // 更新文件页面内容
+    updateFileContent(fileData) {
+        const elements = {
+            '[data-file="title"]': fileData.title,
+            '[data-file="uploadLabel"]': fileData.uploadLabel,
+            '[data-file="uploadBtn"]': fileData.uploadBtn,
+            '[data-file="dragDropText"]': fileData.dragDropText,
+            '[data-file="supportedFormats"]': fileData.supportedFormats,
+            '[data-file="outputFormatLabel"]': fileData.outputFormatLabel,
+            '[data-file="formatPlainText"]': fileData.formatPlainText,
+            '[data-file="formatDataUri"]': fileData.formatDataUri,
+            '[data-file="formatHtmlLink"]': fileData.formatHtmlLink,
+            '[data-file="formatJson"]': fileData.formatJson,
+            '[data-file="formatXml"]': fileData.formatXml,
+            '[data-file="fileInfoLabel"]': fileData.fileInfoLabel,
+            '[data-file="fileName"]': fileData.fileName,
+            '[data-file="fileSize"]': fileData.fileSize,
+            '[data-file="fileType"]': fileData.fileType,
+            '[data-file="resultLabel"]': fileData.resultLabel,
+            '[data-file="copyResultBtn"]': fileData.copyResultBtn,
+            '[data-file="downloadResultBtn"]': fileData.downloadResultBtn,
+            '[data-file="clearBtn"]': fileData.clearBtn,
+            '[data-file="autoCopyLabel"]': fileData.autoCopyLabel
+        };
+        
+        Object.entries(elements).forEach(([selector, text]) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.textContent = text;
+            }
+        });
+        
+        // 更新tooltip
+        const autoCopyElement = document.querySelector('[data-file-tooltip="autoCopy"]');
+        if (autoCopyElement) {
+            autoCopyElement.setAttribute('title', fileData.autoCopyTooltip);
+            autoCopyElement.setAttribute('data-bs-original-title', fileData.autoCopyTooltip);
+        }
+    },
+    
+    // 更新网页页面内容
+    updateWebContent(webData) {
+        const elements = {
+            '[data-web="title"]': webData.title,
+            '[data-web="urlToBase64Label"]': webData.urlToBase64Label,
+            '[data-web="base64ToWebLabel"]': webData.base64ToWebLabel,
+            '[data-web="encodeUrlBtn"]': webData.encodeUrlBtn,
+            '[data-web="decodeBase64Btn"]': webData.decodeBase64Btn,
+            '[data-web="clearUrlBtn"]': webData.clearUrlBtn,
+            '[data-web="clearBase64Btn"]': webData.clearBase64Btn,
+            '[data-web="previewLabel"]': webData.previewLabel,
+            '[data-web="webInfoLabel"]': webData.webInfoLabel,
+            '[data-web="webUrl"]': webData.webUrl,
+            '[data-web="webTitle"]': webData.webTitle,
+            '[data-web="webSize"]': webData.webSize,
+            '[data-web="webType"]': webData.webType,
+            '[data-web="resultLabel"]': webData.resultLabel,
+            '[data-web="copyBase64Btn"]': webData.copyBase64Btn,
+            '[data-web="downloadHtmlBtn"]': webData.downloadHtmlBtn,
+            '[data-web="openPreviewBtn"]': webData.openPreviewBtn,
+            '[data-web="outputFormatLabel"]': webData.outputFormatLabel,
+            '[data-web="formatRawHtml"]': webData.formatRawHtml,
+            '[data-web="formatBase64Only"]': webData.formatBase64Only,
+            '[data-web="formatDataUri"]': webData.formatDataUri,
+            '[data-web="formatJson"]': webData.formatJson,
+            '[data-web="autoCopyLabel"]': webData.autoCopyLabel,
+            '[data-web="corsNotice"]': webData.corsNotice,
+            '[data-web="corsWarning"]': webData.corsWarning
+        };
+        
+        Object.entries(elements).forEach(([selector, text]) => {
+            const element = document.querySelector(selector);
+            if (element) {
+                element.textContent = text;
+            }
+        });
+        
+        // 更新placeholder
+        const urlInput = document.getElementById('urlInput');
+        const base64WebInput = document.getElementById('base64WebInput');
+        if (urlInput) {
+            urlInput.setAttribute('placeholder', webData.urlPlaceholder);
+        }
+        if (base64WebInput) {
+            base64WebInput.setAttribute('placeholder', webData.base64Placeholder);
+        }
+        
+        // 更新tooltip
+        const urlTooltipElement = document.querySelector('[data-web-tooltip="url"]');
+        if (urlTooltipElement) {
+            urlTooltipElement.setAttribute('title', webData.urlTooltip);
+            urlTooltipElement.setAttribute('data-bs-original-title', webData.urlTooltip);
+        }
+        
+        const autoCopyElement = document.querySelector('[data-web-tooltip="autoCopy"]');
+        if (autoCopyElement) {
+            autoCopyElement.setAttribute('title', webData.autoCopyTooltip);
+            autoCopyElement.setAttribute('data-bs-original-title', webData.autoCopyTooltip);
         }
     },
     
@@ -339,9 +501,49 @@ window.LanguageManager = {
 
 // 页面加载完成后初始化语言系统
 document.addEventListener('DOMContentLoaded', () => {
-    window.LanguageManager.init().catch(error => {
-        console.error('语言系统初始化失败:', error);
-    });
+    // 如果导航栏管理器存在，等待导航栏加载完成后再初始化语言系统
+    if (window.NavbarManager) {
+        // 使用MutationObserver监听导航栏容器的变化
+        const navbarContainer = document.getElementById('navbar-container');
+        if (navbarContainer) {
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        // 导航栏已加载，初始化语言系统
+                        setTimeout(() => {
+                            window.LanguageManager.init().catch(error => {
+                                console.error('语言系统初始化失败:', error);
+                            });
+                        }, 50);
+                        observer.disconnect(); // 停止观察
+                    }
+                });
+            });
+            
+            observer.observe(navbarContainer, { childList: true });
+            
+            // 设置超时保护，确保即使导航栏加载失败也能初始化语言系统
+            setTimeout(() => {
+                if (navbarContainer.children.length === 0) {
+                    console.warn('导航栏加载超时，直接初始化语言系统');
+                    window.LanguageManager.init().catch(error => {
+                        console.error('语言系统初始化失败:', error);
+                    });
+                }
+                observer.disconnect();
+            }, 2000);
+        } else {
+            // 没有导航栏容器，直接初始化
+            window.LanguageManager.init().catch(error => {
+                console.error('语言系统初始化失败:', error);
+            });
+        }
+    } else {
+        // 没有导航栏管理器，直接初始化
+        window.LanguageManager.init().catch(error => {
+            console.error('语言系统初始化失败:', error);
+        });
+    }
 });
 
 // 导出语言管理器以供其他脚本使用

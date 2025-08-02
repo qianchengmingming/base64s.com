@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File to Base64 Converter | Base64 File Encoder - Base64.us</title>
+    <link rel="icon" href="/static/images/logo.svg" type="image/png">
+    <meta name="keywords" content="File to Base64,Base64 File Encoder,File Encoder,Document to Base64,PDF to Base64">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- 导航栏样式 -->
+    <link rel="stylesheet" href="/static/css/navbar.css">
+</head>
+
+<body>
+    <!-- 导航栏容器 - 将由JavaScript动态加载 -->
+    <div id="navbar-container"></div>
+
+    <!-- 页面标题 -->
+    <div class="container text-center" style="margin-top: 20px;">
+        <h2 id="pageTitle" data-file="title">File to Base64 Converter</h2>
+        <hr>
+    </div>
+
+    <!-- 主要内容区 -->
+    <div class="container" style="margin-top: 20px;">
+        <div class="row">
+            <!-- 文件上传区域 -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0" data-file="uploadLabel">Select any file to convert to Base64:</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- 拖拽上传区域 -->
+                        <div id="uploadArea" class="upload-area mb-3">
+                            <div class="upload-content">
+                                <i class="bi bi-file-earmark-arrow-up display-1 text-muted"></i>
+                                <p class="mt-3 mb-2" data-file="dragDropText">Drag and drop a file here or click to select</p>
+                                <p class="text-muted small" data-file="supportedFormats">Supports any file type (Max: 50MB)</p>
+                                <input type="file" id="fileInput" style="display: none;">
+                                <button type="button" class="btn btn-primary" onclick="selectFile()" data-file="uploadBtn">Select File</button>
+                            </div>
+                        </div>
+                        
+                        <!-- 文件信息区域 -->
+                        <div id="fileInfo" class="file-info" style="display: none;">
+                            <h6 data-file="fileInfoLabel">File Information:</h6>
+                            <div class="row">
+                                <div class="col-sm-4"><strong data-file="fileName">File Name:</strong></div>
+                                <div class="col-sm-8"><span id="fileNameValue">-</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4"><strong data-file="fileSize">File Size:</strong></div>
+                                <div class="col-sm-8"><span id="fileSizeValue">-</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-4"><strong data-file="fileType">File Type:</strong></div>
+                                <div class="col-sm-8"><span id="fileTypeValue">-</span></div>
+                            </div>
+                            <div class="mt-3">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearFile()" data-file="clearBtn">
+                                    <i class="bi bi-x-lg"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 输出格式选择区域 -->
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0" data-file="outputFormatLabel">Output Format:</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="outputFormat" id="formatPlainText" value="plaintext" checked>
+                            <label class="form-check-label" for="formatPlainText" data-file="formatPlainText">
+                                Plain text -- just the Base64 value
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="outputFormat" id="formatDataUri" value="datauri">
+                            <label class="form-check-label" for="formatDataUri" data-file="formatDataUri">
+                                Data URI -- data:content/type;base64
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="outputFormat" id="formatHtmlLink" value="htmllink">
+                            <label class="form-check-label" for="formatHtmlLink" data-file="formatHtmlLink">
+                                HTML Hyperlink -- &lt;a&gt;&lt;/a&gt;
+                            </label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="outputFormat" id="formatJson" value="json">
+                            <label class="form-check-label" for="formatJson" data-file="formatJson">
+                                JSON -- {file:{mime,data}}
+                            </label>
+                        </div>
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="outputFormat" id="formatXml" value="xml">
+                            <label class="form-check-label" for="formatXml" data-file="formatXml">
+                                XML -- &lt;file&gt;&lt;/file&gt;
+                            </label>
+                        </div>
+                        
+                        <!-- 自动复制设置 -->
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="autoCopyResult" checked
+                                   data-bs-toggle="tooltip" data-bs-placement="top" data-file-tooltip="autoCopy"
+                                   title="Automatically copy the result to clipboard when conversion is complete">
+                            <label class="form-check-label" for="autoCopyResult" data-file="autoCopyLabel">
+                                Auto Copy Result
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果显示区域 -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0" data-file="resultLabel">Conversion Result:</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- 结果显示 -->
+                        <div id="conversionResult" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">Result:</h6>
+                                <div>
+                                    <button type="button" class="btn btn-outline-primary btn-sm me-2" onclick="copyResult()">
+                                        <i class="bi bi-clipboard"></i> <span data-file="copyResultBtn">Copy Result</span>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="downloadResult()">
+                                        <i class="bi bi-download"></i> <span data-file="downloadResultBtn">Download Result</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <textarea id="resultOutput" class="form-control" rows="10" readonly 
+                                      style="font-family: monospace; font-size: 0.875rem; background-color: #f8f9fa;"></textarea>
+                        </div>
+
+                        <!-- 空状态 -->
+                        <div id="emptyResult" class="text-center text-muted py-5">
+                            <i class="bi bi-file-earmark display-1"></i>
+                            <p class="mt-3">Select a file to see the Base64 conversion result here.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 提示消息区域 -->
+    <div class="container" style="margin-top: 20px;">
+        <div id="alertMessage" class="alert alert-info" role="alert" style="display: none;">
+            Select a file to start conversion.
+        </div>
+    </div>
+
+    <!-- 设置模态框 -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="settingsModalLabel" data-settings="title">⚙️ System Settings</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!-- 文件转换设置 -->
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="modalAutoCopyResult" checked>
+                                <label class="form-check-label" for="modalAutoCopyResult">
+                                    Auto Copy Result to Clipboard
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="rememberOutputFormat" checked>
+                                <label class="form-check-label" for="rememberOutputFormat">
+                                    Remember Output Format Selection
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="preserveFileData" checked>
+                                <label class="form-check-label" for="preserveFileData">
+                                    Preserve File Data on Page Refresh
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-settings="cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveFileSettings()" data-settings="save">Save Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript引用 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- 导航栏管理 -->
+    <script src="/static/js/navbar.js"></script>
+    <!-- 多语言支持 -->
+    <script src="/static/js/languageswitch.js"></script>
+
+    <!-- 页面专用JavaScript -->
+    <script>
+        // 文件转换设置
+        let fileSettings = {
+            autoCopyResult: true,
+            rememberOutputFormat: true,
+            preserveFileData: true
+        };
+
+        // 当前处理的文件信息
+        let currentFile = null;
+        let currentFileData = null;
+        let currentBase64 = null;
+
+        // 页面加载完成后初始化
+        $(document).ready(function() {
+            loadFileSettings();
+            initializeFileUpload();
+            initializeTooltips();
+            setupFileEventListeners();
+            restoreFileData(); // 恢复之前的文件数据
+    
+        });
+
+        // 加载文件转换设置
+        function loadFileSettings() {
+            const savedSettings = localStorage.getItem('fileSettings');
+            if (savedSettings) {
+                try {
+                    fileSettings = {...fileSettings, ...JSON.parse(savedSettings)};
+                } catch (e) {
+                    console.error('加载文件设置失败:', e);
+                }
+            }
+            
+            // 更新UI
+            $('#autoCopyResult').prop('checked', fileSettings.autoCopyResult);
+            $('#modalAutoCopyResult').prop('checked', fileSettings.autoCopyResult);
+            $('#rememberOutputFormat').prop('checked', fileSettings.rememberOutputFormat);
+            $('#preserveFileData').prop('checked', fileSettings.preserveFileData);
+            
+            // 恢复输出格式选择
+            if (fileSettings.rememberOutputFormat) {
+                const savedFormat = localStorage.getItem('selectedOutputFormat');
+                if (savedFormat) {
+                    $(`input[name="outputFormat"][value="${savedFormat}"]`).prop('checked', true);
+                }
+            }
+        }
+
+        // 保存文件转换设置
+        function saveFileSettings() {
+            fileSettings.autoCopyResult = $('#modalAutoCopyResult').is(':checked');
+            fileSettings.rememberOutputFormat = $('#rememberOutputFormat').is(':checked');
+            fileSettings.preserveFileData = $('#preserveFileData').is(':checked');
+            
+            localStorage.setItem('fileSettings', JSON.stringify(fileSettings));
+            
+            // 同步主界面设置
+            $('#autoCopyResult').prop('checked', fileSettings.autoCopyResult);
+            
+            if (window.LanguageManager) {
+                showAlert(window.LanguageManager.getText('messages.settingsSaved'), 'success');
+            } else {
+                showAlert('Settings saved!', 'success');
+            }
+            
+            // 关闭模态框
+            const modal = bootstrap.Modal.getInstance(document.getElementById('settingsModal'));
+            if (modal) {
+                modal.hide();
+            }
+        }
+
+        // 初始化文件上传功能
+        function initializeFileUpload() {
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+
+            // 拖拽事件处理
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    handleFileSelect(files[0]);
+                }
+            });
+
+            // 点击选择文件
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            // 文件选择变化
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    handleFileSelect(e.target.files[0]);
+                }
+            });
+        }
+
+        // 处理文件选择
+        function handleFileSelect(file) {
+            if (file.size > 50 * 1024 * 1024) { // 50MB
+                showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileSizeExceeded') : 'File size exceeds 50MB limit.', 'danger');
+                return;
+            }
+
+            currentFile = file;
+            showFileInfo(file);
+            convertFileToBase64(file);
+        }
+
+        // 显示文件信息
+        function showFileInfo(file) {
+            $('#fileNameValue').text(file.name);
+            $('#fileSizeValue').text(formatFileSize(file.size));
+            $('#fileTypeValue').text(file.type || 'Unknown');
+            $('#fileInfo').show();
+            $('#uploadArea').hide();
+        }
+
+        // 将文件转换为Base64
+        function convertFileToBase64(file) {
+            showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileProcessing') : 'Processing file...', 'info');
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result.split(',')[1]; // 移除data:mime;base64,前缀
+                currentBase64 = base64String;
+                currentFileData = {
+                    name: file.name,
+                    size: file.size,
+                    type: file.type,
+                    base64: base64String
+                };
+                
+                // 保存文件数据（如果启用）
+                if (fileSettings.preserveFileData) {
+                    localStorage.setItem('currentFileData', JSON.stringify(currentFileData));
+                }
+                
+                // 生成并显示结果
+                generateOutput();
+                
+                // 自动复制（如果启用）
+                if (fileSettings.autoCopyResult) {
+                    copyToClipboard(document.getElementById('resultOutput').value);
+                    showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.resultCopied') : 'Result copied!', 'success');
+                } else {
+                    showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileToBase64Success') : 'File converted to Base64 successfully!', 'success');
+                }
+            };
+            
+            reader.onerror = function() {
+                showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileReadError') : 'Error reading file.', 'danger');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // 生成输出结果
+        function generateOutput() {
+            if (!currentFileData) return;
+            
+            const selectedFormat = $('input[name="outputFormat"]:checked').val();
+            let output = '';
+            
+            switch (selectedFormat) {
+                case 'plaintext':
+                    output = currentFileData.base64;
+                    break;
+                case 'datauri':
+                    output = `data:${currentFileData.type || 'application/octet-stream'};base64,${currentFileData.base64}`;
+                    break;
+                case 'htmllink':
+                    const dataUri = `data:${currentFileData.type || 'application/octet-stream'};base64,${currentFileData.base64}`;
+                    output = `<a href="${dataUri}" download="${currentFileData.name}">${currentFileData.name}</a>`;
+                    break;
+                case 'json':
+                    output = JSON.stringify({
+                        file: {
+                            mime: currentFileData.type || 'application/octet-stream',
+                            data: currentFileData.base64,
+                            name: currentFileData.name,
+                            size: currentFileData.size
+                        }
+                    }, null, 2);
+                    break;
+                case 'xml':
+                    output = `<file mime="${currentFileData.type || 'application/octet-stream'}" name="${currentFileData.name}" size="${currentFileData.size}">${currentFileData.base64}</file>`;
+                    break;
+            }
+            
+            $('#resultOutput').val(output);
+            $('#conversionResult').show();
+            $('#emptyResult').hide();
+            
+            // 保存输出格式选择（如果启用）
+            if (fileSettings.rememberOutputFormat) {
+                localStorage.setItem('selectedOutputFormat', selectedFormat);
+            }
+        }
+
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 选择文件（按钮点击）
+        function selectFile() {
+            $('#fileInput').click();
+        }
+
+        // 清空文件
+        function clearFile() {
+            currentFile = null;
+            currentFileData = null;
+            currentBase64 = null;
+            $('#fileInfo').hide();
+            $('#uploadArea').show();
+            $('#fileInput').val('');
+            clearResults();
+            
+            // 清除保存的文件数据
+            localStorage.removeItem('currentFileData');
+        }
+
+        // 清空所有结果
+        function clearResults() {
+            $('#conversionResult').hide();
+            $('#emptyResult').show();
+            $('#resultOutput').val('');
+        }
+
+        // 复制结果
+        function copyResult() {
+            const result = $('#resultOutput').val();
+            copyToClipboard(result);
+            showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.resultCopied') : 'Result copied!', 'success');
+        }
+
+        // 下载结果
+        function downloadResult() {
+            const result = $('#resultOutput').val();
+            const selectedFormat = $('input[name="outputFormat"]:checked').val();
+            const fileName = currentFileData ? currentFileData.name : 'file';
+            
+            let downloadFileName = '';
+            let mimeType = 'text/plain';
+            
+            switch (selectedFormat) {
+                case 'plaintext':
+                    downloadFileName = `${fileName}.base64.txt`;
+                    break;
+                case 'datauri':
+                    downloadFileName = `${fileName}.datauri.txt`;
+                    break;
+                case 'htmllink':
+                    downloadFileName = `${fileName}.html`;
+                    mimeType = 'text/html';
+                    break;
+                case 'json':
+                    downloadFileName = `${fileName}.json`;
+                    mimeType = 'application/json';
+                    break;
+                case 'xml':
+                    downloadFileName = `${fileName}.xml`;
+                    mimeType = 'application/xml';
+                    break;
+            }
+            
+            const blob = new Blob([result], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = downloadFileName;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            showAlert('Result downloaded successfully!', 'success');
+        }
+
+        // 恢复文件数据
+        function restoreFileData() {
+            if (!fileSettings.preserveFileData) return;
+            
+            const savedData = localStorage.getItem('currentFileData');
+            if (savedData) {
+                try {
+                    currentFileData = JSON.parse(savedData);
+                    currentBase64 = currentFileData.base64;
+                    
+                    // 显示文件信息
+                    $('#fileNameValue').text(currentFileData.name);
+                    $('#fileSizeValue').text(formatFileSize(currentFileData.size));
+                    $('#fileTypeValue').text(currentFileData.type || 'Unknown');
+                    $('#fileInfo').show();
+                    $('#uploadArea').hide();
+                    
+                    // 生成输出
+                    generateOutput();
+                    
+        
+                } catch (e) {
+                    console.error('恢复文件数据失败:', e);
+                    localStorage.removeItem('currentFileData');
+                }
+            }
+        }
+
+        // 复制到剪贴板通用函数
+        function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text);
+            } else {
+                // 降级方案
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // 显示提示消息
+        function showAlert(message, type = 'info') {
+            const alertElement = $('#alertMessage');
+            alertElement.removeClass('alert-success alert-danger alert-warning alert-info');
+            alertElement.addClass(`alert-${type}`);
+            alertElement.text(message);
+            alertElement.show();
+            
+            // 3秒后自动隐藏
+            setTimeout(() => {
+                alertElement.hide();
+            }, 3000);
+        }
+
+        // 初始化工具提示
+        function initializeTooltips() {
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
+            }
+        }
+
+        // 设置事件监听器
+        function setupFileEventListeners() {
+            // 输出格式变化监听
+            $('input[name="outputFormat"]').on('change', function() {
+                if (currentFileData) {
+                    generateOutput();
+                }
+            });
+
+            // 自动复制设置变化监听
+            $('#autoCopyResult').on('change', function() {
+                fileSettings.autoCopyResult = $(this).is(':checked');
+                $('#modalAutoCopyResult').prop('checked', fileSettings.autoCopyResult);
+                localStorage.setItem('fileSettings', JSON.stringify(fileSettings));
+            });
+
+            // 模态框设置同步
+            $('#modalAutoCopyResult').on('change', function() {
+                $('#autoCopyResult').prop('checked', $(this).is(':checked'));
+            });
+        }
+    </script>
+
+    <style>
+        /* 上传区域样式 */
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 3rem 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+
+        .upload-area:hover {
+            border-color: #86b7fe;
+            background-color: #e7f1ff;
+        }
+
+        .upload-area.dragover {
+            border-color: #0d6efd;
+            background-color: #cfe2ff;
+            transform: scale(1.02);
+        }
+
+        .upload-content {
+            pointer-events: none;
+        }
+
+        /* 文件信息样式 */
+        .file-info {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .file-info .row {
+            margin-bottom: 0.5rem;
+        }
+
+        /* 卡片样式优化 */
+        .card {
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* 表单控件优化 */
+        .form-check {
+            padding: 0.5rem 0;
+        }
+
+        .form-check-label {
+            font-weight: 400;
+            color: #495057;
+        }
+
+        /* 结果文本区域 */
+        #resultOutput {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        /* 移动端优化 */
+        @media (max-width: 768px) {
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+            
+            .upload-area .display-1 {
+                font-size: 2rem;
+            }
+            
+            .file-info {
+                padding: 1rem;
+            }
+        }
+    </style>
+</body>
+
+</html>
