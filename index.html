@@ -14,13 +14,18 @@
 
 <body>
     <!-- 头部导航 -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="/static/images/logo.svg" alt="Logo" width="30" height="24"
+                <img src="./static/images/logo.svg" alt="Logo" width="30" height="24"
                     class="d-inline-block align-text-top">
-                base64<span style="color: rgb(123 18 249);">s</span>.com
+                base64<span style="color: rgb(123 18 249);"><b>s</b></span>.com
             </a>
+            <!-- 移动端汉堡菜单按钮 -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -53,23 +58,20 @@
                         <a class="nav-link" href="#">关于我们</a>
                     </li>
                 </ul>
-                <div class="d-flex">
+                <div class="d-flex navbar-buttons">
                     <!-- 语言选择按钮 -->
                     <div class="dropdown me-2">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                        <button class="btn btn-outline-secondary dropdown-toggle btn-sm" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             🌐 中文
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">🇨🇳 简体中文</a></li>
-                            <li><a class="dropdown-item" href="#">🇹🇼 繁体中文</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">🇺🇸 English</a></li>
-                            <li><a class="dropdown-item" href="#">🇯🇵 日本語</a></li>
-                            <li><a class="dropdown-item" href="#">🇰🇷 한국어</a></li>
+                            <li><a class="dropdown-item" href="#">🇨🇳 简体中文</a></li>
                         </ul>
                     </div>
                     <!-- 设置按钮 -->
-                    <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal"
+                    <button class="btn btn-outline-secondary btn-sm" type="button" data-bs-toggle="modal"
                         data-bs-target="#settingsModal">
                         ⚙️ 设置
                     </button>
@@ -80,40 +82,55 @@
 
     <!-- 内容区 -->
     <div class="container text-center" style="margin-top: 20px;margin-bottom: 20px;">
-        <div class="row">
-            <div class="col">
+        <div class="row textarea-container">
+            <div class="col input-section">
                 <p class="fw-lighter text-start">请输入要进行 Base64 编码或解码的字符: </p>
                 <div class="position-relative">
-                    <textarea id="inputText" style="height: 50vh; resize: vertical; font-size: 12px;" class="form-control" 
-                        placeholder="请输入要编码或解码的内容..." aria-label="Text input with checkbox"></textarea>
-                    <div class="position-absolute bottom-0 end-0 p-2">
-                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="拷贝" onclick="copyToClipboard('inputText')">
-                            <i class="bi bi-clipboard"></i>
-                        </button>
-                    </div>
+                    <textarea id="inputText" class="code-input" placeholder="请输入要编码或解码的内容..."
+                        aria-label="Text input with checkbox"></textarea>
                     <div class="position-absolute top-0 end-0 p-2">
-                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearText('inputText')">
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空"
+                            onclick="clearText('inputText')">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="col">
+
+            <!-- 移动端操作按钮区域 -->
+            <div class="col-12 mobile-buttons" style="margin: 0;padding: 0;">
+                <div class="d-flex justify-content-center gap-2 my-3">
+                    <button type="button" class="btn btn-primary encode-btn" onclick="encodeText()"
+                        style="width: 100px;">
+                        <i class="bi bi-lightbulb-fill"></i>
+                        编码
+                    </button>
+                    <button type="button" class="btn btn-info decode-btn" style="width: 100px;" onclick="decodeText()">
+                        <i class="bi bi-lightbulb-off"></i>
+                        解码
+                    </button>
+                    <button type="button" class="btn btn-secondary swap-btn" style="width: 100px;">
+                        <i class="bi bi-repeat"></i>
+                        交换
+                    </button>
+                </div>
+            </div>
+
+            <div class="col output-section">
                 <p class="fw-lighter text-start">Base64 编码或解码的结果: </p>
                 <div class="position-relative">
-                    <textarea id="outputText" style="height: 50vh; resize: vertical; font-size: 12px;" class="form-control" 
-                        placeholder="编码或解码结果将显示在这里..." aria-label="Text input with checkbox" readonly></textarea>
+                    <textarea id="outputText" class="code-input" placeholder="编码或解码结果将显示在这里..."
+                        aria-label="Text input with checkbox"></textarea>
                     <div class="position-absolute top-0 end-0 p-2">
-                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearText('outputText')">
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空"
+                            onclick="clearText('outputText')">
                             <i class="bi bi-x-lg"></i>
                         </button>
                     </div>
-                    <div class="position-absolute bottom-0 end-0 p-2">
-                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="拷贝" onclick="copyToClipboard('outputText')">
-                            <i class="bi bi-clipboard"></i>
-                        </button>
-                        <button type="button" class="btn swap-btn" style="padding:0 5px;" title="交换" onclick="swapText()">
-                            <i class="bi bi-arrow-left-right"></i>
+                    <div class="position-absolute bottom-0 p-2" style="right: 20px;">
+                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="拷贝"
+                            onclick="copyToClipboard('outputText')">
+                            <i class="bi bi-intersect"></i>
                         </button>
                     </div>
                 </div>
@@ -121,21 +138,77 @@
         </div>
     </div>
 
-    <div class="container">
-        <button type="button" class="btn btn-primary encode-btn" style="width: 120px;" onclick="encodeText()">编码</button>
-        <button type="button" class="btn btn-light decode-btn" style="width: 120px;" onclick="decodeText()">解码</button>
-        <button type="button" class="btn btn-light swap-btn" style="width: 120px;" onclick="swapText()">交换</button>
-        <input type="text" id="insertChar" class="form-control" style="display: inline-block;width: 150px;"
-            placeholder="插入字符" aria-label="Text input with dropdown button">
-
+    <!-- 桌面端操作按钮 -->
+    <div class="container desktop-buttons">
+        <button type="button" class="btn btn-primary encode-btn" onclick="encodeText()" style="width: 120px;">
+            <i class="bi bi-lightbulb-fill"></i>
+            编码
+        </button>
+        <button type="button" class="btn btn-info decode-btn" style="width: 120px;" onclick="decodeText()">
+            <i class="bi bi-lightbulb-off"></i>
+            解码
+        </button>
+        <button type="button" class="btn btn-secondary swap-btn" style="width: 120px;">
+            <i class="bi bi-repeat"></i>
+            交换
+        </button>
     </div>
-
-    <div class="container mt-3">
+    <div class="container" style="margin-top: 20px;">
         <div id="alertMessage" class="alert alert-info" role="alert" style="display: none;">
             请在上方第一个文本框中输入要编码/解码的字符。
         </div>
-        
+    </div>
 
+    <!-- 设置用户的常用操作 -->
+    <div class="container">
+        <hr>
+        <!-- 使用flexbox实现自适应布局 -->
+        <div class="d-flex flex-wrap gap-3 align-items-end">
+            <!-- 自动添加字符串 -->
+            <div class="flex-shrink-0" style="min-width: 300px;">
+                <label class="form-label small">自动添加字符串</label>
+                <div class="input-group">
+                    <input type="text" id="autoAddString" class="form-control" placeholder="最多100个字符" maxlength="100"
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="编码时自动添加此字符串，解码时自动移除。用于防止内容被轻易识别。">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="positionDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false" data-bs-tooltip="tooltip"
+                        data-bs-placement="top" title="选择字符串插入的位置">
+                        <span id="currentPosition">随机位置</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item position-option" href="#" data-value="random">随机位置</a></li>
+                        <li><a class="dropdown-item position-option" href="#" data-value="start">在开头添加</a></li>
+                        <li><a class="dropdown-item position-option" href="#" data-value="end">在结尾添加</a></li>
+                        <li><a class="dropdown-item position-option" href="#" data-value="random-edge">随机在开头或结尾</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 编码次数 -->
+            <div class="flex-shrink-0" style="min-width: 10px;">
+                <label class="form-label small">编码次数</label>
+                <input type="number" id="encodeCount" class="form-control" value="1" min="1" max="100"
+                    data-bs-toggle="tooltip" data-bs-placement="top" title="设置Base64编码的次数，多次编码可增强安全性。建议1-10次。">
+            </div>
+
+            <!-- 自动复制结果开关 -->
+            <div class="flex-shrink-0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="autoCopyResult" checked
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="开启后，编码/解码完成时自动复制结果到剪贴板，无需手动点击复制按钮。">
+                    <label class="form-check-label small" for="autoCopyResult">自动复制结果</label>
+                </div>
+            </div>
+
+            <!-- 自动编解码开关 -->
+            <div class="flex-shrink-0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="autoDetectSwitch" checked
+                        data-bs-toggle="tooltip" data-bs-placement="top" title="开启后，输入内容时自动检测是否为Base64并进行相应的编码或解码操作。">
+                    <label class="form-check-label small" for="autoDetectSwitch">自动编解码</label>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- 设置模态框 -->
@@ -148,97 +221,44 @@
                 </div>
                 <div class="modal-body">
                     <form>
-                        <!-- 主题设置 -->
+                        <!-- 常用操作设置 -->
                         <div class="mb-3">
-                            <label class="form-label">🎨 主题模式</label>
-                            <div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="theme" id="lightTheme"
-                                        value="light" checked>
-                                    <label class="form-check-label" for="lightTheme">
-                                        ☀️ 浅色模式
-                                    </label>
+                            <!-- 自动添加字符串设置 -->
+                            <div class="mb-2">
+                                <label class="form-label small">自动添加字符串</label>
+                                <div class="input-group mb-2">
+                                    <input type="text" id="modalAutoAddString" class="form-control"
+                                        placeholder="最多100个字符" maxlength="100" data-bs-toggle="tooltip"
+                                        title="编码时自动添加此字符串，解码时自动移除。用于防止内容被轻易识别。">
                                 </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="theme" id="darkTheme"
-                                        value="dark">
-                                    <label class="form-check-label" for="darkTheme">
-                                        🌙 深色模式
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="theme" id="autoTheme"
-                                        value="auto">
-                                    <label class="form-check-label" for="autoTheme">
-                                        🔄 跟随系统
-                                    </label>
-                                </div>
+                                <select class="form-select form-select-sm" id="modalAddPosition">
+                                    <option value="random">随机位置</option>
+                                    <option value="start">在开头添加</option>
+                                    <option value="end">在结尾添加</option>
+                                    <option value="random-edge">随机在开头或结尾</option>
+                                </select>
                             </div>
-                        </div>
 
-                        <!-- 编码设置 -->
-                        <div class="mb-3">
-                            <label class="form-label">📝 编码选项</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="autoEncode" checked>
-                                <label class="form-check-label" for="autoEncode">
-                                    自动编码（实时转换）
-                                </label>
+                            <!-- 编码次数设置 -->
+                            <div class="mb-2">
+                                <label class="form-label small">编码次数</label>
+                                <input type="number" id="modalEncodeCount" class="form-control" value="1" min="1"
+                                    max="10" data-bs-toggle="tooltip" title="设置Base64编码的次数，多次编码可增强安全性。建议1-3次。">
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="autoDetect" checked>
-                                <label class="form-check-label" for="autoDetect">
-                                    自动识别编码/解码
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="insertRandomChar">
-                                <label class="form-check-label" for="insertRandomChar">
-                                    启用随机字符插入
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="showLineNumbers">
-                                <label class="form-check-label" for="showLineNumbers">
-                                    显示行号
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="wordWrap" checked>
-                                <label class="form-check-label" for="wordWrap">
-                                    自动换行
-                                </label>
-                            </div>
-                        </div>
 
-                        <!-- 字体大小设置 -->
-                        <div class="mb-3">
-                            <label for="fontSize" class="form-label">🔤 字体大小</label>
-                            <select class="form-select" id="fontSize">
-                                <option value="10">10px</option>
-                                <option value="11">11px</option>
-                                <option value="12" selected>12px（默认）</option>
-                                <option value="13">13px</option>
-                                <option value="14">14px</option>
-                                <option value="16">16px</option>
-                                <option value="18">18px</option>
-                                <option value="20">20px</option>
-                            </select>
-                        </div>
-
-                        <!-- 其他设置 -->
-                        <div class="mb-3">
-                            <label class="form-label">🔔 通知设置</label>
+                            <!-- 开关设置 -->
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="enableNotifications" checked>
-                                <label class="form-check-label" for="enableNotifications">
-                                    启用操作提示
+                                <input class="form-check-input" type="checkbox" id="modalAutoCopyResult" checked>
+                                <label class="form-check-label" for="modalAutoCopyResult" data-bs-toggle="tooltip"
+                                    title="开启后，编码/解码完成时自动复制结果到剪贴板">
+                                    自动复制结果
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="enableSound">
-                                <label class="form-check-label" for="enableSound">
-                                    操作音效
+                                <input class="form-check-input" type="checkbox" id="modalAutoDetectSwitch" checked>
+                                <label class="form-check-label" for="modalAutoDetectSwitch" data-bs-toggle="tooltip"
+                                    title="开启后，输入内容时自动检测是否为Base64并进行相应的编码或解码操作">
+                                    自动编解码
                                 </label>
                             </div>
                         </div>
@@ -269,77 +289,218 @@
             wordWrap: true,
             enableNotifications: true,
             enableSound: false,
-            fontSize: '12'
+            fontSize: '12',
+            // 新增的常用操作设置
+            autoAddString: '',      // 自动添加的字符串
+            addPosition: 'random',  // 添加位置：random, start, end, random-edge
+            encodeCount: 1,         // 编码次数
+            autoCopyResult: true,   // 自动复制结果
+            autoDetectSwitch: true  // 自动编解码开关
         };
 
+        // 用于标识是否是交换操作触发的输入变化
+        let isSwapTriggered = false;
+
         // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadSettings();
             setupEventListeners();
-            showAlert('请在上方第一个文本框中输入要编码/解码的字符。', 'info');
-            
+            initializeTooltips();
+            setupCommonOperations();
+            // showAlert('请在上方第一个文本框中输入要编码/解码的字符。', 'info');
+
             // 调试：显示当前设置状态
             console.log('自动检测设置:', settings.autoDetect);
-            
+
             // 确保函数在全局作用域中可用
             window.encodeText = encodeText;
             window.decodeText = decodeText;
             window.swapText = swapText;
             window.clearText = clearText;
             window.copyToClipboard = copyToClipboard;
-            
+
 
         });
 
-        // 设置事件监听器
+        // 设置事件监听器 - 为各种用户交互绑定事件处理函数
         function setupEventListeners() {
-            // 使用jQuery设置事件监听器
-            $('#inputText').on('input', function() {
-                if (settings.autoDetect) {
+            // 输入框内容变化事件监听 - 当用户在输入框中输入内容时自动触发检测
+            $('#inputText').on('input', function () {
+                // 只有在启用自动检测且不是交换操作触发的情况下才进行自动处理
+                // 使用新的autoDetectSwitch开关来控制自动编解码
+                if (settings.autoDetectSwitch && !isSwapTriggered) {
                     autoDetectAndProcess();
                 }
             });
 
-            $('#insertChar').on('input', function() {
+            // 插入字符输入框变化监听 - 用于随机字符插入功能
+            $('#insertChar').on('input', function () {
+                // 如果用户输入了插入字符且启用了随机插入功能
                 if ($(this).val() && settings.insertRandomChar) {
                     settings.insertRandomChar = true;
-                    saveSettings();
+                    saveSettings(); // 保存设置到本地存储
                 }
             });
 
-            // 粘贴事件监听
-            $('#inputText').on('paste', function(e) {
+            // 粘贴事件监听 - 处理用户粘贴内容到输入框的情况
+            $('#inputText').on('paste', function (e) {
+                // 延迟100毫秒执行，确保粘贴内容已经填入输入框
                 setTimeout(() => {
-                    if (settings.autoDetect) {
+                    // 检查是否启用自动检测且不是交换操作触发的
+                    // 使用新的autoDetectSwitch开关来控制自动编解码
+                    if (settings.autoDetectSwitch && !isSwapTriggered) {
                         autoDetectAndProcess();
                     }
                 }, 100);
             });
 
-            // 设置按钮点击事件
-            $('.encode-btn').on('click', encodeText);
-            $('.decode-btn').on('click', decodeText);
-            $('.swap-btn').on('click', swapText);
+            // 设置各个按钮的点击事件处理函数
+            $('.encode-btn').on('click', encodeText);    // 编码按钮
+            $('.decode-btn').on('click', decodeText);    // 解码按钮
+            $('.swap-btn').on('click', swapText);        // 交换按钮
         }
 
-        // 自动检测并处理编码/解码
+        // 初始化Bootstrap提示框 - 为所有带有tooltip属性的元素启用提示功能
+        function initializeTooltips() {
+            // 初始化所有tooltip
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        }
+
+        // 设置常用操作功能 - 初始化常用操作区域的所有功能和事件监听
+        function setupCommonOperations() {
+            // 自动添加字符串长度计数更新
+            $('#autoAddString').on('input', function () {
+                const length = $(this).val().length;
+                $('#addStringCount').text(length);
+                settings.autoAddString = $(this).val();
+                saveSettingsToStorage();
+            });
+
+            // 位置选择下拉菜单事件
+            $('.position-option').on('click', function (e) {
+                e.preventDefault();
+                const value = $(this).data('value');
+                const text = $(this).text();
+                $('#currentPosition').text(text);
+                settings.addPosition = value;
+                saveSettingsToStorage();
+            });
+
+            // 编码次数输入框事件
+            $('#encodeCount').on('change', function () {
+                const count = parseInt($(this).val());
+                if (count >= 1 && count <= 10) {
+                    settings.encodeCount = count;
+                    saveSettingsToStorage();
+                } else {
+                    $(this).val(settings.encodeCount);
+                    showAlert('编码次数必须在1-10之间', 'warning');
+                }
+            });
+
+            // 自动复制结果开关
+            $('#autoCopyResult').on('change', function () {
+                settings.autoCopyResult = $(this).is(':checked');
+                saveSettingsToStorage();
+            });
+
+            // 自动编解码开关 - 同步到原有的自动检测设置
+            $('#autoDetectSwitch').on('change', function () {
+                const enabled = $(this).is(':checked');
+                settings.autoDetectSwitch = enabled;
+                settings.autoDetect = enabled; // 同步到原有设置
+                $('#autoDetect').prop('checked', enabled); // 同步UI
+                saveSettingsToStorage();
+            });
+
+            // 同步设置弹框中的控件
+            setupModalSync();
+        }
+
+        // 设置弹框同步功能 - 确保设置弹框中的控件与主界面保持同步
+        function setupModalSync() {
+            // 模态框中的自动添加字符串
+            $('#modalAutoAddString').on('input', function () {
+                const value = $(this).val();
+                $('#autoAddString').val(value);
+                $('#addStringCount').text(value.length);
+                settings.autoAddString = value;
+                saveSettingsToStorage();
+            });
+
+            // 模态框中的位置选择
+            $('#modalAddPosition').on('change', function () {
+                const value = $(this).val();
+                const text = $(this).find('option:selected').text();
+                $('#currentPosition').text(text);
+                settings.addPosition = value;
+                saveSettingsToStorage();
+            });
+
+            // 模态框中的编码次数
+            $('#modalEncodeCount').on('change', function () {
+                const count = parseInt($(this).val());
+                if (count >= 1 && count <= 10) {
+                    $('#encodeCount').val(count);
+                    settings.encodeCount = count;
+                    saveSettingsToStorage();
+                } else {
+                    $(this).val(settings.encodeCount);
+                }
+            });
+
+            // 模态框中的自动复制开关
+            $('#modalAutoCopyResult').on('change', function () {
+                const enabled = $(this).is(':checked');
+                $('#autoCopyResult').prop('checked', enabled);
+                settings.autoCopyResult = enabled;
+                saveSettingsToStorage();
+            });
+
+            // 模态框中的自动编解码开关
+            $('#modalAutoDetectSwitch').on('change', function () {
+                const enabled = $(this).is(':checked');
+                $('#autoDetectSwitch').prop('checked', enabled);
+                settings.autoDetectSwitch = enabled;
+                settings.autoDetect = enabled; // 同步到原有设置
+                $('#autoDetect').prop('checked', enabled);
+                saveSettingsToStorage();
+            });
+        }
+
+        // 自动检测并处理编码/解码功能 - 根据输入内容智能判断是否需要编码或解码
         function autoDetectAndProcess() {
+            // 关键修复：如果是交换操作触发的输入变化，跳过自动处理
+            // 这确保了交换功能不会触发意外的编码/解码操作
+            if (isSwapTriggered) {
+                console.log('交换操作触发，跳过自动检测处理');
+                isSwapTriggered = false; // 重置标志，为下次操作做准备
+                return;
+            }
+
+            // 获取输入框中的文本内容并去除首尾空格
             const text = $('#inputText').val().trim();
-            
+
+            // 如果输入为空，清空输出框
             if (!text) {
                 clearOutput();
                 return;
             }
 
-            // 调试：显示检测过程
+            // 调试信息：显示检测过程，便于开发者调试
             console.log('自动检测输入:', text);
             console.log('是否为Base64:', isBase64(text));
 
-            // 检测是否为Base64编码
+            // 智能检测输入内容的类型：Base64编码 vs 普通文本
             if (isBase64(text)) {
+                // 如果检测到是Base64编码，执行自动解码
                 console.log('检测到Base64编码，执行自动解码');
                 autoDecode();
             } else {
+                // 如果不是Base64编码，执行自动编码
                 console.log('不是Base64，执行自动编码');
                 autoEncode();
             }
@@ -349,23 +510,23 @@
         function isBase64(str) {
             // 移除可能的空白字符
             str = str.replace(/\s/g, '');
-            
+
             // 空字符串不是Base64
             if (!str) {
                 return false;
             }
-            
+
             // Base64字符串长度必须是4的倍数
             if (str.length % 4 !== 0) {
                 return false;
             }
-            
+
             // 检查是否只包含Base64字符
             const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/;
             if (!base64Regex.test(str)) {
                 return false;
             }
-            
+
             // 尝试解码验证
             try {
                 atob(str);
@@ -387,7 +548,7 @@
             try {
                 // 首先尝试直接解码
                 const binaryString = atob(str);
-                
+
                 // 尝试使用TextDecoder解码（支持UTF-8）
                 if (typeof TextDecoder !== 'undefined') {
                     const bytes = new Uint8Array(binaryString.length);
@@ -430,49 +591,198 @@
             }
         }
 
-        // 自动编码（不显示提示）
+        // 根据位置设置插入字符串 - 实现自动添加字符串功能的核心逻辑
+        function insertStringAtPosition(text, insertString, position) {
+            if (!insertString) return text;
+
+            switch (position) {
+                case 'start':
+                    // 在开头添加
+                    return insertString + text;
+                case 'end':
+                    // 在结尾添加
+                    return text + insertString;
+                case 'random':
+                    // 在随机位置添加
+                    const randomPos = Math.floor(Math.random() * (text.length + 1));
+                    return text.slice(0, randomPos) + insertString + text.slice(randomPos);
+                case 'random-edge':
+                    // 随机在开头或结尾添加
+                    return Math.random() < 0.5 ? insertString + text : text + insertString;
+                default:
+                    return text;
+            }
+        }
+
+        // 从文本中移除指定字符串 - 解码时移除自动添加的字符串
+        function removeInsertedString(text, insertString) {
+            if (!insertString) return text;
+
+            // 移除所有出现的插入字符串（支持多次出现的情况）
+            return text.replace(new RegExp(escapeRegExp(insertString), 'g'), '');
+        }
+
+        // 转义正则表达式特殊字符 - 确保字符串能正确用于正则表达式
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        // 多次编码功能 - 根据设置的编码次数进行多次Base64编码
+        function multipleEncode(text, times) {
+            let result = text;
+            for (let i = 0; i < times; i++) {
+                result = safeBase64Encode(result);
+            }
+            return result;
+        }
+
+        // 多次解码功能 - 尝试多次Base64解码直到得到可读文本
+        function multipleDecode(text) {
+            let result = text;
+            let decodeCount = 0;
+            const maxAttempts = settings.encodeCount || 10; // 最大尝试次数
+
+            while (decodeCount < maxAttempts) {
+                try {
+                    const decoded = safeBase64Decode(result);
+                    decodeCount++;
+
+                    // 检查解码结果是否仍然是Base64格式
+                    if (isBase64(decoded) && decodeCount < maxAttempts) {
+                        result = decoded;
+                    } else {
+                        // 不是Base64格式或达到最大次数，返回当前结果
+                        return { result: decoded, decodeTimes: decodeCount };
+                    }
+                } catch (e) {
+                    // 解码失败，返回上一次的结果
+                    break;
+                }
+            }
+
+            return { result: result, decodeTimes: decodeCount };
+        }
+
+        // 独立的本地存储保存函数 - 避免与原有保存函数冲突
+        function saveSettingsToStorage() {
+            localStorage.setItem('base64Settings', JSON.stringify(settings));
+        }
+
+        // 自动复制功能 - 当开启自动复制时，自动复制结果到剪贴板
+        function autoCopyToClipboard(text) {
+            if (!settings.autoCopyResult) return;
+
+            try {
+                // 保存当前焦点元素，防止复制操作导致焦点丢失
+                const activeElement = document.activeElement;
+
+                // 使用现代的Clipboard API（如果支持）
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showAlert('结果已自动复制到剪贴板！', 'success');
+                    }).catch(() => {
+                        // 降级到传统方法
+                        fallbackCopyToClipboard(text, activeElement);
+                    });
+                } else {
+                    // 降级到传统方法
+                    fallbackCopyToClipboard(text, activeElement);
+                }
+            } catch (e) {
+                console.error('自动复制失败:', e);
+            }
+        }
+
+        // 传统复制方法的降级函数 - 在不支持现代API时使用
+        function fallbackCopyToClipboard(text, activeElement) {
+            try {
+                // 创建临时textarea元素进行复制
+                const tempElement = document.createElement('textarea');
+                tempElement.value = text;
+                tempElement.style.position = 'fixed';
+                tempElement.style.left = '-9999px';
+                tempElement.style.top = '-9999px';
+                document.body.appendChild(tempElement);
+
+                // 执行复制操作
+                tempElement.select();
+                tempElement.setSelectionRange(0, 99999);
+                document.execCommand('copy');
+                document.body.removeChild(tempElement);
+
+                // 恢复焦点到原来的元素
+                if (activeElement && activeElement.focus) {
+                    activeElement.focus();
+                }
+
+                // 显示自动复制提示
+                showAlert('结果已自动复制到剪贴板！', 'success');
+            } catch (e) {
+                console.error('传统复制方法失败:', e);
+            }
+        }
+
+        // 自动编码（不显示提示）- 支持自动添加字符串和多次编码
         function autoEncode() {
             let text = $('#inputText').val();
             if (!text.trim()) return;
 
             try {
-                // 如果有插入字符且启用了随机插入
+                // 第一步：添加自定义字符串（如果设置了）
+                if (settings.autoAddString) {
+                    text = insertStringAtPosition(text, settings.autoAddString, settings.addPosition);
+                }
+
+                // 第二步：如果有插入字符且启用了随机插入（保持向后兼容）
                 if ($('#insertChar').val() && settings.insertRandomChar) {
                     text = insertRandomChar(text, $('#insertChar').val());
                 }
-                
-                // 使用更安全的中文编码方法
-                const encoded = safeBase64Encode(text);
+
+                // 第三步：进行多次编码
+                const encoded = multipleEncode(text, settings.encodeCount);
                 $('#outputText').val(encoded);
                 updateButtonStates('encode');
+
+                // 第四步：自动复制结果（如果开启）
+                autoCopyToClipboard(encoded);
             } catch (e) {
                 console.log('自动编码失败:', e.message);
                 // 自动编码失败时不显示错误
             }
         }
 
-        // 自动解码（不显示提示）
+        // 自动解码（不显示提示）- 支持多次解码和自动移除字符串
         function autoDecode() {
             let text = $('#inputText').val();
             if (!text.trim()) return;
 
             try {
-                // 如果有插入字符且启用了随机插入，先移除插入的字符
-                if ($('#insertChar').val() && settings.insertRandomChar) {
-                    text = removeInsertedChar(text, $('#insertChar').val());
+                // 第一步：进行多次解码，获取解码结果和解码次数
+                const decodeResult = multipleDecode(text);
+                let decoded = decodeResult.result;
+
+                // 第二步：移除自定义添加的字符串（如果设置了）
+                if (settings.autoAddString) {
+                    decoded = removeInsertedString(decoded, settings.autoAddString);
                 }
-                
-                // 使用更安全的中文解码方法
-                const decoded = safeBase64Decode(text);
+
+                // 第三步：如果有插入字符且启用了随机插入，移除插入的字符（保持向后兼容）
+                if ($('#insertChar').val() && settings.insertRandomChar) {
+                    decoded = removeInsertedChar(decoded, $('#insertChar').val());
+                }
+
                 $('#outputText').val(decoded);
                 updateButtonStates('decode');
+
+                // 第四步：自动复制结果（如果开启）
+                autoCopyToClipboard(decoded);
             } catch (e) {
                 console.log('自动解码失败:', e.message);
                 // 自动解码失败时不显示错误
             }
         }
 
-        // Base64编码功能
+        // Base64编码功能 - 手动编码，支持所有新功能
         function encodeText() {
             let text = $('#inputText').val();
             if (!text.trim()) {
@@ -481,23 +791,34 @@
             }
 
             try {
-                // 如果有插入字符且启用了随机插入
+                // 第一步：添加自定义字符串（如果设置了）
+                if (settings.autoAddString) {
+                    text = insertStringAtPosition(text, settings.autoAddString, settings.addPosition);
+                }
+
+                // 第二步：如果有插入字符且启用了随机插入（保持向后兼容）
                 if ($('#insertChar').val() && settings.insertRandomChar) {
                     text = insertRandomChar(text, $('#insertChar').val());
                 }
-                
-                // 使用更安全的中文编码方法
-                const encoded = safeBase64Encode(text);
+
+                // 第三步：进行多次编码
+                const encoded = multipleEncode(text, settings.encodeCount);
                 $('#outputText').val(encoded);
-                
-                showAlert('编码成功！', 'success');
+
+                // 显示成功提示，包含编码次数信息
+                const message = settings.encodeCount > 1 ?
+                    `编码成功！（${settings.encodeCount}次编码）` : '编码成功！';
+                showAlert(message, 'success');
                 updateButtonStates('encode');
+
+                // 第四步：自动复制结果（如果开启）
+                autoCopyToClipboard(encoded);
             } catch (e) {
                 showAlert('编码失败：' + e.message, 'danger');
             }
         }
 
-        // Base64解码功能
+        // Base64解码功能 - 手动解码，支持所有新功能
         function decodeText() {
             let text = $('#inputText').val();
             if (!text.trim()) {
@@ -506,17 +827,30 @@
             }
 
             try {
-                // 如果有插入字符且启用了随机插入，先移除插入的字符
-                if ($('#insertChar').val() && settings.insertRandomChar) {
-                    text = removeInsertedChar(text, $('#insertChar').val());
+                // 第一步：进行多次解码，获取解码结果和解码次数
+                const decodeResult = multipleDecode(text);
+                let decoded = decodeResult.result;
+
+                // 第二步：移除自定义添加的字符串（如果设置了）
+                if (settings.autoAddString) {
+                    decoded = removeInsertedString(decoded, settings.autoAddString);
                 }
-                
-                // 使用更安全的中文解码方法
-                const decoded = safeBase64Decode(text);
+
+                // 第三步：如果有插入字符且启用了随机插入，移除插入的字符（保持向后兼容）
+                if ($('#insertChar').val() && settings.insertRandomChar) {
+                    decoded = removeInsertedChar(decoded, $('#insertChar').val());
+                }
+
                 $('#outputText').val(decoded);
-                
-                showAlert('解码成功！', 'success');
+
+                // 显示成功提示，包含解码次数信息
+                const message = decodeResult.decodeTimes > 1 ?
+                    `解码成功！（${decodeResult.decodeTimes}次解码）` : '解码成功！';
+                showAlert(message, 'success');
                 updateButtonStates('decode');
+
+                // 第四步：自动复制结果（如果开启）
+                autoCopyToClipboard(decoded);
             } catch (e) {
                 showAlert('解码失败：请检查输入是否为有效的Base64编码。', 'danger');
             }
@@ -535,44 +869,87 @@
             return text.replace(new RegExp(char, 'g'), '');
         }
 
-        // 交换文本内容
+        // 交换文本内容功能 - 将输入框和输出框的内容进行交换
         function swapText() {
             console.log('交换函数被调用');
-            
-            // 使用原生JavaScript作为备选方案
-            const inputElement = document.getElementById('inputText');
-            const outputElement = document.getElementById('outputText');
-            
-            if (!inputElement || !outputElement) {
-                console.error('元素未找到');
-                alert('元素未找到，交换功能无法使用');
-                return;
-            }
-            
-            const inputText = inputElement.value;
-            const outputText = outputElement.value;
-            
+            // 设置交换触发标志为true，防止自动检测功能在交换时触发编码/解码
+            // 必须在获取值之前设置，确保整个交换过程不被干扰
+            isSwapTriggered = true;
+
+            // 使用jQuery获取当前两个文本框的内容
+            const inputText = $('#inputText').val();
+            const outputText = $('#outputText').val();
+
             console.log('交换前 - 输入框:', inputText);
             console.log('交换前 - 输出框:', outputText);
-            
-            // 执行交换
-            inputElement.value = outputText;
-            outputElement.value = inputText;
-            
-            console.log('交换后 - 输入框:', inputElement.value);
-            console.log('交换后 - 输出框:', outputElement.value);
-            
+
+            // 临时禁用所有自动处理事件，确保交换过程不被打断
+            const originalAutoDetect = settings.autoDetect;
+            settings.autoDetect = false;
+
+            // 执行内容交换：将输出框内容放入输入框，将输入框内容放入输出框
+            $('#inputText').val(outputText);
+            $('#outputText').val(inputText);
+
+            console.log('交换后 - 输入框:', $('#inputText').val());
+            console.log('交换后 - 输出框:', $('#outputText').val());
+
+            // 恢复自动检测设置并重置交换标志
+            setTimeout(() => {
+                settings.autoDetect = originalAutoDetect;
+                isSwapTriggered = false;
+            }, 50);
+
+            // 显示操作成功提示信息
             showAlert('内容已交换。', 'info');
         }
 
-        // 复制到剪贴板
+        // 复制到剪贴板 - 手动复制功能，保持原有焦点
         function copyToClipboard(elementId) {
-            const element = $('#' + elementId)[0];
-            element.select();
-            element.setSelectionRange(0, 99999); // 兼容移动端
-            document.execCommand('copy');
-            
-            showAlert('已复制到剪贴板！', 'success');
+            try {
+                const element = $('#' + elementId)[0];
+                const text = element.value;
+
+                // 保存当前焦点元素
+                const activeElement = document.activeElement;
+
+                // 使用现代的Clipboard API（如果支持）
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showAlert('已复制到剪贴板！', 'success');
+                    }).catch(() => {
+                        // 降级到传统方法
+                        fallbackManualCopy(element, activeElement);
+                    });
+                } else {
+                    // 降级到传统方法
+                    fallbackManualCopy(element, activeElement);
+                }
+            } catch (e) {
+                console.error('复制失败:', e);
+                showAlert('复制失败，请手动选择文本复制。', 'danger');
+            }
+        }
+
+        // 传统手动复制方法的降级函数
+        function fallbackManualCopy(element, activeElement) {
+            try {
+                element.select();
+                element.setSelectionRange(0, 99999); // 兼容移动端
+                document.execCommand('copy');
+
+                // 恢复原来的焦点（如果原来就在某个输入框中）
+                if (activeElement && activeElement !== element && activeElement.focus) {
+                    setTimeout(() => {
+                        activeElement.focus();
+                    }, 100);
+                }
+
+                showAlert('已复制到剪贴板！', 'success');
+            } catch (e) {
+                console.error('传统复制方法失败:', e);
+                showAlert('复制失败，请手动选择文本复制。', 'danger');
+            }
         }
 
         // 清空文本
@@ -607,15 +984,16 @@
                 .addClass(`alert alert-${type}`)
                 .text(message)
                 .show();
-            
+
             // 3秒后自动隐藏
             setTimeout(() => {
                 $('#alertMessage').hide();
-            }, 3000);
+            }, 10000);
         }
 
-        // 保存设置
+        // 保存设置 - 包含所有新的常用操作设置
         function saveSettings() {
+            // 原有设置项
             settings.autoEncode = $('#autoEncode').is(':checked');
             settings.autoDetect = $('#autoDetect').is(':checked');
             settings.insertRandomChar = $('#insertRandomChar').is(':checked');
@@ -624,22 +1002,48 @@
             settings.enableNotifications = $('#enableNotifications').is(':checked');
             settings.enableSound = $('#enableSound').is(':checked');
             settings.fontSize = $('#fontSize').val();
-            
+
+            // 新增的常用操作设置项
+            settings.autoAddString = $('#modalAutoAddString').val() || $('#autoAddString').val();
+            settings.addPosition = $('#modalAddPosition').val() || settings.addPosition;
+            settings.encodeCount = parseInt($('#modalEncodeCount').val()) || parseInt($('#encodeCount').val()) || 1;
+            settings.autoCopyResult = $('#modalAutoCopyResult').is(':checked');
+            settings.autoDetectSwitch = $('#modalAutoDetectSwitch').is(':checked');
+
+            // 确保编码次数在有效范围内
+            if (settings.encodeCount < 1 || settings.encodeCount > 10) {
+                settings.encodeCount = 1;
+            }
+
             localStorage.setItem('base64Settings', JSON.stringify(settings));
             showAlert('设置已保存！', 'success');
-            
-            // 应用设置
+
+            // 应用设置到界面
             applySettings();
+            syncSettingsToUI();
+
+            // 关闭设置模态框
+            const settingsModal = document.getElementById('settingsModal');
+            const modal = bootstrap.Modal.getInstance(settingsModal);
+            if (modal) {
+                modal.hide();
+            } else {
+                // 如果没有实例，创建一个新的并立即关闭
+                const newModal = new bootstrap.Modal(settingsModal);
+                newModal.hide();
+            }
         }
 
-        // 加载设置
+        // 加载设置 - 加载所有设置项包括新的常用操作设置
         function loadSettings() {
             const savedSettings = localStorage.getItem('base64Settings');
             if (savedSettings) {
-                settings = JSON.parse(savedSettings);
+                const loaded = JSON.parse(savedSettings);
+                // 合并设置，确保新字段有默认值
+                settings = { ...settings, ...loaded };
             }
-            
-            // 应用设置到UI
+
+            // 应用原有设置到UI
             $('#autoEncode').prop('checked', settings.autoEncode);
             $('#autoDetect').prop('checked', settings.autoDetect);
             $('#insertRandomChar').prop('checked', settings.insertRandomChar);
@@ -648,23 +1052,54 @@
             $('#enableNotifications').prop('checked', settings.enableNotifications);
             $('#enableSound').prop('checked', settings.enableSound);
             $('#fontSize').val(settings.fontSize);
-            
+
             // 应用设置
             applySettings();
+            syncSettingsToUI();
+        }
+
+        // 同步设置到UI界面 - 确保主界面和设置弹框显示一致的设置值
+        function syncSettingsToUI() {
+            // 同步常用操作设置到主界面
+            $('#autoAddString').val(settings.autoAddString);
+            $('#encodeCount').val(settings.encodeCount);
+            $('#autoCopyResult').prop('checked', settings.autoCopyResult);
+            $('#autoDetectSwitch').prop('checked', settings.autoDetectSwitch);
+            $('#addStringCount').text(settings.autoAddString.length);
+
+            // 更新位置显示
+            const positionTexts = {
+                'random': '随机位置',
+                'start': '在开头添加',
+                'end': '在结尾添加',
+                'random-edge': '随机在开头或结尾'
+            };
+            $('#currentPosition').text(positionTexts[settings.addPosition] || '随机位置');
+
+            // 同步常用操作设置到设置弹框
+            $('#modalAutoAddString').val(settings.autoAddString);
+            $('#modalAddPosition').val(settings.addPosition);
+            $('#modalEncodeCount').val(settings.encodeCount);
+            $('#modalAutoCopyResult').prop('checked', settings.autoCopyResult);
+            $('#modalAutoDetectSwitch').prop('checked', settings.autoDetectSwitch);
+
+            // 同步自动编解码设置（新旧设置保持一致）
+            $('#autoDetect').prop('checked', settings.autoDetectSwitch);
         }
 
         // 应用设置
         function applySettings() {
             // 应用字体大小
             applyFontSize();
-            
-            // 应用自动换行
-            if (settings.wordWrap) {
-                $('textarea').css('white-space', 'pre-wrap');
-            } else {
-                $('textarea').css('white-space', 'pre');
-            }
-            
+
+            // 强制应用自动换行设置
+            $('textarea.code-input').css({
+                'white-space': 'pre-wrap',
+                'word-wrap': 'break-word',
+                'word-break': 'break-all',
+                'overflow-wrap': 'break-word'
+            });
+
             // 应用行号显示（如果需要的话）
             if (settings.showLineNumbers) {
                 // 这里可以添加行号显示的逻辑
@@ -685,8 +1120,6 @@
             showAlert('所有内容已清空。', 'info');
         }
 
-
-
         // 语言切换功能
         function switchLanguage(lang, langName, flag) {
             // 更新按钮显示
@@ -701,7 +1134,7 @@
         }
 
         // 添加键盘快捷键支持
-        $(document).on('keydown', function(e) {
+        $(document).on('keydown', function (e) {
             // Ctrl+Enter 编码
             if (e.ctrlKey && e.key === 'Enter') {
                 e.preventDefault();
@@ -724,57 +1157,6 @@
             }
         });
 
-        // 添加文件拖拽上传功能
-        $('#inputText').on('dragover', function(e) {
-            e.preventDefault();
-            $(this).addClass('border-primary');
-        }).on('dragleave', function(e) {
-            e.preventDefault();
-            $(this).removeClass('border-primary');
-        }).on('drop', function(e) {
-            e.preventDefault();
-            $(this).removeClass('border-primary');
-            
-            const files = e.originalEvent.dataTransfer.files;
-            if (files.length > 0) {
-                const file = files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#inputText').val(e.target.result);
-                    if (settings.autoDetect) {
-                        autoDetectAndProcess();
-                    }
-                };
-                reader.readAsText(file);
-            }
-        });
-
-        // 统计相关函数
-        function updateCharCount() {
-            const inputLength = $('#inputText').val().length;
-            const outputLength = $('#outputText').val().length;
-            
-            $('#inputCharCount').text(inputLength);
-            $('#outputCharCount').text(outputLength);
-        }
-
-        function updateStats() {
-            $('#encodeCount').text(stats.encodeCount);
-            $('#decodeCount').text(stats.decodeCount);
-        }
-
-        function saveStats() {
-            localStorage.setItem('base64Stats', JSON.stringify(stats));
-        }
-
-        function loadStats() {
-            const savedStats = localStorage.getItem('base64Stats');
-            if (savedStats) {
-                stats = JSON.parse(savedStats);
-                updateStats();
-            }
-        }
-
         // 清空所有内容
         function clearAll() {
             $('#inputText').val('');
@@ -784,49 +1166,19 @@
             showAlert('所有内容已清空。', 'info');
         }
 
-        // 播放音效
-        function playSound(type) {
-            if (!settings.enableSound) return;
-            
-            try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                if (type === 'success') {
-                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-                    oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.1);
-                } else if (type === 'error') {
-                    oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
-                    oscillator.frequency.setValueAtTime(300, audioContext.currentTime + 0.1);
-                }
-                
-                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
-                
-                oscillator.start(audioContext.currentTime);
-                oscillator.stop(audioContext.currentTime + 0.2);
-            } catch (e) {
-                // 如果Web Audio API不可用，静默失败
-            }
-        }
-
         // 增强的Base64检测函数
         function isBase64(str) {
             if (str === '' || str.trim() === '') {
                 return false;
             }
-            
+
             try {
                 // 检查是否只包含Base64字符
                 const base64Regex = /^[A-Za-z0-9+/]*={0,2}$/;
                 if (!base64Regex.test(str)) {
                     return false;
                 }
-                
+
                 // 尝试解码
                 const decoded = atob(str);
                 // 检查解码结果是否有效
@@ -839,15 +1191,278 @@
         // 增强的可读文本检测
         function isReadableText(str) {
             if (!str || str.length === 0) return false;
-            
+
             // 检查是否包含可读字符（包括中文）
             const readableChars = str.match(/[a-zA-Z0-9\u4e00-\u9fa5\s.,!?;:'"()[\]{}]/g);
             const readableRatio = readableChars ? readableChars.length / str.length : 0;
-            
+
             // 如果可读字符比例超过50%，认为是可读文本
             return readableRatio > 0.5;
         }
     </script>
 </body>
+
+<style>
+    html,
+    body {
+        background: rgb(245 246 255);
+        min-width: 100%;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 强化textarea样式，确保能够调整大小和自动换行 */
+    .code-input {
+        background: #fff !important;
+        border-radius: 10px !important;
+        box-shadow: 0 2px 8px 0 rgba(96, 114, 252, .05) !important;
+        padding: 12px !important;
+        min-height: 300px !important;
+        height: 50vh;
+        width: 100%;
+        border: 1px solid #fff;
+        resize: vertical !important;
+        /* 强制自动换行设置 */
+        white-space: pre-wrap !important;
+        word-wrap: break-word !important;
+        word-break: break-all !important;
+        overflow-wrap: break-word !important;
+        /* 确保有滚动条 */
+        overflow-y: auto !important;
+    }
+
+
+    /* 鼠标悬浮时的提示效果 */
+    .code-input:hover {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.1);
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    /* 移动端布局优化 - 上下排列和按钮位置调整 */
+    @media (max-width: 768px) {
+
+        /* 确保row容器支持flexbox order */
+        .textarea-container {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        /* 移动端输入框上下排列 */
+        .textarea-container .input-section,
+        .textarea-container .output-section {
+            flex: 0 0 100% !important;
+            max-width: 100% !important;
+            margin-bottom: 20px;
+        }
+
+        /* 移动端输入框高度调整 */
+        .code-input {
+            min-height: 200px !important;
+            height: 30vh !important;
+            background: #fff !important;
+            border-radius: 10px !important;
+            box-shadow: 0 2px 8px 0 rgba(96, 114, 252, .05) !important;
+            border: 1px solid #fff !important;
+        }
+
+        /* 移动端显示中间按钮，隐藏桌面按钮 */
+        .mobile-buttons {
+            display: block !important;
+            order: 2;
+            /* 确保在输入框和输出框之间 */
+        }
+
+        .desktop-buttons {
+            display: none !important;
+        }
+
+        /* 调整输入框顺序 */
+        .input-section {
+            order: 1;
+        }
+
+        .output-section {
+            order: 3;
+        }
+
+        /* 移动端按钮样式优化 */
+        .mobile-buttons .btn {
+            font-size: 14px;
+            padding: 10px 15px;
+            margin: 0 5px;
+        }
+
+        /* 移动端按钮容器样式 */
+        .mobile-buttons {
+            padding: 15px 0;
+            background: rgba(245, 246, 255, 0.5);
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        /* 移动端调整手柄更明显 */
+        .code-input::-webkit-resizer {
+            background-size: 12px 12px;
+        }
+
+        /* 移动端文本框边距调整 */
+        .input-section,
+        .output-section {
+            margin-bottom: 0;
+        }
+    }
+
+    /* 桌面端隐藏移动端按钮 */
+    @media (min-width: 769px) {
+        .mobile-buttons {
+            display: none !important;
+        }
+
+        .desktop-buttons {
+            display: block !important;
+        }
+    }
+
+    div {
+        box-sizing: border-box;
+    }
+
+    /* 导航栏优化 - 确保在各种设备上都有良好的显示效果 */
+    .navbar {
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        padding: 0.5rem 0;
+    }
+
+    .navbar-brand {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+    /* 移动端导航栏优化 */
+    @media (max-width: 991.98px) {
+        .navbar-nav {
+            text-align: center;
+            padding: 1rem 0;
+        }
+        
+        .navbar-nav .nav-link {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f8f9fa;
+        }
+        
+        .navbar-nav .nav-link:last-child {
+            border-bottom: none;
+        }
+        
+        .navbar-nav .dropdown-menu {
+            border: none;
+            box-shadow: none;
+            background-color: #f8f9fa;
+            margin-top: 0;
+        }
+        
+        .navbar-nav .dropdown-item {
+            text-align: center;
+            padding: 0.5rem 1rem;
+        }
+        
+        /* 移动端右侧按钮优化 */
+        .navbar .navbar-buttons {
+            justify-content: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+            width: 100%;
+        }
+        
+        .navbar .navbar-buttons .btn {
+            margin: 0 0.25rem;
+            font-size: 0.875rem;
+            min-width: 80px;
+        }
+        
+        .navbar .navbar-buttons .dropdown-menu {
+            min-width: 150px;
+        }
+        
+        /* 汉堡菜单按钮样式 */
+        .navbar-toggler {
+            border: 1px solid #dee2e6;
+            font-size: 1.25rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            border-color: #86b7fe;
+        }
+        
+        .navbar-toggler:hover {
+            background-color: rgba(0,0,0,.05);
+        }
+        
+        /* 移动端菜单展开动画 */
+        .navbar-collapse {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* 移动端品牌logo优化 */
+        .navbar-brand img {
+            margin-right: 0.5rem;
+        }
+    }
+
+    /* 大屏幕导航栏优化 */
+    @media (min-width: 992px) {
+        .navbar-nav .nav-link {
+            margin: 0 0.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(0,0,0,.05);
+        }
+    }
+
+    /* 常用操作区域样式优化 - 确保在各种屏幕尺寸下都有良好的显示效果 */
+    .d-flex.flex-wrap.gap-3 {
+        gap: 1rem !important;
+        /* 确保元素间有适当的间距 */
+    }
+
+    /* 提示框样式优化 - 确保tooltip在移动端也能正常显示 */
+    .tooltip {
+        font-size: 0.875rem;
+        max-width: 250px;
+    }
+
+    /* 表单控件样式优化 - 统一表单元素的外观 */
+    .form-control,
+    .form-select {
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    /* 开关样式优化 - 使开关在移动端更容易点击 */
+    .form-check-input[type="checkbox"] {
+        cursor: pointer;
+    }
+
+    /* 小标签样式 - 统一小标签的外观 */
+    .form-label.small {
+        font-weight: 500;
+        color: #6c757d;
+        margin-bottom: 0.25rem;
+    }
+</style>
 
 </html>
