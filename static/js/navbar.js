@@ -12,7 +12,6 @@ window.NavbarManager = {
         'index.html': 'text',
         'image2base64.html': 'image',
         'file2base64.html': 'file',
-        'webpage2base64.html': 'web',
         'prevent-password-cracking.html': 'faq',
         'how-to-use-website.html': 'faq',
         'what-is-base64.html': 'faq',

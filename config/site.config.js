@@ -44,11 +44,6 @@ window.SiteConfig = {
             path: "/file2base64.html",
             name: "文件编码", 
             description: "将任何文件转换为Base64，支持多种输出格式"
-        },
-        webEncode: {
-            path: "/webpage2base64.html",
-            name: "网页编码",
-            description: "从URL获取网页内容并转换为Base64格式"
         }
     },
     
