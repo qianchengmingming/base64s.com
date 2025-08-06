@@ -14,7 +14,7 @@
 
     <!-- 核心功能页面 - 高优先级 -->
     <url>
-        <loc>https://base64s.com/image2base64.html</loc>
+        <loc>https://base64s.com/imagetobase64.html</loc>
         <lastmod>2024-12-19</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>

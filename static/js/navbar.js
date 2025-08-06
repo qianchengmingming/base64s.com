@@ -10,7 +10,7 @@ window.NavbarManager = {
     // 页面类型映射
     pageMapping: {
         'index.html': 'text',
-        'image2base64.html': 'image',
+        'imagetobase64.html': 'image',
         'file2base64.html': 'file',
         'prevent-password-cracking.html': 'faq',
         'how-to-use-website.html': 'faq',

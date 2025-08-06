@@ -36,7 +36,7 @@ window.SiteConfig = {
             description: "支持文本与Base64互转，具备安全字符串添加和多次编码功能"
         },
         imageEncode: {
-            path: "/image2base64.html", 
+            path: "/imagetobase64.html", 
             name: "图片编码",
             description: "将图片转换为Base64格式，支持多种图片格式"
         },

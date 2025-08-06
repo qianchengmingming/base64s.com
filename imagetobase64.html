@@ -121,7 +121,7 @@
             </button>
             <button type="button" class="btn btn-outline-primary" onclick="copyImage()">
                 <i class="bi bi-image"></i>
-                <span data-image="copyImageBtn">复制图片</span>
+                <span data-image="copyImageBtn">复制图片到剪贴板</span>
             </button>
             <button type="button" class="btn btn-outline-primary" onclick="downloadImage()">
                 <i class="bi bi-download"></i>
@@ -137,6 +137,7 @@
     <div class="container" style="margin-top: 20px;">
         <div id="alertMessage" class="alert alert-info" role="alert" style="display: none;" data-image="initialMessage">
             请选择图片文件或粘贴Base64字符串开始转换。
+            <button type="button" class="btn-close" onclick="closeCurrentAlert()" aria-label="关闭"></button>
         </div>
     </div>
 
@@ -219,7 +220,7 @@
             initializeImageUpload();
             initializeTooltips();
             setupImageEventListeners();
-            showAlert('请选择图片文件或粘贴Base64字符串开始转换。', 'info');
+            updateAutoStatus();
 
             // 确保函数在全局作用域中可用
             window.imageToBase64 = imageToBase64;
@@ -232,6 +233,7 @@
             window.downloadImage = downloadImage;
             window.selectImage = selectImage;
             window.clearAll = clearAll;
+            window.closeCurrentAlert = closeCurrentAlert;
         });
 
         // 加载图片转换设置
@@ -342,8 +344,9 @@
                 // 自动编码（如果启用了）
                 if (imageSettings.autoEncodeDecode) {
                     setTimeout(() => {
+                        showAlert('图片已加载，正在自动编码...', 'info');
                         imageToBase64();
-                    }, 100);
+                    }, 200);
                 }
             };
             reader.readAsDataURL(file);
@@ -467,7 +470,13 @@
                 let dataUri = extractDataURI(base64Input);
                 
                 if (!dataUri) {
-                    showAlert('无效的Base64图片格式。', 'danger');
+                    showAlert('无效的Base64图片格式。请确保输入的是有效的Base64编码或支持的格式。', 'danger');
+                    return;
+                }
+
+                // 验证data URI格式
+                if (!dataUri.startsWith('data:image/')) {
+                    showAlert('提取的数据URI格式无效：' + dataUri.substring(0, 50) + '...', 'danger');
                     return;
                 }
 
@@ -535,13 +544,14 @@
             // 从各种格式中提取
             const patterns = [
                 /url\(['"](data:image\/[^'"]+)['"]/,  // CSS
-                /href=['"]([^'"]+\.(?:png|jpg|jpeg|gif|webp|svg))['"]/, // Favicon/Hyperlink
-                /src=['"]([^'"]+)['"]/,  // IMG/Iframe
+                /href=['"](data:image\/[^'"]+)['"]/, // HTML Hyperlink - 修复：匹配data URI而不是文件扩展名
+                /src=['"](data:image\/[^'"]+)['"]/,  // IMG/Iframe - 修复：只匹配data URI
                 /img\.src\s*=\s*['"](data:image\/[^'"]+)['"]/,  // JS Image
                 /window\.open\(['"](data:image\/[^'"]+)['"]/, // JS Popup
             ];
             
-            for (const pattern of patterns) {
+            for (let i = 0; i < patterns.length; i++) {
+                const pattern = patterns[i];
                 const match = text.match(pattern);
                 if (match && match[1] && match[1].startsWith('data:image/')) {
                     return match[1];
@@ -603,17 +613,70 @@
                 showAlert('没有Base64内容可复制。', 'warning');
                 return;
             }
-            copyToClipboard(base64Text);
-            showAlert('Base64已复制到剪贴板！', 'success');
+            copyToClipboard(base64Text).then(() => {
+                showAlert('Base64已复制到剪贴板！', 'success');
+            }).catch(() => {
+                showAlert('复制失败，请手动复制。', 'danger');
+            });
         }
 
-        // 复制图片（复制Base64）
+        // 复制图片
         function copyImage() {
-            if (currentImageSrc) {
-                copyToClipboard(currentImageSrc);
-                showAlert('图片Base64已复制到剪贴板！', 'success');
-            } else {
+            if (!currentImageSrc && !currentBase64) {
                 showAlert('没有图片可复制。', 'warning');
+                return;
+            }
+
+            // 优先使用当前图片源，如果没有则使用Base64输入框的内容
+            const imageData = currentImageSrc || $('#base64Text').val().trim();
+            
+            if (!imageData) {
+                showAlert('没有图片可复制。', 'warning');
+                return;
+            }
+
+            // 尝试复制图片到剪贴板（现代浏览器支持）
+            if (navigator.clipboard && navigator.clipboard.write) {
+                // 将data URI转换为Blob
+                try {
+                    const response = fetch(imageData);
+                    response.then(res => res.blob()).then(blob => {
+                        const clipboardItem = new ClipboardItem({
+                            [blob.type]: blob
+                        });
+                        navigator.clipboard.write([clipboardItem]).then(() => {
+                            showAlert('图片已复制到剪贴板！', 'success');
+                        }).catch(() => {
+                            // 如果复制图片失败，降级为复制Base64
+                            copyToClipboard(imageData).then(() => {
+                                showAlert('图片Base64已复制到剪贴板！', 'success');
+                            }).catch(() => {
+                                showAlert('复制失败，请手动复制。', 'danger');
+                            });
+                        });
+                    }).catch(() => {
+                        // 如果fetch失败，降级为复制Base64
+                        copyToClipboard(imageData).then(() => {
+                            showAlert('图片Base64已复制到剪贴板！', 'success');
+                        }).catch(() => {
+                            showAlert('复制失败，请手动复制。', 'danger');
+                        });
+                    });
+                } catch (e) {
+                    // 如果出现错误，降级为复制Base64
+                    copyToClipboard(imageData).then(() => {
+                        showAlert('图片Base64已复制到剪贴板！', 'success');
+                    }).catch(() => {
+                        showAlert('复制失败，请手动复制。', 'danger');
+                    });
+                }
+            } else {
+                // 降级方案：复制Base64字符串
+                copyToClipboard(imageData).then(() => {
+                    showAlert('图片Base64已复制到剪贴板！', 'success');
+                }).catch(() => {
+                    showAlert('复制失败，请手动复制。', 'danger');
+                });
             }
         }
 
@@ -703,40 +766,93 @@
                 return navigator.clipboard.writeText(text);
             } else {
                 // 降级方案
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-9999px';
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
+                return new Promise((resolve, reject) => {
+                    try {
+                        const textArea = document.createElement('textarea');
+                        textArea.value = text;
+                        textArea.style.position = 'fixed';
+                        textArea.style.left = '-9999px';
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        resolve();
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
             }
         }
+
+        // 提示消息管理器
+        let alertQueue = [];
+        let currentAlert = null;
 
         // 显示提示消息
         function showAlert(message, type = 'info') {
             const alertElement = $('#alertMessage');
             
-            // 清除之前的定时器（如果存在）
-            const existingTimer = alertElement.data('hideTimer');
-            if (existingTimer) {
-                clearTimeout(existingTimer);
+            // 创建新的提示对象
+            const newAlert = {
+                message: message,
+                type: type,
+                timestamp: Date.now(),
+                timer: null
+            };
+            
+            // 将新提示添加到队列
+            alertQueue.push(newAlert);
+            
+            // 如果当前没有显示的提示，立即显示
+            if (!currentAlert) {
+                displayNextAlert();
+            }
+        }
+
+        // 显示队列中的下一个提示
+        function displayNextAlert() {
+            if (alertQueue.length === 0) {
+                currentAlert = null;
+                return;
             }
             
+            const alertElement = $('#alertMessage');
+            currentAlert = alertQueue.shift();
+            
+            // 清除之前的定时器
+            if (currentAlert.timer) {
+                clearTimeout(currentAlert.timer);
+            }
+            
+            // 显示当前提示
             alertElement
                 .removeClass()
-                .addClass(`alert alert-${type}`)
-                .text(message)
+                .addClass(`alert alert-${currentAlert.type}`)
+                .text(currentAlert.message)
                 .show();
 
-            // 10秒后自动隐藏，并保存定时器ID
-            const hideTimer = setTimeout(() => {
+            // 设置10秒后自动隐藏当前提示
+            currentAlert.timer = setTimeout(() => {
                 alertElement.hide();
-                alertElement.removeData('hideTimer');
+                // 显示下一个提示
+                displayNextAlert();
             }, 10000);
+        }
+
+        // 手动关闭当前提示
+        function closeCurrentAlert() {
+            const alertElement = $('#alertMessage');
             
-            alertElement.data('hideTimer', hideTimer);
+            // 清除当前提示的定时器
+            if (currentAlert && currentAlert.timer) {
+                clearTimeout(currentAlert.timer);
+            }
+            
+            // 隐藏当前提示
+            alertElement.hide();
+            
+            // 显示下一个提示
+            displayNextAlert();
         }
 
         // 更新质量显示
@@ -757,17 +873,62 @@
             }
         }
 
+        // 更新自动编解码状态显示
+        function updateAutoStatus() {
+            if (imageSettings.autoEncodeDecode) {
+                $('#autoStatus').show();
+            } else {
+                $('#autoStatus').hide();
+            }
+        }
+
         // 设置事件监听器
         function setupImageEventListeners() {
             // 设置项变化监听
             $('#autoDownload, #autoCopyBase64, #autoEncodeDecode').on('change', function() {
                 saveImageSettings();
+                updateAutoStatus();
             });
             
             $('#outputFormat').on('change', function() {
                 imageSettings.outputFormat = $(this).val();
                 saveImageSettings();
                 updateOutputFormat();
+            });
+
+            // Base64输入框实时监听
+            let base64InputTimer = null;
+            $('#base64Text').on('input', function() {
+                // 清除之前的定时器
+                if (base64InputTimer) {
+                    clearTimeout(base64InputTimer);
+                }
+                
+                // 设置新的定时器，延迟500ms执行自动解码
+                base64InputTimer = setTimeout(() => {
+                    const base64Text = $(this).val().trim();
+                    if (base64Text && imageSettings.autoEncodeDecode) {
+                        // 检查是否包含有效的Base64数据
+                        if (base64Text.includes('data:image/') || 
+                            /^[A-Za-z0-9+/]*={0,2}$/.test(base64Text) ||
+                            base64Text.includes('<a href="data:image/') ||
+                            base64Text.includes('<img src="data:image/') ||
+                            base64Text.includes('background-image: url(') ||
+                            base64Text.includes('img.src = \'data:image/')) {
+                            showAlert('检测到Base64数据，正在自动解码...', 'info');
+                            base64ToImage();
+                        }
+                    }
+                }, 500);
+            });
+
+            // 图片显示区域的点击事件（用于重新编码）
+            $('#imageDisplay').on('click', function() {
+                if (currentImageSrc && imageSettings.autoEncodeDecode) {
+                    setTimeout(() => {
+                        imageToBase64();
+                    }, 100);
+                }
             });
         }
     </script>
@@ -994,6 +1155,25 @@
         .intro-section {
             border-bottom: 1px solid #e9ecef;
             padding-bottom: 15px;
+        }
+
+        /* 提示框关闭按钮样式 */
+        .alert .btn-close {
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .alert .btn-close:hover {
+            opacity: 1;
+        }
+
+        /* 提示框样式优化 */
+        .alert {
+            position: relative;
+            padding-right: 40px;
         }
 
         /* 移动端介绍栏调整 */

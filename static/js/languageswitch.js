@@ -143,7 +143,7 @@ window.LanguageManager = {
         // 根据文件名或路径确定页面类型
         if (pathname === '/' || filename === 'index.html') {
             return 'home';
-        } else if (filename === 'image2base64.html') {
+        } else if (filename === 'imagetobase64.html') {
             return 'image';
         } else if (filename === 'file2base64.html') {
             return 'file';
