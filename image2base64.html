@@ -241,7 +241,7 @@
                 try {
                     imageSettings = {...imageSettings, ...JSON.parse(savedSettings)};
                 } catch (e) {
-                    console.error('加载图片设置失败:', e);
+                    // 加载图片设置失败
                 }
             }
             
@@ -460,22 +460,25 @@
                 return;
             }
 
-            if (!isValidBase64Image(base64Input)) {
-                showAlert('无效的Base64图片格式。', 'danger');
-                return;
-            }
-
             showAlert('正在处理Base64...', 'info');
 
             try {
+                // 尝试从输入中提取数据URI
+                let dataUri = extractDataURI(base64Input);
+                
+                if (!dataUri) {
+                    showAlert('无效的Base64图片格式。', 'danger');
+                    return;
+                }
+
                 // 显示图片结果
                 const img = $('#displayImg');
-                img.attr('src', base64Input);
-                currentImageSrc = base64Input;
-                currentBase64 = base64Input;
+                img.attr('src', dataUri);
+                currentImageSrc = dataUri;
+                currentBase64 = dataUri;
                 
                 // 显示图片信息
-                const size = Math.round(base64Input.length * 0.75 / 1024); // 估算KB大小
+                const size = Math.round(dataUri.length * 0.75 / 1024); // 估算KB大小
                 $('#imageInfo').text(`Base64解码图片 (约${size}KB)`);
                 
                 // 切换显示区域
@@ -559,28 +562,17 @@
                 return `data:${xmlMatch[1]};base64,${xmlMatch[2]}`;
             }
             
-            // 如果是纯粹的Base64，假设是PNG
+            // 如果是纯粹的Base64，尝试检测图片类型
             if (/^[A-Za-z0-9+/]*={0,2}$/.test(text) && text.length > 100) {
-                return `data:image/png;base64,${text}`;
+                // 尝试检测图片类型
+                const imageType = detectImageTypeFromBase64(text);
+                return `data:${imageType};base64,${text}`;
             }
             
             return null;
         }
 
-        // 验证Base64图片格式
-        function isValidBase64Image(base64String) {
-            // 基本格式检查
-            if (!base64String.startsWith('data:image/')) {
-                return false;
-            }
-            
-            // 检查是否包含base64标识
-            if (!base64String.includes('base64,')) {
-                return false;
-            }
-            
-            return true;
-        }
+
 
         // 选择图片（按钮点击）
         function selectImage() {
@@ -659,6 +651,50 @@
             if (base64String.includes('image/webp')) return 'webp';
             if (base64String.includes('image/svg')) return 'svg';
             return 'png'; // 默认
+        }
+
+        // 检测Base64字符串的图片类型
+        function detectImageTypeFromBase64(base64String) {
+            try {
+                // 解码Base64的前几个字节来检测图片类型
+                const binaryString = atob(base64String);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                
+                // 检测文件头
+                if (bytes.length >= 4) {
+                    // PNG: 89 50 4E 47
+                    if (bytes[0] === 0x89 && bytes[1] === 0x50 && bytes[2] === 0x4E && bytes[3] === 0x47) {
+                        return 'image/png';
+                    }
+                    // JPEG: FF D8 FF
+                    if (bytes[0] === 0xFF && bytes[1] === 0xD8 && bytes[2] === 0xFF) {
+                        return 'image/jpeg';
+                    }
+                    // GIF: 47 49 46 38 (GIF8)
+                    if (bytes[0] === 0x47 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x38) {
+                        return 'image/gif';
+                    }
+                    // WebP: 52 49 46 46 (RIFF)
+                    if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46) {
+                        return 'image/webp';
+                    }
+                }
+                
+                // 如果是SVG，检查是否包含SVG标记
+                const decodedString = binaryString.toString();
+                if (decodedString.includes('<svg') || decodedString.includes('<?xml')) {
+                    return 'image/svg+xml';
+                }
+                
+            } catch (e) {
+                // 如果检测失败，返回默认类型
+            }
+            
+            // 默认返回PNG
+            return 'image/png';
         }
 
         // 复制到剪贴板通用函数
