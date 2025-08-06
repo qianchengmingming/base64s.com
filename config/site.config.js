@@ -41,7 +41,7 @@ window.SiteConfig = {
             description: "将图片转换为Base64格式，支持多种图片格式"
         },
         fileEncode: {
-            path: "/file2base64.html",
+            path: "/filetobase64.html",
             name: "文件编码", 
             description: "将任何文件转换为Base64，支持多种输出格式"
         }

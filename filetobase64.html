@@ -32,7 +32,7 @@
         <div class="row textarea-container">
             <!-- 左侧：文件上传/显示区域 -->
             <div class="col input-section">
-                <p class="fw-lighter text-start" data-file="uploadLabel">请选择文件进行Base64编码转换：</p>
+                <p class="fw-lighter text-start" data-file="uploadLabel">请选择文件进行编码或查看Base64解码后的文件：</p>
                 <div class="position-relative">
                     <!-- 文件上传区域 -->
                     <div id="uploadArea" class="file-display-area">
@@ -57,6 +57,29 @@
                         </div>
                     </div>
                     
+                    <!-- 文件下载显示区域 -->
+                    <div id="fileDownloadDisplay" class="file-display-area" style="display: none;">
+                        <div class="file-download-content text-center">
+                            <i class="bi bi-file-earmark-arrow-down display-2 text-success mb-3"></i>
+                            <h5 class="mb-3">文件解析成功！</h5>
+                            <div class="file-info mb-3">
+                                <h6 id="parsedFileName" class="mb-2 text-primary"></h6>
+                                <p id="parsedFileInfo" class="text-muted small mb-1"></p>
+                                <p id="parsedFileSizeInfo" class="text-muted small"></p>
+                            </div>
+                            <div class="download-buttons">
+                                <button type="button" class="btn btn-success btn-lg" onclick="downloadParsedFile()">
+                                    <i class="bi bi-download"></i>
+                                    <span id="downloadBtnText">下载文件</span>
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm mt-2" onclick="previewParsedFile()" id="previewBtn" style="display: none;">
+                                    <i class="bi bi-eye"></i>
+                                    预览文件
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- 清空按钮 -->
                     <div class="position-absolute top-0 end-0 p-2">
                         <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearFile()" data-main-title="clearBtn">
@@ -71,7 +94,11 @@
                 <div class="d-flex justify-content-center gap-2 my-3">
                     <button type="button" class="btn btn-primary encode-btn" onclick="fileToBase64()" style="width: 80px;">
                         <i class="bi bi-arrow-right"></i>
-                        <span data-file="encodeBtn">转换</span>
+                        <span data-file="encodeBtn">编码</span>
+                    </button>
+                    <button type="button" class="btn btn-info decode-btn" style="width: 80px;" onclick="base64ToFile()">
+                        <i class="bi bi-arrow-left"></i>
+                        <span data-file="decodeBtn">解码</span>
                     </button>
                     <button type="button" class="btn btn-secondary" onclick="clearAll()" style="width: 80px;">
                         <i class="bi bi-trash"></i>
@@ -82,9 +109,9 @@
 
             <!-- 右侧：Base64输出区域 -->
             <div class="col output-section">
-                <p class="fw-lighter text-start" data-file="outputLabel">Base64编码结果：</p>
+                <p class="fw-lighter text-start" data-file="outputLabel">Base64编码结果或输入Base64字符串进行解码：</p>
                 <div class="position-relative">
-                    <textarea id="base64Text" class="code-input" placeholder="Base64编码结果将显示在这里..." aria-label="Base64 output" data-file-placeholder="base64Placeholder"></textarea>
+                    <textarea id="base64Text" class="code-input" placeholder="Base64编码结果将显示在这里，或输入Base64字符串进行解码..." aria-label="Base64 input/output" data-file-placeholder="base64Placeholder"></textarea>
                     <div class="position-absolute top-0 end-0 p-2">
                         <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearBase64()" data-main-title="clearBtn">
                             <i class="bi bi-x-lg"></i>
@@ -195,6 +222,12 @@
         let currentFile = null;
         let currentFileData = null;
         let currentBase64 = null;
+        
+        // 文件解析相关数据
+        let parsedFileData = null;
+        let parsedFileName = null;
+        let parsedFileType = null;
+        let parsedFileSize = null;
 
         // 页面加载完成后初始化
         $(document).ready(function() {
@@ -203,16 +236,18 @@
             initializeTooltips();
             setupFileEventListeners();
             restoreFileData();
-            showAlert('请选择文件开始转换。', 'info');
 
             // 确保函数在全局作用域中可用
             window.fileToBase64 = fileToBase64;
+            window.base64ToFile = base64ToFile;
             window.clearFile = clearFile;
             window.clearBase64 = clearBase64;
             window.copyBase64 = copyBase64;
             window.selectFile = selectFile;
             window.clearAll = clearAll;
             window.downloadResult = downloadResult;
+            window.downloadParsedFile = downloadParsedFile;
+            window.previewParsedFile = previewParsedFile;
         });
 
         // 加载文件转换设置
@@ -222,7 +257,7 @@
                 try {
                     fileSettings = {...fileSettings, ...JSON.parse(savedSettings)};
                 } catch (e) {
-                    console.error('加载文件设置失败:', e);
+                    // 加载文件设置失败
                 }
             }
             
@@ -446,7 +481,15 @@
             currentFile = null;
             currentFileData = null;
             currentBase64 = null;
+            
+            // 清空解析后的文件数据
+            parsedFileData = null;
+            parsedFileName = null;
+            parsedFileType = null;
+            parsedFileSize = null;
+            
             $('#fileDisplay').hide();
+            $('#fileDownloadDisplay').hide();
             $('#uploadArea').show();
             $('#fileInput').val('');
             
@@ -547,7 +590,7 @@
                     generateOutput();
                     
                 } catch (e) {
-                    console.error('恢复文件数据失败:', e);
+                    // 恢复文件数据失败
                     localStorage.removeItem('currentFileData');
                 }
             }
@@ -568,6 +611,207 @@
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
             }
+        }
+
+        // Base64转文件
+        function base64ToFile() {
+            const base64Input = $('#base64Text').val().trim();
+            
+            if (!base64Input) {
+                showAlert('请输入Base64字符串。', 'warning');
+                return;
+            }
+
+            showAlert('正在解析Base64数据...', 'info');
+
+            try {
+                // 尝试解析Base64字符串
+                let base64Data, mimeType, fileName;
+                
+                if (base64Input.startsWith('data:')) {
+                    // Data URI 格式
+                    const parts = base64Input.split(',');
+                    if (parts.length !== 2) {
+                        showAlert('无效的Data URI格式。', 'danger');
+                        return;
+                    }
+                    
+                    const header = parts[0];
+                    base64Data = parts[1];
+                    
+                    // 提取MIME类型
+                    const mimeMatch = header.match(/data:([^;]+)/);
+                    mimeType = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+                } else {
+                    // 纯Base64字符串
+                    base64Data = base64Input;
+                    mimeType = 'application/octet-stream';
+                }
+                
+                // 验证Base64格式
+                if (!/^[A-Za-z0-9+/]*={0,2}$/.test(base64Data)) {
+                    showAlert('无效的Base64格式。', 'danger');
+                    return;
+                }
+                
+                // 解码Base64
+                const binaryString = atob(base64Data);
+                const bytes = new Uint8Array(binaryString.length);
+                for (let i = 0; i < binaryString.length; i++) {
+                    bytes[i] = binaryString.charCodeAt(i);
+                }
+                
+                // 生成文件名
+                const extension = getFileExtensionFromMimeType(mimeType);
+                fileName = `decoded_file_${Date.now()}.${extension}`;
+                
+                // 保存解析的文件数据
+                parsedFileData = bytes;
+                parsedFileName = fileName;
+                parsedFileType = mimeType;
+                parsedFileSize = bytes.length;
+                
+                // 显示文件信息
+                showParsedFileInfo();
+                
+                showAlert('Base64解析成功！', 'success');
+                
+            } catch (e) {
+                showAlert('Base64解析失败：' + e.message, 'danger');
+            }
+        }
+
+        // 显示解析后的文件信息
+        function showParsedFileInfo() {
+            $('#parsedFileName').text(parsedFileName);
+            $('#parsedFileInfo').text(`类型：${parsedFileType || '未知'}`);
+            $('#parsedFileSizeInfo').text(`大小：${formatFileSize(parsedFileSize)}`);
+            $('#downloadBtnText').text(`下载 ${parsedFileName}`);
+            
+            // 隐藏其他显示区域
+            $('#uploadArea').hide();
+            $('#fileDisplay').hide();
+            
+            // 显示文件下载区域
+            $('#fileDownloadDisplay').show();
+            
+            // 如果是文本文件，显示预览按钮
+            if (parsedFileType && (parsedFileType.startsWith('text/') || parsedFileType.includes('json') || parsedFileType.includes('xml'))) {
+                $('#previewBtn').show();
+            } else {
+                $('#previewBtn').hide();
+            }
+        }
+
+        // 下载解析后的文件
+        function downloadParsedFile() {
+            if (!parsedFileData || !parsedFileName) {
+                showAlert('没有可下载的文件。', 'warning');
+                return;
+            }
+            
+            try {
+                // 创建Blob对象
+                const blob = new Blob([parsedFileData], { type: parsedFileType });
+                
+                // 创建下载链接
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = parsedFileName;
+                
+                // 触发下载
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // 清理URL对象
+                URL.revokeObjectURL(url);
+                
+                showAlert('文件下载已开始！', 'success');
+                
+            } catch (e) {
+                showAlert('文件下载失败：' + e.message, 'danger');
+            }
+        }
+
+        // 预览解析后的文件
+        function previewParsedFile() {
+            if (!parsedFileData || !parsedFileName) {
+                showAlert('没有可预览的文件。', 'warning');
+                return;
+            }
+            
+            try {
+                // 将字节数组转换为文本
+                const text = new TextDecoder('utf-8').decode(parsedFileData);
+                
+                // 创建一个新的预览区域，而不是新窗口
+                let previewDiv = document.getElementById('filePreviewArea');
+                if (!previewDiv) {
+                    previewDiv = document.createElement('div');
+                    previewDiv.id = 'filePreviewArea';
+                    previewDiv.className = 'card mt-3';
+                    document.querySelector('.container').appendChild(previewDiv);
+                }
+                
+                // 转义HTML字符
+                const escapedText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                
+                previewDiv.innerHTML = 
+                    '<div class="card-header d-flex justify-content-between align-items-center">' +
+                    '<h5 class="mb-0">文件预览</h5>' +
+                    '<button type="button" class="btn btn-sm btn-outline-secondary" onclick="this.closest(\'.card\').style.display=\'none\'">关闭</button>' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '<div class="mb-3">' +
+                    '<p><strong>文件名：</strong>' + parsedFileName + '</p>' +
+                    '<p><strong>类型：</strong>' + parsedFileType + '</p>' +
+                    '<p><strong>大小：</strong>' + formatFileSize(parsedFileSize) + '</p>' +
+                    '</div>' +
+                    '<pre style="background: #f8f9fa; padding: 15px; border-radius: 5px; max-height: 400px; overflow-y: auto; white-space: pre-wrap;">' + 
+                    escapedText + 
+                    '</pre>' +
+                    '</div>';
+                
+                previewDiv.style.display = 'block';
+                
+            } catch (e) {
+                showAlert('文件预览失败：' + e.message, 'danger');
+            }
+        }
+
+        // 根据MIME类型获取文件扩展名
+        function getFileExtensionFromMimeType(mimeType) {
+            const mimeMap = {
+                'text/plain': 'txt',
+                'text/html': 'html',
+                'text/css': 'css',
+                'text/javascript': 'js',
+                'application/json': 'json',
+                'application/xml': 'xml',
+                'text/xml': 'xml',
+                'application/pdf': 'pdf',
+                'image/jpeg': 'jpg',
+                'image/png': 'png',
+                'image/gif': 'gif',
+                'image/svg+xml': 'svg',
+                'audio/mpeg': 'mp3',
+                'video/mp4': 'mp4',
+                'application/zip': 'zip',
+                'application/x-rar': 'rar'
+            };
+            
+            return mimeMap[mimeType] || 'bin';
+        }
+
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
         }
 
         // 显示提示消息
@@ -848,6 +1092,25 @@
         .intro-section {
             border-bottom: 1px solid #e9ecef;
             padding-bottom: 15px;
+        }
+
+        /* 文件下载区域样式 */
+        .file-download-content {
+            padding: 30px 20px;
+        }
+
+        .file-info h6 {
+            font-weight: 600;
+            word-break: break-all;
+        }
+
+        .download-buttons .btn {
+            transition: all 0.3s ease;
+        }
+
+        .download-buttons .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
         /* 移动端介绍栏调整 */

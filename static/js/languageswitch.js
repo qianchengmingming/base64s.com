@@ -145,7 +145,7 @@ window.LanguageManager = {
             return 'home';
         } else if (filename === 'imagetobase64.html') {
             return 'image';
-        } else if (filename === 'file2base64.html') {
+        } else if (filename === 'filetobase64.html') {
             return 'file';
         } else if (filename === 'webpage2base64.html') {
             return 'webpage';

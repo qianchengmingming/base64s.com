@@ -11,7 +11,7 @@ window.NavbarManager = {
     pageMapping: {
         'index.html': 'text',
         'imagetobase64.html': 'image',
-        'file2base64.html': 'file',
+        'filetobase64.html': 'file',
         'prevent-password-cracking.html': 'faq',
         'how-to-use-website.html': 'faq',
         'what-is-base64.html': 'faq',
