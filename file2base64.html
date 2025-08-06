@@ -19,189 +19,153 @@
     <!-- 导航栏容器 - 将由JavaScript动态加载 -->
     <div id="navbar-container"></div>
 
-    <!-- 页面标题 -->
-    <div class="container text-center" style="margin-top: 20px;">
-        <h2 id="pageTitle" data-file="title">File to Base64 Converter</h2>
+    <!-- 第2栏：介绍栏 -->
+    <div class="container intro-section" style="margin-top: 10px; margin-bottom: 20px;">
+        <div class="d-flex align-items-center justify-content-start">
+            <h1 class="me-4" style="margin: 0; font-size: 1.2rem; font-weight: 600;" data-file="title">文件Base64编码工具</h1>
+            <h2 class="mb-0" style="font-size: 1rem; color: #6c757d; font-weight: 400;" data-file="subtitle">支持任意文件转Base64编码，最大50MB，多种输出格式</h2>
+        </div>
+    </div>
+
+    <!-- 第3栏：主要内容区 -->
+    <div class="container text-center" style="margin-top: 10px; margin-bottom: 10px;">
+        <div class="row textarea-container">
+            <!-- 左侧：文件上传/显示区域 -->
+            <div class="col input-section">
+                <p class="fw-lighter text-start" data-file="uploadLabel">请选择文件进行Base64编码转换：</p>
+                <div class="position-relative">
+                    <!-- 文件上传区域 -->
+                    <div id="uploadArea" class="file-display-area">
+                        <div class="upload-content">
+                            <i class="bi bi-file-earmark-arrow-up display-4 text-muted"></i>
+                            <p class="mt-2 mb-2" data-file="dragDropText">拖拽文件到此处或点击选择</p>
+                            <p class="text-muted small" data-file="supportedFormats">支持任意文件格式（最大50MB）</p>
+                            <input type="file" id="fileInput" style="display: none;">
+                            <button type="button" class="btn btn-primary btn-sm" onclick="selectFile()" data-file="uploadBtn">选择文件</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 文件信息显示区域 -->
+                    <div id="fileDisplay" class="file-display-area" style="display: none;">
+                        <div class="file-preview">
+                            <i id="fileIcon" class="bi bi-file-earmark display-2 text-primary mb-3"></i>
+                            <h6 id="fileName" class="mb-2"></h6>
+                            <div class="file-details">
+                                <p class="mb-1"><span class="text-muted">大小：</span><span id="fileSize"></span></p>
+                                <p class="mb-0"><span class="text-muted">类型：</span><span id="fileType"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 清空按钮 -->
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearFile()" data-main-title="clearBtn">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 移动端操作按钮区域 -->
+            <div class="col-12 mobile-buttons" style="margin: 0;padding: 0;">
+                <div class="d-flex justify-content-center gap-2 my-3">
+                    <button type="button" class="btn btn-primary encode-btn" onclick="fileToBase64()" style="width: 80px;">
+                        <i class="bi bi-arrow-right"></i>
+                        <span data-file="encodeBtn">转换</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="clearAll()" style="width: 80px;">
+                        <i class="bi bi-trash"></i>
+                        <span data-file="clearBtn">清空</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 右侧：Base64输出区域 -->
+            <div class="col output-section">
+                <p class="fw-lighter text-start" data-file="outputLabel">Base64编码结果：</p>
+                <div class="position-relative">
+                    <textarea id="base64Text" class="code-input" placeholder="Base64编码结果将显示在这里..." aria-label="Base64 output" data-file-placeholder="base64Placeholder"></textarea>
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <button type="button" class="btn clear-btn" style="padding:0 5px;" title="清空" onclick="clearBase64()" data-main-title="clearBtn">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <div class="position-absolute bottom-0 p-2" style="right: 20px;">
+                        <button type="button" class="btn copy-btn" style="padding:0 5px;" title="复制" onclick="copyBase64()" data-main-title="copyBtn">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 第4栏：桌面端操作按钮 -->
+    <div class="container desktop-buttons">
+        <div class="d-flex justify-content-start gap-2">
+            <button type="button" class="btn btn-primary encode-btn" onclick="fileToBase64()" style="min-width: 120px;">
+                <i class="bi bi-arrow-right"></i>
+                <span data-file="encodeBtn">转换文件</span>
+            </button>
+            <button type="button" class="btn btn-outline-primary" onclick="copyBase64()">
+                <i class="bi bi-clipboard"></i>
+                <span data-file="copyBase64Btn">复制Base64</span>
+            </button>
+            <button type="button" class="btn btn-outline-primary" onclick="downloadResult()">
+                <i class="bi bi-download"></i>
+                <span data-file="downloadBtn">下载结果</span>
+            </button>
+            <button type="button" class="btn btn-outline-primary" onclick="clearAll()">
+                <i class="bi bi-trash"></i>
+                <span data-file="clearAllBtn">清空</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 第5栏：提示消息区域 -->
+    <div class="container" style="margin-top: 20px;">
+        <div id="alertMessage" class="alert alert-info" role="alert" style="display: none;" data-file="initialMessage">
+            请选择文件开始转换。
+        </div>
+    </div>
+
+    <!-- 第6栏：设置区域 -->
+    <div class="container">
         <hr>
-    </div>
+        <div class="d-flex flex-wrap gap-3 align-items-end" style="margin-bottom: 20px;">
+            <!-- 输出格式设置 -->
+            <div class="flex-shrink-0" style="min-width: 250px;">
+                <label class="form-label small" data-file="outputFormatLabel">输出格式</label>
+                <select class="form-select" id="outputFormat">
+                    <option value="plaintext" data-file="formatPlainText">纯文本 Base64</option>
+                    <option value="datauri" data-file="formatDataURI">Data URI</option>
+                    <option value="htmllink" data-file="formatHtmlLink">HTML 超链接</option>
+                    <option value="json" data-file="formatJSON">JSON 格式</option>
+                    <option value="xml" data-file="formatXML">XML 格式</option>
+                </select>
+            </div>
 
-    <!-- 主要内容区 -->
-    <div class="container" style="margin-top: 20px;">
-        <div class="row">
-            <!-- 文件上传区域 -->
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="mb-0" data-file="uploadLabel">Select any file to convert to Base64:</h5>
-                    </div>
-                    <div class="card-body">
-                        <!-- 拖拽上传区域 -->
-                        <div id="uploadArea" class="upload-area mb-3">
-                            <div class="upload-content">
-                                <i class="bi bi-file-earmark-arrow-up display-1 text-muted"></i>
-                                <p class="mt-3 mb-2" data-file="dragDropText">Drag and drop a file here or click to select</p>
-                                <p class="text-muted small" data-file="supportedFormats">Supports any file type (Max: 50MB)</p>
-                                <input type="file" id="fileInput" style="display: none;">
-                                <button type="button" class="btn btn-primary" onclick="selectFile()" data-file="uploadBtn">Select File</button>
-                            </div>
-                        </div>
-                        
-                        <!-- 文件信息区域 -->
-                        <div id="fileInfo" class="file-info" style="display: none;">
-                            <h6 data-file="fileInfoLabel">File Information:</h6>
-                            <div class="row">
-                                <div class="col-sm-4"><strong data-file="fileName">File Name:</strong></div>
-                                <div class="col-sm-8"><span id="fileNameValue">-</span></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4"><strong data-file="fileSize">File Size:</strong></div>
-                                <div class="col-sm-8"><span id="fileSizeValue">-</span></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-4"><strong data-file="fileType">File Type:</strong></div>
-                                <div class="col-sm-8"><span id="fileTypeValue">-</span></div>
-                            </div>
-                            <div class="mt-3">
-                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearFile()" data-file="clearBtn">
-                                    <i class="bi bi-x-lg"></i> Clear
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+            <!-- 自动复制开关 -->
+            <div class="flex-shrink-0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="autoCopyResult" checked>
+                    <label class="form-check-label small" for="autoCopyResult" data-file="autoCopyLabel">自动复制结果</label>
                 </div>
             </div>
 
-            <!-- 输出格式选择区域 -->
-            <div class="col-lg-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="mb-0" data-file="outputFormatLabel">Output Format:</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="outputFormat" id="formatPlainText" value="plaintext" checked>
-                            <label class="form-check-label" for="formatPlainText" data-file="formatPlainText">
-                                Plain text -- just the Base64 value
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="outputFormat" id="formatDataUri" value="datauri">
-                            <label class="form-check-label" for="formatDataUri" data-file="formatDataUri">
-                                Data URI -- data:content/type;base64
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="outputFormat" id="formatHtmlLink" value="htmllink">
-                            <label class="form-check-label" for="formatHtmlLink" data-file="formatHtmlLink">
-                                HTML Hyperlink -- &lt;a&gt;&lt;/a&gt;
-                            </label>
-                        </div>
-                        <div class="form-check mb-2">
-                            <input class="form-check-input" type="radio" name="outputFormat" id="formatJson" value="json">
-                            <label class="form-check-label" for="formatJson" data-file="formatJson">
-                                JSON -- {file:{mime,data}}
-                            </label>
-                        </div>
-                        <div class="form-check mb-3">
-                            <input class="form-check-input" type="radio" name="outputFormat" id="formatXml" value="xml">
-                            <label class="form-check-label" for="formatXml" data-file="formatXml">
-                                XML -- &lt;file&gt;&lt;/file&gt;
-                            </label>
-                        </div>
-                        
-                        <!-- 自动复制设置 -->
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" role="switch" id="autoCopyResult" checked
-                                   data-bs-toggle="tooltip" data-bs-placement="top" data-file-tooltip="autoCopy"
-                                   title="Automatically copy the result to clipboard when conversion is complete">
-                            <label class="form-check-label" for="autoCopyResult" data-file="autoCopyLabel">
-                                Auto Copy Result
-                            </label>
-                        </div>
-                    </div>
+            <!-- 记住输出格式开关 -->
+            <div class="flex-shrink-0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="rememberOutputFormat" checked>
+                    <label class="form-check-label small" for="rememberOutputFormat" data-file="rememberFormatLabel">记住输出格式</label>
                 </div>
             </div>
-        </div>
 
-        <!-- 结果显示区域 -->
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="mb-0" data-file="resultLabel">Conversion Result:</h5>
-                    </div>
-                    <div class="card-body">
-                        <!-- 结果显示 -->
-                        <div id="conversionResult" style="display: none;">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="mb-0">Result:</h6>
-                                <div>
-                                    <button type="button" class="btn btn-outline-primary btn-sm me-2" onclick="copyResult()">
-                                        <i class="bi bi-clipboard"></i> <span data-file="copyResultBtn">Copy Result</span>
-                                    </button>
-                                    <button type="button" class="btn btn-outline-success btn-sm" onclick="downloadResult()">
-                                        <i class="bi bi-download"></i> <span data-file="downloadResultBtn">Download Result</span>
-                                    </button>
-                                </div>
-                            </div>
-                            <textarea id="resultOutput" class="form-control" rows="10" readonly 
-                                      style="font-family: monospace; font-size: 0.875rem; background-color: #f8f9fa;"></textarea>
-                        </div>
-
-                        <!-- 空状态 -->
-                        <div id="emptyResult" class="text-center text-muted py-5">
-                            <i class="bi bi-file-earmark display-1"></i>
-                            <p class="mt-3">Select a file to see the Base64 conversion result here.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 提示消息区域 -->
-    <div class="container" style="margin-top: 20px;">
-        <div id="alertMessage" class="alert alert-info" role="alert" style="display: none;">
-            Select a file to start conversion.
-        </div>
-    </div>
-
-    <!-- 设置模态框 -->
-    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="settingsModalLabel" data-settings="title">⚙️ System Settings</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <!-- 文件转换设置 -->
-                        <div class="mb-3">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="modalAutoCopyResult" checked>
-                                <label class="form-check-label" for="modalAutoCopyResult">
-                                    Auto Copy Result to Clipboard
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="rememberOutputFormat" checked>
-                                <label class="form-check-label" for="rememberOutputFormat">
-                                    Remember Output Format Selection
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="preserveFileData" checked>
-                                <label class="form-check-label" for="preserveFileData">
-                                    Preserve File Data on Page Refresh
-                                </label>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-settings="cancel">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="saveFileSettings()" data-settings="save">Save Settings</button>
+            <!-- 保存文件数据开关 -->
+            <div class="flex-shrink-0">
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="preserveFileData" checked>
+                    <label class="form-check-label small" for="preserveFileData" data-file="preserveDataLabel">保存文件数据</label>
                 </div>
             </div>
         </div>
@@ -223,7 +187,8 @@
         let fileSettings = {
             autoCopyResult: true,
             rememberOutputFormat: true,
-            preserveFileData: true
+            preserveFileData: true,
+            outputFormat: 'plaintext'
         };
 
         // 当前处理的文件信息
@@ -237,8 +202,17 @@
             initializeFileUpload();
             initializeTooltips();
             setupFileEventListeners();
-            restoreFileData(); // 恢复之前的文件数据
-    
+            restoreFileData();
+            showAlert('请选择文件开始转换。', 'info');
+
+            // 确保函数在全局作用域中可用
+            window.fileToBase64 = fileToBase64;
+            window.clearFile = clearFile;
+            window.clearBase64 = clearBase64;
+            window.copyBase64 = copyBase64;
+            window.selectFile = selectFile;
+            window.clearAll = clearAll;
+            window.downloadResult = downloadResult;
         });
 
         // 加载文件转换设置
@@ -254,41 +228,19 @@
             
             // 更新UI
             $('#autoCopyResult').prop('checked', fileSettings.autoCopyResult);
-            $('#modalAutoCopyResult').prop('checked', fileSettings.autoCopyResult);
             $('#rememberOutputFormat').prop('checked', fileSettings.rememberOutputFormat);
             $('#preserveFileData').prop('checked', fileSettings.preserveFileData);
-            
-            // 恢复输出格式选择
-            if (fileSettings.rememberOutputFormat) {
-                const savedFormat = localStorage.getItem('selectedOutputFormat');
-                if (savedFormat) {
-                    $(`input[name="outputFormat"][value="${savedFormat}"]`).prop('checked', true);
-                }
-            }
+            $('#outputFormat').val(fileSettings.outputFormat);
         }
 
         // 保存文件转换设置
         function saveFileSettings() {
-            fileSettings.autoCopyResult = $('#modalAutoCopyResult').is(':checked');
+            fileSettings.autoCopyResult = $('#autoCopyResult').is(':checked');
             fileSettings.rememberOutputFormat = $('#rememberOutputFormat').is(':checked');
             fileSettings.preserveFileData = $('#preserveFileData').is(':checked');
+            fileSettings.outputFormat = $('#outputFormat').val();
             
             localStorage.setItem('fileSettings', JSON.stringify(fileSettings));
-            
-            // 同步主界面设置
-            $('#autoCopyResult').prop('checked', fileSettings.autoCopyResult);
-            
-            if (window.LanguageManager) {
-                showAlert(window.LanguageManager.getText('messages.settingsSaved'), 'success');
-            } else {
-                showAlert('Settings saved!', 'success');
-            }
-            
-            // 关闭模态框
-            const modal = bootstrap.Modal.getInstance(document.getElementById('settingsModal'));
-            if (modal) {
-                modal.hide();
-            }
         }
 
         // 初始化文件上传功能
@@ -333,36 +285,85 @@
         // 处理文件选择
         function handleFileSelect(file) {
             if (file.size > 50 * 1024 * 1024) { // 50MB
-                showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileSizeExceeded') : 'File size exceeds 50MB limit.', 'danger');
+                showAlert('文件大小超过50MB限制。', 'danger');
                 return;
             }
 
             currentFile = file;
             showFileInfo(file);
-            convertFileToBase64(file);
+            
+            // 自动转换（如果启用）
+            if (fileSettings.autoConvert !== false) {
+                setTimeout(() => {
+                    fileToBase64();
+                }, 100);
+            }
         }
 
         // 显示文件信息
         function showFileInfo(file) {
-            $('#fileNameValue').text(file.name);
-            $('#fileSizeValue').text(formatFileSize(file.size));
-            $('#fileTypeValue').text(file.type || 'Unknown');
-            $('#fileInfo').show();
+            // 更新文件图标
+            const fileIcon = $('#fileIcon');
+            const extension = file.name.split('.').pop().toLowerCase();
+            const iconClass = getFileIconClass(extension);
+            fileIcon.attr('class', `bi ${iconClass} display-2 text-primary mb-3`);
+            
+            // 更新文件信息
+            $('#fileName').text(file.name);
+            $('#fileSize').text(formatFileSize(file.size));
+            $('#fileType').text(file.type || '未知');
+            
+            // 切换显示区域
             $('#uploadArea').hide();
+            $('#fileDisplay').show();
         }
 
-        // 将文件转换为Base64
-        function convertFileToBase64(file) {
-            showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileProcessing') : 'Processing file...', 'info');
+        // 根据文件扩展名获取图标类
+        function getFileIconClass(extension) {
+            const iconMap = {
+                'pdf': 'bi-file-earmark-pdf',
+                'doc': 'bi-file-earmark-word',
+                'docx': 'bi-file-earmark-word',
+                'xls': 'bi-file-earmark-excel',
+                'xlsx': 'bi-file-earmark-excel',
+                'ppt': 'bi-file-earmark-ppt',
+                'pptx': 'bi-file-earmark-ppt',
+                'txt': 'bi-file-earmark-text',
+                'jpg': 'bi-file-earmark-image',
+                'jpeg': 'bi-file-earmark-image',
+                'png': 'bi-file-earmark-image',
+                'gif': 'bi-file-earmark-image',
+                'svg': 'bi-file-earmark-image',
+                'webp': 'bi-file-earmark-image',
+                'zip': 'bi-file-earmark-zip',
+                'rar': 'bi-file-earmark-zip',
+                '7z': 'bi-file-earmark-zip',
+                'mp3': 'bi-file-earmark-music',
+                'wav': 'bi-file-earmark-music',
+                'mp4': 'bi-file-earmark-play',
+                'avi': 'bi-file-earmark-play',
+                'mov': 'bi-file-earmark-play'
+            };
+            return iconMap[extension] || 'bi-file-earmark';
+        }
+
+        // 文件转Base64
+        function fileToBase64() {
+            if (!currentFile) {
+                showAlert('请先选择文件。', 'warning');
+                return;
+            }
+
+            showAlert('正在处理文件...', 'info');
             
             const reader = new FileReader();
             reader.onload = function(e) {
                 const base64String = e.target.result.split(',')[1]; // 移除data:mime;base64,前缀
                 currentBase64 = base64String;
                 currentFileData = {
-                    name: file.name,
-                    size: file.size,
-                    type: file.type,
+                    name: currentFile.name,
+                    size: currentFile.size,
+                    type: currentFile.type,
                     base64: base64String
                 };
                 
@@ -376,25 +377,25 @@
                 
                 // 自动复制（如果启用）
                 if (fileSettings.autoCopyResult) {
-                    copyToClipboard(document.getElementById('resultOutput').value);
-                    showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.resultCopied') : 'Result copied!', 'success');
+                    copyToClipboard(document.getElementById('base64Text').value);
+                    showAlert('文件已转换并复制到剪贴板！', 'success');
                 } else {
-                    showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileToBase64Success') : 'File converted to Base64 successfully!', 'success');
+                    showAlert('文件已成功转换为Base64！', 'success');
                 }
             };
             
             reader.onerror = function() {
-                showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.fileReadError') : 'Error reading file.', 'danger');
+                showAlert('文件读取错误。', 'danger');
             };
             
-            reader.readAsDataURL(file);
+            reader.readAsDataURL(currentFile);
         }
 
         // 生成输出结果
         function generateOutput() {
             if (!currentFileData) return;
             
-            const selectedFormat = $('input[name="outputFormat"]:checked').val();
+            const selectedFormat = fileSettings.outputFormat;
             let output = '';
             
             switch (selectedFormat) {
@@ -423,14 +424,7 @@
                     break;
             }
             
-            $('#resultOutput').val(output);
-            $('#conversionResult').show();
-            $('#emptyResult').hide();
-            
-            // 保存输出格式选择（如果启用）
-            if (fileSettings.rememberOutputFormat) {
-                localStorage.setItem('selectedOutputFormat', selectedFormat);
-            }
+            $('#base64Text').val(output);
         }
 
         // 格式化文件大小
@@ -452,33 +446,40 @@
             currentFile = null;
             currentFileData = null;
             currentBase64 = null;
-            $('#fileInfo').hide();
+            $('#fileDisplay').hide();
             $('#uploadArea').show();
             $('#fileInput').val('');
-            clearResults();
             
             // 清除保存的文件数据
             localStorage.removeItem('currentFileData');
         }
 
-        // 清空所有结果
-        function clearResults() {
-            $('#conversionResult').hide();
-            $('#emptyResult').show();
-            $('#resultOutput').val('');
+        // 清空Base64输入
+        function clearBase64() {
+            currentBase64 = null;
+            $('#base64Text').val('');
         }
 
-        // 复制结果
-        function copyResult() {
-            const result = $('#resultOutput').val();
-            copyToClipboard(result);
-            showAlert(window.LanguageManager ? window.LanguageManager.getText('messages.resultCopied') : 'Result copied!', 'success');
+        // 复制Base64
+        function copyBase64() {
+            const base64Text = $('#base64Text').val();
+            if (!base64Text) {
+                showAlert('没有Base64内容可复制。', 'warning');
+                return;
+            }
+            copyToClipboard(base64Text);
+            showAlert('Base64已复制到剪贴板！', 'success');
         }
 
         // 下载结果
         function downloadResult() {
-            const result = $('#resultOutput').val();
-            const selectedFormat = $('input[name="outputFormat"]:checked').val();
+            const result = $('#base64Text').val();
+            if (!result) {
+                showAlert('没有结果可下载。', 'warning');
+                return;
+            }
+            
+            const selectedFormat = fileSettings.outputFormat;
             const fileName = currentFileData ? currentFileData.name : 'file';
             
             let downloadFileName = '';
@@ -515,7 +516,14 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
             
-            showAlert('Result downloaded successfully!', 'success');
+            showAlert('结果已下载！', 'success');
+        }
+
+        // 清空所有内容
+        function clearAll() {
+            clearFile();
+            clearBase64();
+            showAlert('所有内容已清空。', 'info');
         }
 
         // 恢复文件数据
@@ -528,17 +536,16 @@
                     currentFileData = JSON.parse(savedData);
                     currentBase64 = currentFileData.base64;
                     
-                    // 显示文件信息
-                    $('#fileNameValue').text(currentFileData.name);
-                    $('#fileSizeValue').text(formatFileSize(currentFileData.size));
-                    $('#fileTypeValue').text(currentFileData.type || 'Unknown');
-                    $('#fileInfo').show();
-                    $('#uploadArea').hide();
+                    // 创建模拟文件对象用于显示信息
+                    const mockFile = {
+                        name: currentFileData.name,
+                        size: currentFileData.size,
+                        type: currentFileData.type
+                    };
                     
-                    // 生成输出
+                    showFileInfo(mockFile);
                     generateOutput();
                     
-        
                 } catch (e) {
                     console.error('恢复文件数据失败:', e);
                     localStorage.removeItem('currentFileData');
@@ -554,6 +561,8 @@
                 // 降级方案
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
                 document.body.appendChild(textArea);
                 textArea.select();
                 document.execCommand('copy');
@@ -571,11 +580,12 @@
                 clearTimeout(existingTimer);
             }
             
-            alertElement.removeClass('alert-success alert-danger alert-warning alert-info');
-            alertElement.addClass(`alert-${type}`);
-            alertElement.text(message);
-            alertElement.show();
-            
+            alertElement
+                .removeClass()
+                .addClass(`alert alert-${type}`)
+                .text(message)
+                .show();
+
             // 10秒后自动隐藏，并保存定时器ID
             const hideTimer = setTimeout(() => {
                 alertElement.hide();
@@ -598,108 +608,262 @@
         // 设置事件监听器
         function setupFileEventListeners() {
             // 输出格式变化监听
-            $('input[name="outputFormat"]').on('change', function() {
+            $('#outputFormat').on('change', function() {
+                fileSettings.outputFormat = $(this).val();
+                saveFileSettings();
                 if (currentFileData) {
                     generateOutput();
                 }
             });
 
-            // 自动复制设置变化监听
-            $('#autoCopyResult').on('change', function() {
-                fileSettings.autoCopyResult = $(this).is(':checked');
-                $('#modalAutoCopyResult').prop('checked', fileSettings.autoCopyResult);
-                localStorage.setItem('fileSettings', JSON.stringify(fileSettings));
-            });
-
-            // 模态框设置同步
-            $('#modalAutoCopyResult').on('change', function() {
-                $('#autoCopyResult').prop('checked', $(this).is(':checked'));
+            // 设置项变化监听
+            $('#autoCopyResult, #rememberOutputFormat, #preserveFileData').on('change', function() {
+                saveFileSettings();
             });
         }
     </script>
 
     <style>
-        /* 上传区域样式 */
-        .upload-area {
-            border: 2px dashed #dee2e6;
-            border-radius: 8px;
-            padding: 3rem 1rem;
-            text-align: center;
-            transition: all 0.3s ease;
+        html,
+        body {
+            background: rgb(245 246 255);
+            min-width: 100%;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 文件上传区域样式 */
+        .file-display-area {
+            background: #fff !important;
+            border-radius: 10px !important;
+            box-shadow: 0 2px 8px 0 rgba(96, 114, 252, .05) !important;
+            padding: 12px !important;
+            min-height: 300px !important;
+            height: 50vh;
+            width: 100%;
+            border: 1px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            position: relative;
             cursor: pointer;
-            background-color: #f8f9fa;
+            transition: all 0.3s ease;
         }
 
-        .upload-area:hover {
+        .file-display-area:hover {
             border-color: #86b7fe;
-            background-color: #e7f1ff;
+            box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.1);
         }
 
-        .upload-area.dragover {
+        .file-display-area.dragover {
             border-color: #0d6efd;
-            background-color: #cfe2ff;
+            background-color: #cfe2ff !important;
             transform: scale(1.02);
         }
 
         .upload-content {
             pointer-events: none;
+            text-align: center;
         }
 
-        /* 文件信息样式 */
-        .file-info {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 1.5rem;
+        /* 文件预览样式 */
+        .file-preview {
+            text-align: center;
+            pointer-events: none;
         }
 
-        .file-info .row {
-            margin-bottom: 0.5rem;
+        .file-details {
+            max-width: 100%;
+            word-break: break-all;
         }
 
-        /* 卡片样式优化 */
+        /* 强化textarea样式，确保能够调整大小和自动换行 */
+        .code-input {
+            background: #fff !important;
+            border-radius: 10px !important;
+            box-shadow: 0 2px 8px 0 rgba(96, 114, 252, .05) !important;
+            padding: 12px !important;
+            min-height: 300px !important;
+            height: 50vh;
+            width: 100%;
+            border: 1px solid #fff;
+            resize: vertical !important;
+            /* 强制自动换行设置 */
+            white-space: pre-wrap !important;
+            word-wrap: break-word !important;
+            word-break: break-all !important;
+            overflow-wrap: break-word !important;
+            /* 确保有滚动条 */
+            overflow-y: auto !important;
+            font-family: monospace;
+            font-size: 0.875rem;
+        }
+
+        /* 鼠标悬浮时的提示效果 */
+        .code-input:hover {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 1px rgba(13, 110, 253, 0.1);
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        /* 移动端布局优化 - 上下排列和按钮位置调整 */
+        @media (max-width: 768px) {
+            /* 确保row容器支持flexbox order */
+            .textarea-container {
+                display: flex !important;
+                flex-direction: column !important;
+            }
+
+            /* 移动端输入框上下排列 */
+            .textarea-container .input-section,
+            .textarea-container .output-section {
+                flex: 0 0 100% !important;
+                max-width: 100% !important;
+                margin-bottom: 20px;
+            }
+
+            /* 移动端输入框高度调整 */
+            .code-input,
+            .file-display-area {
+                min-height: 200px !important;
+                height: 40vh !important;
+            }
+
+            /* 移动端显示中间按钮，隐藏桌面按钮 */
+            .mobile-buttons {
+                display: block !important;
+                order: 2;
+                /* 确保在输入框和输出框之间 */
+            }
+
+            .desktop-buttons {
+                display: none !important;
+            }
+
+            /* 调整输入框顺序 */
+            .input-section {
+                order: 1;
+            }
+
+            .output-section {
+                order: 3;
+            }
+
+            /* 移动端按钮样式优化 */
+            .mobile-buttons .btn {
+                font-size: 14px;
+                padding: 10px 15px;
+                margin: 0 5px;
+            }
+
+            /* 移动端按钮容器样式 */
+            .mobile-buttons {
+                padding: 15px 0;
+                background: rgba(245, 246, 255, 0.5);
+                border-radius: 10px;
+                margin: 15px 0;
+            }
+        }
+
+        /* 桌面端隐藏移动端按钮 */
+        @media (min-width: 769px) {
+            .mobile-buttons {
+                display: none !important;
+            }
+
+            .desktop-buttons {
+                display: block !important;
+            }
+
+            .desktop-buttons .btn {
+                height: 38px; /* 统一按钮高度 */
+            }
+        }
+
+        div {
+            box-sizing: border-box;
+        }
+
+        /* 设置区域样式优化 */
+        .d-flex.flex-wrap.gap-3 {
+            gap: 1rem !important;
+        }
+
+        /* 表单控件样式优化 */
+        .form-control,
+        .form-select,
+        .form-range {
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+
+        /* 开关样式优化 */
+        .form-check-input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        /* 小标签样式 */
+        .form-label.small {
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 0.25rem;
+        }
+
+        /* 格式化输出卡片样式 */
         .card {
             border: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            border-radius: 10px;
         }
 
         .card-header {
             background-color: #f8f9fa;
             border-bottom: 1px solid #dee2e6;
+            border-radius: 10px 10px 0 0 !important;
         }
 
-        /* 表单控件优化 */
-        .form-check {
-            padding: 0.5rem 0;
+        /* 按钮组样式 */
+        .clear-btn,
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            color: #6c757d;
         }
 
-        .form-check-label {
-            font-weight: 400;
+        .clear-btn:hover,
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 1);
             color: #495057;
         }
 
-        /* 结果文本区域 */
-        #resultOutput {
-            min-height: 200px;
-            resize: vertical;
+        /* 介绍栏样式 */
+        .intro-section {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 15px;
         }
 
-        /* 移动端优化 */
+        /* 移动端介绍栏调整 */
         @media (max-width: 768px) {
-            .upload-area {
-                padding: 2rem 1rem;
+            .intro-section .d-flex {
+                flex-direction: column !important;
+                align-items: flex-start !important;
             }
             
-            .upload-area .display-1 {
-                font-size: 2rem;
+            .intro-section h1 {
+                margin-bottom: 5px !important;
+                font-size: 1.2rem !important;
             }
             
-            .file-info {
-                padding: 1rem;
+            .intro-section h2 {
+                font-size: 0.9rem !important;
             }
         }
     </style>
